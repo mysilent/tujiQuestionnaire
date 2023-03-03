@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: root
+    username: root
+    url: "jdbc:mysql://127.0.0.1:3306/questionnaire?serverTimezone=UTC"
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+springfox:
+  documentation:
+    enabled: true
+mybatis-plus:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  typeAliasesPackage: com.wang.tujiquestionnaire.system.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
