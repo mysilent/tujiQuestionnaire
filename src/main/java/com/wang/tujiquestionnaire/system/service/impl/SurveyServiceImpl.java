@@ -1,5 +1,7 @@
 package com.wang.tujiquestionnaire.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.wang.tujiquestionnaire.common.Constant;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.dto.QuestionDto;
 import com.wang.tujiquestionnaire.system.entity.dto.SurveyCreateDto;
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,13 +44,13 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
     OptionMapper optionMapper;
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result createquestionnaire(SurveyCreateDto surveyCreateDto) {
+    public Result createQuestionnaire(SurveyCreateDto surveyCreateDto) {
         Survey survey = new Survey();
         Question question = null;
         //1.获取前端传输的各种信息
         //2.对各个信息放入对应的实例化对象中
         BeanUtils.copyProperties(surveyCreateDto,survey);
-        List<QuestionDto> questionList= surveyCreateDto.getQuestionList();
+        List<QuestionDto> questionList= surveyCreateDto.getQuestionDtoList();
         //2.1首先存放问卷信息标注谁发布的并获取其id键值
         //2.1.1创建调查问卷主表id
         Long  surveyId = hutoolUntil.getID();
@@ -83,6 +87,47 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
         }
 
         return Result.success();
+    }
+
+    @Override
+    public SurveyCreateDto selectQuestionnaire(Long id) {
+        //mybatisplus 条件查询构造器
+        QueryWrapper<Question> queryWrapper =new QueryWrapper<>();
+        QueryWrapper<Option> optionQueryWrapper = null;
+        //surveyCreateDto对象实例化
+        SurveyCreateDto surveyCreateDto = new SurveyCreateDto();
+        //questionDto对象实例化（先定义名字，在循环中实例化，每次都实例化一个新的来存储）
+        QuestionDto questionDto=null;
+        //dtoList时QuestionDto的一个列表实例化
+        List<QuestionDto> dtoList=new ArrayList<>();
+        //1.对问卷基础信息进行查询，并记录问卷id
+        Survey survey = surveyMapper.selectById(id);
+        BeanUtils.copyProperties(survey,surveyCreateDto);
+        //2.0判断是否为选项，并将属于选项问题的选项加入到里面
+        //2.1根据问卷id查找属于该问卷的问题
+        queryWrapper.eq("survey_id",id);
+        //2.2将每一个问卷的问题查询出来并放入questionList
+        List<Question> questionList= questionMapper.selectList(queryWrapper);
+        for (Question q:questionList) {
+            questionDto = new QuestionDto();
+            //TODO 待 将3变为一个可变常量
+            //2.3判断是否为选项
+            if (questionMapper.selectQuestionType(q.getId())!=3){
+                //2.4根据问卷id以及问题id查询对应选项
+                Long questionId =q.getId();
+                optionQueryWrapper = new QueryWrapper<>();
+                optionQueryWrapper.eq("survey_id",id);
+                optionQueryWrapper.eq("question_id",questionId);
+                List<Option> optionList = optionMapper.selectList(optionQueryWrapper);
+                //2.5将选项分别添加到对应的问题列表dtoList中
+                    questionDto.setOptionList(optionList);
+                    BeanUtils.copyProperties(q,questionDto);
+                    dtoList.add(questionDto);
+            }
+        }
+        //3.将问题以及带有选项的加入到问卷对象surveyCreateDto上
+        surveyCreateDto.setQuestionDtoList(dtoList);
+        return surveyCreateDto;
     }
 
 }

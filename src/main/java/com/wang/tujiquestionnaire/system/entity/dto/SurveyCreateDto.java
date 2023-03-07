@@ -2,10 +2,13 @@ package com.wang.tujiquestionnaire.system.entity.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.wang.tujiquestionnaire.system.entity.Question;
+import com.wang.tujiquestionnaire.system.entity.Option;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,8 +26,10 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class SurveyCreateDto implements Serializable {
     private static final long serialVersionUID = 1L;
+    @Id
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     @ApiModelProperty("主题")
@@ -62,7 +67,6 @@ public class SurveyCreateDto implements Serializable {
 
     @ApiModelProperty("图片id")
     private Integer surveyPicId;
-    @ApiModelProperty("调查问卷问题主表链表")
-    private List<QuestionDto> questionList;
-
+    @ApiModelProperty("调查问卷问题主表列表")
+    private List<QuestionDto> questionDtoList;
 }

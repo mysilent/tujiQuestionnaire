@@ -6,6 +6,7 @@ import com.wang.tujiquestionnaire.system.entity.Option;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -21,7 +22,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionDto {
+@ToString
+public class QuestionDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
@@ -45,7 +47,7 @@ public class QuestionDto {
     @ApiModelProperty("图片id")
     private Integer questionPicId;
 
-    @ApiModelProperty("调查问卷问题选项主表链表")
+    @ApiModelProperty("调查问卷问题选项主表列表")
     private List<Option> optionList;
 
 }

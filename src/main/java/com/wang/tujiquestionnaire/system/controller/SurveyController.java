@@ -5,6 +5,7 @@ import com.wang.tujiquestionnaire.system.entity.dto.SurveyCreateDto;
 import com.wang.tujiquestionnaire.system.service.impl.SurveyServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,10 +28,16 @@ public class SurveyController {
         this.surveyService = surveyService;
     }
 
-    @ApiOperation("调查问卷主表")
-    @PostMapping("/CreateQuestionnaire")
-    public Result CreateQuestionnaire(SurveyCreateDto surveyCreateDto){
-        return surveyService.createquestionnaire(surveyCreateDto);
+    @ApiOperation("问卷添加")
+    @PostMapping("/createQuestionnaire")
+    public Result createQuestionnaire(SurveyCreateDto surveyCreateDto){
+        return surveyService.createQuestionnaire(surveyCreateDto);
 }
+    @ApiOperation("问卷查询")
+    @GetMapping("/selectQuestionnaire")
+    public SurveyCreateDto selectQuestionnaire(Long id){
+        SurveyCreateDto surveyCreateDto = surveyService.selectQuestionnaire(id);
+        return surveyCreateDto;
+    }
 
 }
