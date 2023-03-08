@@ -4,6 +4,8 @@ import com.wang.tujiquestionnaire.system.entity.User;
 import com.wang.tujiquestionnaire.system.mapper.UserMapper;
 import com.wang.tujiquestionnaire.system.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wang.tujiquestionnaire.until.HutoolUntil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,10 +19,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
     private final UserMapper userMapper;
+    private final
+    HutoolUntil hutoolUntil;
 
-    public UserServiceImpl(UserMapper userMapper) {
+    public UserServiceImpl(UserMapper userMapper, HutoolUntil hutoolUntil) {
         this.userMapper = userMapper;
+        this.hutoolUntil = hutoolUntil;
     }
+
 
     @Override
     public Integer login(String username, String password) {
@@ -28,8 +34,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
     @Override
     public Integer enroll(String username, String password) {
-        if (userMapper.usernameSelectSame(username)==0) {
-            return (userMapper.enroll(username, password)==1) ? 1:0;
+            if (userMapper.usernameSelectSame(username)==0) {
+                Long id= hutoolUntil.getID();
+            return (userMapper.enroll(id,username, password)==1) ? 1:0;
         }
         return 2;
     }

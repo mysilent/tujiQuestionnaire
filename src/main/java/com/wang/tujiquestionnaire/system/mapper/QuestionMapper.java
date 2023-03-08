@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * <p>
  * 调查问卷问题主表 Mapper 接口
@@ -23,4 +25,9 @@ public interface QuestionMapper extends BaseMapper<Question> {
     @Select("select question_type from question_info where id=${id}")
     Integer selectQuestionType(Long id);
 
+    /**
+     * 将传入的数据批量插入数据库的question表中
+     * @param questionLists question对象的list列表
+     */
+    void insertQuestionList(List<Question> questionLists);
 }

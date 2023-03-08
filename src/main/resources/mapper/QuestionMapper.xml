@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wang.tujiquestionnaire.system.mapper.QuestionMapper">
-
+<insert id="insertQuestionList" parameterType="list">
+    insert into question_info(id, survey_id, question_type, question_description, question_sort, required_flag, question_pic_id)
+    values
+    <foreach item="item" index="index" collection="questionLists" separator=",">
+        (
+        #{item.id},
+        #{item.surveyId},
+        #{item.questionType},
+        #{item.questionDescription},
+        #{item.questionSort},
+        #{item.requiredFlag},
+        #{item.questionPicId},
+        )
+    </foreach>
+</insert>
 </mapper>

@@ -22,10 +22,13 @@ public interface ISurveyService extends IService<Survey> {
      */
     Result createQuestionnaire(SurveyCreateDto surveyCreateDto);
 
+    Result createQuestionnaire1(SurveyCreateDto surveyCreateDto);
+
     /**
      * 根据前端传过来的问卷id返回问卷所有信息
      * @param id 传过来的问卷id
      * @return 返回存储问卷所有信息的一个实体类
      */
     SurveyCreateDto selectQuestionnaire(Long id);
+
 }

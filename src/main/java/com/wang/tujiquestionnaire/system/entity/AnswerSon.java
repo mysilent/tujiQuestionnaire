@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ import lombok.Setter;
  * @author wang
  * @since 2023-02-28
  */
+@Data
 @Getter
 @Setter
 @TableName("answer_son_info")

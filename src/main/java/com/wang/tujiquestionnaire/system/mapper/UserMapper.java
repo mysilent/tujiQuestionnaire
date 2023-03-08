@@ -38,8 +38,9 @@ public interface UserMapper extends BaseMapper<User> {
      * 将用户注册的账户密码写入数据库
      * @param username 密码
      * @param password 账户
+     * @param id 成员id
      * @return 成功、失败
      */
-    @Insert("insert into user(username,password) values (${username},${password})")
-    Integer enroll(@Param("username") String username , @Param("password") String password);
+    @Insert("insert into user(id,username,password) values (${id},${username},${password})")
+    Integer enroll(@Param("id") Long id,@Param("username") String username , @Param("password") String password);
 }

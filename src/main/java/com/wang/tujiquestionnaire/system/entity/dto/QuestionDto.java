@@ -46,7 +46,6 @@ public class QuestionDto implements Serializable {
 
     @ApiModelProperty("图片id")
     private Integer questionPicId;
-
     @ApiModelProperty("调查问卷问题选项主表列表")
     private List<Option> optionList;
 

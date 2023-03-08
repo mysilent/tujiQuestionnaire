@@ -39,5 +39,4 @@ public class SurveyController {
         SurveyCreateDto surveyCreateDto = surveyService.selectQuestionnaire(id);
         return surveyCreateDto;
     }
-
 }
