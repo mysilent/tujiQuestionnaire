@@ -15,7 +15,6 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 @SpringBootApplication
 
 public class TujiQuestionnaireApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(TujiQuestionnaireApplication.class, args);
     }

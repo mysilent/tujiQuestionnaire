@@ -19,7 +19,6 @@ import lombok.Setter;
  * @author wang
  * @since 2023-02-28
  */
-@Data
 @Getter
 @Setter
 @TableName("answer_info")

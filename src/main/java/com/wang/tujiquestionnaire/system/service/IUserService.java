@@ -2,6 +2,7 @@ package com.wang.tujiquestionnaire.system.service;
 
 import com.wang.tujiquestionnaire.system.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
 
 /**
  * <p>
@@ -29,4 +30,5 @@ public interface IUserService extends IService<User> {
      */
      Integer enroll(String username,String password);
 
+    UserDto selectUser(String username);
 }

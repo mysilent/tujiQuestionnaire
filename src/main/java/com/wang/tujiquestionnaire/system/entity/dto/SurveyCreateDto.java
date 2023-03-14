@@ -2,13 +2,10 @@ package com.wang.tujiquestionnaire.system.entity.dto;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.wang.tujiquestionnaire.system.entity.Option;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,10 +15,9 @@ import java.util.List;
  * Package: IntelliJ IDEA
  * Description:
  *
- * @Author: wang
+ * @Author:  wang
  * Create:2023/3/2-11:16
  */
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

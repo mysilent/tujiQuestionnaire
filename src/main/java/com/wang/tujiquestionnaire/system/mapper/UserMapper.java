@@ -2,6 +2,7 @@ package com.wang.tujiquestionnaire.system.mapper;
 
 import com.wang.tujiquestionnaire.system.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -43,4 +44,12 @@ public interface UserMapper extends BaseMapper<User> {
      */
     @Insert("insert into user(id,username,password) values (${id},${username},${password})")
     Integer enroll(@Param("id") Long id,@Param("username") String username , @Param("password") String password);
+
+    /**
+     * 根据用户名查询用户的一些用户信息
+     * @param username 用户名
+     * @return UseDto对象
+     */
+    @Select("select id,nickname from user where username=${username}")
+    UserDto selectUser(String username);
 }

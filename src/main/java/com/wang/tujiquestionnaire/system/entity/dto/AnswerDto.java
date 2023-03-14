@@ -21,7 +21,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class AnswerDto {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;

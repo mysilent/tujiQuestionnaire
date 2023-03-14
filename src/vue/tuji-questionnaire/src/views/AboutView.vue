@@ -1,8 +1,16 @@
 <template>
-  <div class="about">
-  </div>
 </template>
 
 <style>
 
+
+
 </style>
+<script >
+
+import {defineComponent} from "vue";
+export default defineComponent({
+})
+
+
+</script>

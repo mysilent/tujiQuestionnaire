@@ -12,7 +12,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * 
+ * 用户表
  * </p>
  *
  * @author wang
@@ -20,7 +20,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@ApiModel(value = "User对象", description = "")
+@ApiModel(value = "User对象", description = "用户表")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;

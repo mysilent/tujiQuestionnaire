@@ -1,7 +1,9 @@
 package com.wang.tujiquestionnaire.system.controller;
 
 import com.wang.tujiquestionnaire.common.Result;
+import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
 import com.wang.tujiquestionnaire.system.service.impl.UserServiceImpl;
+import com.wang.tujiquestionnaire.until.JwtUtil;
 import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +26,17 @@ public class UserController {
     }
 
     @ApiOperation("用户登录")
-    @GetMapping("/login")
-    public Result login(@ApiParam("用户名") String username, @ApiParam("密码") String password) {
+    @PostMapping ("/login")
+    public Result login(@RequestParam("username") String username, @RequestParam("password")String password) {
+//        System.out.println(userDto.getUsername()+userDto.getPassword());
         Integer i = userService.login(username, password);
         if (i == 1) {
-            return Result.success();
+            UserDto userDto = userService.selectUser(username);
+            String token = JwtUtil.getToken(username,password);
+            userDto.setToken(token);
+            if (token != null){
+                return Result.success(userDto);
+            }
         }
         return Result.error(10000, "账户或密码错误");
     }

@@ -5,19 +5,37 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+        children:[{
+            path: '/home/questionnairePreview',
+            name: 'questionnairePreview',
+            component:()=>import('../views/HomePageView/QuestionnairePreview.vue')
+        },{
+            path: '/home/publishQuestionnaire',
+            name: 'publishQuestionnaire',
+            component:()=>import('../views/HomePageView/PublishQuestionnaire.vue')
+        },{
+            path: '/home/myQuestionnaire',
+            name: 'myQuestionnaire',
+            component:()=>import('../views/HomePageView/MyQuestionnaire.vue')
+        },
+
+        ]
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
-    }
+    },
+      {
+          path: '/',
+          name: 'login',
+          component: () => import('../views/Login.vue')
+      }
   ]
-})
+}
+)
 
 export default router

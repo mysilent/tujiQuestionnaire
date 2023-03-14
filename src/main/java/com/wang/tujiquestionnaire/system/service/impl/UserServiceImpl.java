@@ -1,6 +1,7 @@
 package com.wang.tujiquestionnaire.system.service.impl;
 
 import com.wang.tujiquestionnaire.system.entity.User;
+import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
 import com.wang.tujiquestionnaire.system.mapper.UserMapper;
 import com.wang.tujiquestionnaire.system.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -39,6 +40,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return (userMapper.enroll(id,username, password)==1) ? 1:0;
         }
         return 2;
+    }
+
+    @Override
+    public UserDto selectUser(String username) {
+        UserDto userDto = userMapper.selectUser(username);
+        userDto.setUsername(username);
+        return userDto;
     }
 
 }

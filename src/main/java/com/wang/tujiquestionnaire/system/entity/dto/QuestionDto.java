@@ -17,7 +17,6 @@ import java.util.List;
  * @Author: wang
  * Create:2023/3/3-14:55
  */
-@Data
 @Getter
 @Setter
 @AllArgsConstructor
