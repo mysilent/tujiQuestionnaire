@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class Result {
     private Integer code;
     private String msg;
-    private Object date;
+    private Object data;
 
     public static Result success(){
         return new Result(200,"成功",null);

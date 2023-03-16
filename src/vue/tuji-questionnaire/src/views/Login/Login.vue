@@ -1,14 +1,7 @@
 <template>
   <div class="login">
     <div class="login-box">
-      <div class="owl" id="owl">
-        <div class="hand"></div>
-        <div class="hand hand-r"></div>
-        <div class="arms">
-          <div class="arm"></div>
-          <div class="arm arm-r"></div>
-        </div>
-      </div>
+
       <div class="input-box">
         <el-form :model="user" :rules="rules" ref="user" class="demo-ruleForm ">
           <el-form-item prop="username">
@@ -27,16 +20,15 @@
 
 </template>
 
-<script>
-import {loginAPI} from "@/axios/api/login.api";
-
-export default {
+<script lang="ts" setup>
+import {loginAPI} from "@/axios/api/logints.api";
+export default  {
   name: "login",
   data() {
     return {
       user: {
-        username: '',
-        password: ''
+        username:'',
+        password:''
       },
       rules: {
         username: [
@@ -58,11 +50,14 @@ export default {
             if (map.status !== 200) {
               this.$message.error("用户名或密码错误")
             } else {
-              this.$router.push("/home")
+              localStorage.setItem("token",map.data.token)
+              this.$router.push({
+                name:"home",
+              })
             }
           })
         } else {
-          this.$message.error("请正确填写")
+          this.$message.error("请正确填写登录信息")
         }
       })
     },

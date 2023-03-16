@@ -1,17 +1,19 @@
-import myAxios from '../http';
-// import myAxios from "../api/request";
-import qs from "qs";
+import myAxios from '../https';
+import qs from 'qs';
 
-export function loginAPI(paramsList) {
+// import qs from '@types/qs';
+
+
+export function enrollAPI(paramsList: any) {
     return myAxios({
-            url: '/system/user/login',
+            url: '/system/user/enroll',
             method: 'post',
             data: paramsList,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             transformRequest: [
-                (data) => {
+                (data: any) => {
                     return qs.stringify(data)
                 }
             ],
@@ -23,3 +25,4 @@ export function loginAPI(paramsList) {
         }
     );
 }
+export default enrollAPI;

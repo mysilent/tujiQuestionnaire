@@ -24,7 +24,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param password 账户
      * @return 0/1
      */
-    @Select("select count(*) from user where username=${username} and password=${password}")
+    @Select("select count(*) from user where username='${username}' and password='${password}'")
     Integer login(@Param("username") String username, @Param("password") String password);
 
     /**
@@ -32,7 +32,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param username 账户
      * @return 0/1
      */
-    @Select("Select count(*) from user where username=${username}")
+    @Select("Select count(*) from user where username='${username}'")
     Integer usernameSelectSame(@Param("username") String username);
 
     /**
@@ -42,7 +42,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param id 成员id
      * @return 成功、失败
      */
-    @Insert("insert into user(id,username,password) values (${id},${username},${password})")
+    @Insert("insert into user(id,username,password) values (${id},'${username}','${password}')")
     Integer enroll(@Param("id") Long id,@Param("username") String username , @Param("password") String password);
 
     /**
@@ -50,6 +50,6 @@ public interface UserMapper extends BaseMapper<User> {
      * @param username 用户名
      * @return UseDto对象
      */
-    @Select("select id,nickname from user where username=${username}")
+    @Select("select id,nickname from user where username='${username}'")
     UserDto selectUser(String username);
 }

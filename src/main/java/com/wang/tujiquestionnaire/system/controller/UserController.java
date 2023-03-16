@@ -32,7 +32,7 @@ public class UserController {
         Integer i = userService.login(username, password);
         if (i == 1) {
             UserDto userDto = userService.selectUser(username);
-            String token = JwtUtil.getToken(username,password);
+            String token = JwtUtil.getToken(username,String.valueOf(userDto.getId()));
             userDto.setToken(token);
             if (token != null){
                 return Result.success(userDto);
@@ -43,7 +43,7 @@ public class UserController {
 
     @ApiOperation("用户注册")
     @PostMapping("/enroll")
-    public Result enroll(String username, String password) {
+    public Result enroll(@RequestParam("username") String username, @RequestParam("pass")String password) {
         switch (userService.enroll(username, password)) {
             case 1:
                 return Result.success();

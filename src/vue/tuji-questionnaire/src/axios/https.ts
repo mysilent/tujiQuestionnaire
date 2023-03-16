@@ -1,7 +1,9 @@
 import axios from 'axios';
-import {getTokenAUTH} from '@/utils/auth';
+// import {getTokenAUTH} from '@/utils/auth';
+import {getTokenAUTH} from '@/utils/auths';
+import {carouselContextKey} from "element-plus";
 
-function myAxios(axiosConfig, customOptions, loadingOptions) {
+function myAxios(axiosConfig: any, customOptions: any) {
     const service = axios.create({
         baseURL: 'http://localhost:8080', // 设置统一的请求前缀
         timeout: 10000, // 设置统一的超时时长
@@ -20,7 +22,6 @@ function myAxios(axiosConfig, customOptions, loadingOptions) {
             custom_options.repeat_request_cancel && addPending(config);
             // config.headers['token'] = getTokenAUTH.token;  // 设置请求头
             // console.log(getTokenAUTH())
-
             // 设置请求头
             if (getTokenAUTH() && typeof window !== "undefined") {
                 config.headers.Authorization = getTokenAUTH();
@@ -113,7 +114,7 @@ const pendingMap = new Map();
  * @param {*} config
  * @returns string
  */
-function getPendingKey(config) {
+function getPendingKey(config: any) {
     let {url, method, params, data} = config;
     // if(typeof data === 'string') data = JSON.parse(data); // response里面返回的config.data是个字符串对象
     return [url, method, JSON.stringify(params), JSON.stringify(data)].join('&');
@@ -123,7 +124,7 @@ function getPendingKey(config) {
  * 储存每个请求唯一值, 也就是cancel()方法, 用于取消请求
  * @param {*} config
  */
-function addPending(config) {
+function addPending(config: any) {
     const pendingKey = getPendingKey(config);
     config.cancelToken = config.cancelToken || new axios.CancelToken((cancel) => {
         if (!pendingMap.has(pendingKey)) {
@@ -136,7 +137,7 @@ function addPending(config) {
  * 删除重复的请求
  * @param {*} config
  */
-function removePending(config) {
+function removePending(config: any) {
     const pendingKey = getPendingKey(config);
     if (pendingMap.has(pendingKey)) {
         const cancelToken = pendingMap.get(pendingKey);
@@ -149,7 +150,7 @@ function removePending(config) {
  * 处理异常
  * @param {*} error
  */
-function httpErrorStatusHandle(error) {
+function httpErrorStatusHandle(error: any) {
     // 处理被取消的请求
     if (axios.isCancel(error)) return console.error('请求的重复请求：' + error.message);
     let message = '';
@@ -202,7 +203,7 @@ function httpErrorStatusHandle(error) {
     if (error.message.includes('timeout')) message = '网络请求超时！';
     if (error.message.includes('Network')) message = window.navigator.onLine ? '服务端异常！' : '您断网了！';
 
-    ElMessage({
+    const ElMessage = ({
         type: 'error',
         message
     })
