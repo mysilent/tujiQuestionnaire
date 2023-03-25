@@ -25,7 +25,6 @@ import java.util.List;
 public class QuestionDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty("关联调查问卷主表ID")

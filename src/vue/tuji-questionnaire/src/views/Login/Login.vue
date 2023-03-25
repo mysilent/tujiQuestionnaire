@@ -1,68 +1,104 @@
 <template>
-  <div class="login">
-    <div class="login-box">
-
+  <div class="login"  >
+    <div class="login-box" >
+      <div class="owl" id="owl" v-bind:class="{'password': isActive===1}">
+        <div class="duihua"><span style="font-size: 14px">如果你还未加入我们,就快去<span @click="enroll" style="color: #72afd3;cursor: pointer;">注册</span>吧！</span></div>
+        <div class="hand"></div>
+        <div class="hand hand-r"></div>
+        <div class="arms">
+          <div class="arm"></div>
+          <div class="arm arm-r"></div>
+        </div>
+      </div>
       <div class="input-box">
-        <el-form :model="user" :rules="rules" ref="user" class="demo-ruleForm ">
-          <el-form-item prop="username">
+        <el-form :model="user" :rules="rules" ref="ruleFormRef" class="demo-ruleForm ">
+          <el-form-item prop="username" >
             <el-input v-model="user.username" placeholder="账户名" style="height: 35px"></el-input>
           </el-form-item>
-          <el-form-item prop="password">
-            <el-input v-model="user.password" placeholder="密码" style="height: 35px"></el-input>
+          <el-form-item prop="password" >
+            <el-input v-model="user.password" placeholder="密码" style="height: 35px" @click="isActive=1" @blur="isActive=0"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button @click="login(user)" class="button">登录</el-button>
+            <el-button type="primary" @click="submitForm(ruleFormRef)" class="button">登录</el-button>
           </el-form-item>
         </el-form>
       </div>
     </div>
   </div>
-
 </template>
 
 <script lang="ts" setup>
-import {loginAPI} from "@/axios/api/logints.api";
-export default  {
-  name: "login",
-  data() {
-    return {
-      user: {
-        username:'',
-        password:''
-      },
-      rules: {
-        username: [
-          {required: true, message: '请输入账户名称', trigger: 'blur'},
-          {min: 3, max: 6, message: '长度在 3 到 5 个字符', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: '请输入密码', trigger: 'blur'},
-          {min: 3, max: 6, message: '长度在 3 到 5 个字符', trigger: 'blur'}
-        ],
-      }
-    }
-  },
-  methods: {
-    login(user) {
-      this.$refs.user.validate((valid) => {
-        if (valid) {
-          loginAPI(user).then(map => {
-            if (map.status !== 200) {
-              this.$message.error("用户名或密码错误")
-            } else {
-              localStorage.setItem("token",map.data.token)
-              this.$router.push({
-                name:"home",
-              })
-            }
-          })
-        } else {
-          this.$message.error("请正确填写登录信息")
-        }
-      })
-    },
+import {loginAPI} from "@/axios/api/logint.api";
+import type { FormInstance, FormRules} from "element-plus";
+import {ElMessage} from "element-plus";
+import {useRouter} from "vue-router";
+import {reactive, ref} from "vue";
+
+const ruleFormRef = ref<FormInstance>()
+const router = useRouter();
+
+const user = reactive({
+  username: '',
+  password: ''
+})
+const isActive = ref(0)
+
+const username = (rule: any, value: any, callback: any) => {
+  const mailReg = /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){7,15}$/;
+  if (!value) {
+    return callback(new Error('请输入用户名称'))
+  } else if (mailReg.test(value)) {
+    callback()
+  } else {
+    callback(new Error("请以英文开头，用户名长度8-16"))
   }
 }
+
+const validatePass = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入密码'))
+  }else {
+    callback();
+  }
+}
+
+const rules = reactive<FormRules>({
+  username: [{validator: username, trigger: 'blur'}],
+  password: [{validator: validatePass, trigger: 'blur'}],
+})
+
+
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      loginAPI(user).then((map:any) => {
+        if (map.data.code !== 200) {
+          ElMessage({message: '用户名或密码错误', type: 'error'})
+        } else {
+          console.log(map)
+          localStorage.setItem("token", map.data.date.token)
+          router.push({
+            name: "home",
+            params:{
+              username:map.data.data.username,
+              nickname:map.data.data.nickname,
+            }
+          })
+        }
+      })
+    } else {
+      ElMessage({message: '请正确填写登录信息', type: 'error'})
+      return false
+    }
+  })
+}
+const enroll = ()=>{
+  router.push({
+    path:"/enroll"
+  })
+}
+
 </script>
 
 <style scoped>
@@ -103,5 +139,92 @@ export default  {
 
 .input-box input:focus {
   outline: 1px solid lightseagreen;
+}
+
+
+
+/* 接下来是猫头鹰的样式 */
+.owl{
+  width: 211px;
+  height: 108px;
+  /* 背景图片 */
+  background: url("@/imager/owl-login.png") no-repeat;
+  /* 绝对定位 */
+  position: absolute;
+  top: -100px;
+  /* 水平居中 */
+  left: 50%;
+  transform: translateX(-50%);
+}
+.owl .hand{
+  width: 34px;
+  height: 34px;
+  border-radius: 40px;
+  background-color: #472d20;
+  /* 绝对定位 */
+  position: absolute;
+  left: 12px;
+  bottom: -8px;
+  /* 沿Y轴缩放0.6倍（压扁） */
+  transform: scaleY(0.6);
+  /* 动画过渡 */
+  transition: 0.3s ease-out;
+}
+.owl .hand.hand-r{
+  left: 170px;
+}
+.owl.password .hand{
+  transform: translateX(42px) translateY(-15px) scale(0.7);
+}
+.owl.password .hand.hand-r{
+  transform: translateX(-42px) translateY(-15px) scale(0.7);
+}
+.owl .arms{
+  position: absolute;
+  top: 58px;
+  width: 100%;
+  height: 41px;
+  overflow: hidden;
+}
+.owl .arms .arm{
+  width: 40px;
+  height: 65px;
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  background: url("@/imager/owl-login-arm.png") no-repeat;
+  transform: rotate(-20deg);
+  transition: 0.3s ease-out;
+}
+.owl .arms .arm.arm-r{
+  transform: rotate(20deg) scaleX(-1);
+  left: 158px;
+}
+.owl.password .arms .arm{
+  transform: translateY(-40px) translateX(40px);
+}
+.owl.password .arms .arm.arm-r{
+  transform: translateY(-40px) translateX(-40px) scaleX(-1);
+}
+
+
+
+.duihua{
+  width: 125px;
+  height:50px;
+  border-radius: 5px;
+  background-color: #F6F6F6;
+  position: relative;
+  margin-left:175px;
+
+}
+.duihua:before{
+  content: "";
+  border-top: 30px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 20px solid #F6F6F6;
+  position: absolute;
+  top: 10px;
+  left: -10px;
 }
 </style>

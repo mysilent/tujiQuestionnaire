@@ -22,7 +22,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerDto {
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
     @ApiModelProperty("成员id")
@@ -37,6 +36,6 @@ public class AnswerDto {
     @ApiModelProperty("创建时间")
     private LocalDateTime createDate;
 
-    @ApiModelProperty("答案子表")
+    @ApiModelProperty("答案子表列表")
     private List<AnswerSon> answerSonList;
 }

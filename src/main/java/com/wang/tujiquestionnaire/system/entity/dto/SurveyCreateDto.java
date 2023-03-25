@@ -25,8 +25,6 @@ import java.util.List;
 @ToString
 public class SurveyCreateDto implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
     @ApiModelProperty("主题")
     private String surveyName;

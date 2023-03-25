@@ -30,5 +30,10 @@ public interface IUserService extends IService<User> {
      */
      Integer enroll(String username,String password);
 
+    /**
+     * 登录之后将用户一部分信息存入UserDto对象中，以便后面用户进行各种功能的使用
+     * @param username 用户名
+     * @return 返回UserDto对象
+     */
     UserDto selectUser(String username);
 }

@@ -28,7 +28,6 @@ public class UserController {
     @ApiOperation("用户登录")
     @PostMapping ("/login")
     public Result login(@RequestParam("username") String username, @RequestParam("password")String password) {
-//        System.out.println(userDto.getUsername()+userDto.getPassword());
         Integer i = userService.login(username, password);
         if (i == 1) {
             UserDto userDto = userService.selectUser(username);

@@ -1,8 +1,5 @@
 import axios from 'axios';
-// import {getTokenAUTH} from '@/utils/auth';
-import {getTokenAUTH} from '@/utils/auths';
-import {carouselContextKey} from "element-plus";
-
+import {getTokenAUTH} from '@/utils/auth';
 function myAxios(axiosConfig: any, customOptions: any) {
     const service = axios.create({
         baseURL: 'http://localhost:8080', // 设置统一的请求前缀
@@ -29,9 +26,7 @@ function myAxios(axiosConfig: any, customOptions: any) {
             return config;
         },
         error => {
-            // return Promise.reject(error);
-            //TODO  错误状态码设置
-
+            // return Promise.reject(error)；
             // httpErrorStatusHandle(error);
             custom_options.error_message_show && httpErrorStatusHandle(error);  // 处理错误状态码
             return Promise.reject(error); // 错误继续返回给到具体页面

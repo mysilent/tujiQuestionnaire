@@ -1,5 +1,4 @@
 import myAxios from '../https';
-// import myAxios from "../api/request";
 import qs from "qs";
 export function loginAPI(paramsList :any) {
     return myAxios({
