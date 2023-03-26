@@ -20,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserDto {
     @ApiModelProperty("用户id")
-    private Long id;
+    private String id;
     @ApiModelProperty("用户名")
     private String username;
     @ApiModelProperty("token")

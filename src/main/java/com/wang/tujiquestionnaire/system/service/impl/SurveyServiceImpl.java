@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -180,6 +181,14 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
         //3.将问题以及带有选项的加入到问卷对象surveyCreateDto上
         surveyCreateDto.setQuestionDtoList(dtoList);
         return surveyCreateDto;
+    }
+
+    @Override
+    public List<Survey> selectUserSurvey( Long id) {
+        QueryWrapper<Survey> queryWrapper =new QueryWrapper<>();
+        queryWrapper.eq("creator_id",id);
+        List<Survey> surveys = surveyMapper.selectList(queryWrapper);
+        return surveys;
     }
 
 

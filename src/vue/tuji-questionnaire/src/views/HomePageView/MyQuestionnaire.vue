@@ -33,19 +33,26 @@
     </div>
   </div>
 
-
 </template>
 
 <script lang="ts" setup>
 
 import {Search, Edit, Star, Delete} from "@element-plus/icons-vue";
 import {reactive, ref} from "vue";
+import selectAPI from "@/axios/api/selectUserSurvey.api";
+import {useCounterStore} from '@/stores/UserLogin'
 
+
+
+const userLogin = useCounterStore();
 const isActive = ref(-1);
-const user = reactive({
-  id: '',
-  nickname: '',
-  username: '',
+const user = ref([])
+const id = {
+  id:''
+}
+id.id = userLogin.id
+selectAPI(id).then(map=>{
+  console.log(map)
 })
 
 
@@ -135,7 +142,8 @@ el-button {
   border-radius: 5px;
   transition: border-radius 0.3s, -webkit-box-shadow 0.3s, box-shadow 0.3s ease;
   overflow: hidden;
-
+  -webkit-box-shadow: 2px 2px 3px #888888;
+  box-shadow: 2px 2px 3px #888888;
 }
 
 .box-card:hover {
@@ -150,7 +158,7 @@ el-button {
   display: grid;
   place-items: center;
   opacity: 0;
-  transition: opacity 0.3s, height 0.7s ease;
+  transition: opacity 0.3s, height 0.5s ease;
 }
 
 .bottom-div-add {
@@ -160,7 +168,7 @@ el-button {
   place-items: center;
   /*transform: scale(1, 0.1);*/
   opacity: 1;
-  transition: opacity 0.3s, height 0.7s ease;
+  transition: opacity 0.3s, height 0.5s ease;
   /*transition: opacity 0.3s, transform 0.3s ease;*/
 }
 
@@ -175,7 +183,7 @@ el-button {
 .h {
   display: inline-block;
   width: 220px;
-  height: 50px;
+  height: 35px;
   font-size: 16px;
   line-height: 26px;
   padding: 8px 16px 8px;

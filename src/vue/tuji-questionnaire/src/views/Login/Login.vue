@@ -16,7 +16,7 @@
             <el-input v-model="user.username" placeholder="账户名" style="height: 35px"></el-input>
           </el-form-item>
           <el-form-item prop="password" >
-            <el-input v-model="user.password" placeholder="密码" style="height: 35px" @click="isActive=1" @blur="isActive=0"></el-input>
+            <el-input v-model="user.password" placeholder="密码" style="height: 35px" @click="isActive=1" @blur="isActive=0" type="password"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm(ruleFormRef)" class="button">登录</el-button>
@@ -28,13 +28,17 @@
 </template>
 
 <script lang="ts" setup>
-import {loginAPI} from "@/axios/api/logint.api";
+import {loginAPI} from "@/axios/api/login.api";
 import type { FormInstance, FormRules} from "element-plus";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
 import {reactive, ref} from "vue";
+import {useCounterStore} from '@/stores/UserLogin'
 
-const ruleFormRef = ref<FormInstance>()
+
+
+const userLogin = useCounterStore();
+const ruleFormRef = ref<FormInstance>();
 const router = useRouter();
 
 const user = reactive({
@@ -76,14 +80,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
         if (map.data.code !== 200) {
           ElMessage({message: '用户名或密码错误', type: 'error'})
         } else {
-          console.log(map)
-          localStorage.setItem("token", map.data.date.token)
+          localStorage.setItem("token", map.data.data.token)
+          userLogin.$patch((state)=>{
+            state.id=map.data.data.id
+            state.username = map.data.data.username
+            state.nickname = map.data.data.nickname
+          })
           router.push({
-            name: "home",
-            params:{
-              username:map.data.data.username,
-              nickname:map.data.data.nickname,
-            }
+            name: "home"
           })
         }
       })

@@ -5,6 +5,8 @@ import com.wang.tujiquestionnaire.system.entity.dto.SurveyCreateDto;
 import com.wang.tujiquestionnaire.system.entity.Survey;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 调查问卷主表 服务类
@@ -31,4 +33,10 @@ public interface ISurveyService extends IService<Survey> {
      */
     SurveyCreateDto selectQuestionnaire(Long id);
 
+    /**
+     * 根据前端传过来的用户id返回该用户所创建的问卷
+     * @param creatorId 前端传过来的用户id
+     * @return  返回一个存储问卷id、名字、等信息的对象
+     */
+    List<Survey> selectUserSurvey(Long creatorId);
 }

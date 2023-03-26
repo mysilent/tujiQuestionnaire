@@ -1,8 +1,8 @@
 package com.wang.tujiquestionnaire.system.controller;
 
+import com.wang.tujiquestionnaire.system.entity.Question;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>

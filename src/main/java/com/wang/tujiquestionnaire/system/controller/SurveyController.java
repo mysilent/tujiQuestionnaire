@@ -1,14 +1,15 @@
 package com.wang.tujiquestionnaire.system.controller;
 
 import com.wang.tujiquestionnaire.common.Result;
+import com.wang.tujiquestionnaire.system.entity.Question;
+import com.wang.tujiquestionnaire.system.entity.Survey;
 import com.wang.tujiquestionnaire.system.entity.dto.SurveyCreateDto;
 import com.wang.tujiquestionnaire.system.service.impl.SurveyServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -38,5 +39,12 @@ public class SurveyController {
     public SurveyCreateDto selectQuestionnaire(Long id){
         SurveyCreateDto surveyCreateDto = surveyService.selectQuestionnaire(id);
         return surveyCreateDto;
+    }
+    @ApiOperation("根据用户id查询属于他的问卷")
+    @GetMapping("/selectUserSurvey")
+    public Result selectUserSurvey(@RequestParam("id") Long id){
+        List<Survey> surveys = surveyService.selectUserSurvey(id);
+        System.out.println(id);
+        return Result.success(surveys);
     }
 }
