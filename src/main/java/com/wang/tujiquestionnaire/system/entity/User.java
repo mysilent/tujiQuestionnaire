@@ -25,7 +25,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
     @ApiModelProperty("用户名")
     private String username;
@@ -40,7 +40,7 @@ public class User implements Serializable {
     private String email;
 
     @ApiModelProperty("电话")
-    private byte[] phone;
+    private String phone;
 
     @ApiModelProperty("创建日期")
     private LocalDateTime createDate;

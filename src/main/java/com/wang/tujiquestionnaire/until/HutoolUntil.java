@@ -18,7 +18,8 @@ public class HutoolUntil {
     /**
      * 雪花算法获取唯一id
      */
-    public Long getID(){
-        return snowflake.nextId();
+    public String getID(){
+        String id =String.valueOf(snowflake.nextId()) ;
+        return id;
     }
 }

@@ -3,27 +3,26 @@
 
 
   <div class="index">
-    <div class="box-card" @mouseover="isActive=index" @mouseout="isActive=-1" v-for="(users,index) in user"
-         :key="index">
+    <div class="box-card" @mouseover="isActive=index" @mouseout="isActive=-1" v-for="(surveys,index) in survey" :key="index">
       <div class="header-div">
         <div class="image"></div>
         <div class="state"><span class="text">{{ '答题中' }}</span></div>
         <span class="tag"></span>
       </div>
-      <div class="h"><span>{{ users }}</span></div>
+      <div class="h"><span>{{surveys.surveyName}}</span></div>
       <div>
         <div class="text-div" v-bind:class="{ 'text-div-add': isActive===index}">
           <span style="flex: auto">{{ '1' }}份</span>
           <span>
         <span class="id">
       <span class="id-title">ID</span>
-      <span class="id-num">{{ 'id' }}</span>
+      <span class="id-num">{{ surveys.id }}</span>
         </span>
         </span>
         </div>
         <div class="bottom-div" v-bind:class="{ 'bottom-div-add':isActive===index}">
           <el-row>
-            <el-button type="info" style="cursor: pointer" :icon="Search" circle @click=""/>
+            <el-button type="info" style="cursor: pointer" :icon="Search" circle @click="preview(surveys.id)"/>
             <el-button type="primary" :icon="Edit" circle/>
             <el-button type="warning" :icon="Star" circle/>
             <el-button type="danger" :icon="Delete" circle/>
@@ -39,21 +38,40 @@
 
 import {Search, Edit, Star, Delete} from "@element-plus/icons-vue";
 import {reactive, ref} from "vue";
-import selectAPI from "@/axios/api/selectUserSurvey.api";
-import {useCounterStore} from '@/stores/UserLogin'
+import {selectUserSurveyApi} from "@/axios/api/myquestionnaire.api";
+import {useLoginStore} from '@/stores/UserLogin'
+import {useRouter} from 'vue-router'
+import {useSurveyPreviewStore} from '@/stores/userSurvey'
 
 
-
-const userLogin = useCounterStore();
+const router = useRouter();
+const userLogin = useLoginStore();
 const isActive = ref(-1);
 const user = ref([])
-const id = {
+const id = reactive({
   id:''
-}
-id.id = userLogin.id
-selectAPI(id).then(map=>{
-  console.log(map)
 })
+const surveyStore = useSurveyPreviewStore()
+
+const survey:any =reactive([])
+id.id = userLogin.id
+selectUserSurveyApi(id).then(map=>{
+  let i = 0
+  for (i ;i<map.data.data.length;i++){
+    survey.push(map.data.data[i]);
+  }
+})
+
+
+function preview(id:any){
+  surveyStore.$patch((state)=>{
+    state.cont.id=id
+  })
+  router.push({
+    name:"preview",
+  })
+}
+
 
 
 </script>

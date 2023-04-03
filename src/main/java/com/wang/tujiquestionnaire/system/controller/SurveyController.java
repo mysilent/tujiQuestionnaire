@@ -36,7 +36,7 @@ public class SurveyController {
 }
     @ApiOperation("问卷查询")
     @GetMapping("/selectQuestionnaire")
-    public SurveyCreateDto selectQuestionnaire(Long id){
+    public SurveyCreateDto selectQuestionnaire(@RequestParam("id")Long id){
         SurveyCreateDto surveyCreateDto = surveyService.selectQuestionnaire(id);
         return surveyCreateDto;
     }
@@ -44,7 +44,6 @@ public class SurveyController {
     @GetMapping("/selectUserSurvey")
     public Result selectUserSurvey(@RequestParam("id") Long id){
         List<Survey> surveys = surveyService.selectUserSurvey(id);
-        System.out.println(id);
         return Result.success(surveys);
     }
 }

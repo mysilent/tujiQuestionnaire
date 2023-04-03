@@ -22,16 +22,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerDto {
-    private Long id;
+    private String id;
 
     @ApiModelProperty("成员id")
     private String userId;
 
     @ApiModelProperty("问卷主表ID")
-    private Long surveyId;
+    private String surveyId;
 
     @ApiModelProperty("问题主表ID")
-    private Long questionId;
+    private String questionId;
 
     @ApiModelProperty("创建时间")
     private LocalDateTime createDate;

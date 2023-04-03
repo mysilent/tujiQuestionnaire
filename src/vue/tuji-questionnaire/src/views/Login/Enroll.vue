@@ -46,7 +46,7 @@
 import {reactive, ref} from 'vue'
 import type {FormInstance, FormRules} from 'element-plus'
 import {ElMessage} from 'element-plus'
-import EnrollApi from '@/axios/api/eroll.api'
+import {enrollApi} from '@/axios/api/login.api'
 import {useRouter} from 'vue-router'
 
 const router = useRouter();
@@ -118,7 +118,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      EnrollApi(ruleForm).then((map: any) => {
+      enrollApi(ruleForm).then((map: any) => {
         if (map.data.code === 200) {
           router.push({path: '/login'})
           ElMessage({message: '注册成功请登录', type: 'success',})

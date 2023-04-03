@@ -53,13 +53,13 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
         List<QuestionDto> questionList= surveyCreateDto.getQuestionDtoList();
         //2.1首先存放问卷信息标注谁发布的并获取其id键值
         //2.1.1创建调查问卷主表id
-        Long  surveyId = hutoolUntil.getID();
+        String  surveyId = hutoolUntil.getID();
         survey.setId(surveyId);
        //2.2.2存入调查问卷主表
         surveyMapper.insert(survey);
         //2.2.3存入调查问卷问题主表
         for (QuestionDto q:questionList) {
-            Long questionId = hutoolUntil.getID();
+            String questionId = hutoolUntil.getID();
             q.setSurveyId(surveyId);
             q.setId(questionId);
             //2.2.3.1将questiondto中属于question的复制进去传入question表
@@ -74,7 +74,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
                 List<Option> optionList = q.getOptionList();
                 for (Option o:optionList) {
                     //2.2.2若为单选、多选将问题表的主键记录下来
-                    Long optionId = hutoolUntil.getID();
+                    String optionId = hutoolUntil.getID();
                     o.setSurveyId(surveyId);
                     o.setQuestionId(questionId);
                     o.setId(optionId);
@@ -99,11 +99,11 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
         List<Option> optionLists = new ArrayList<>();
         //2.1首先存放问卷信息标注谁发布的并获取其id键值
         //2.1.1创建调查问卷主表id
-        Long  surveyId = hutoolUntil.getID();
+        String  surveyId = hutoolUntil.getID();
         survey.setId(surveyId);
         //2.2存入调查问卷问题主表
         for (QuestionDto q:questionList) {
-            Long questionId = hutoolUntil.getID();
+            String questionId = hutoolUntil.getID();
             q.setSurveyId(surveyId);
             q.setId(questionId);
             //2.2.1将questiondto中属于question的复制进去传入question表
@@ -116,7 +116,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
                 List<Option> optionList = q.getOptionList();
                 for (Option o:optionList) {
                     //2.2.2若为单选、多选将问题表的主键记录下来
-                    Long optionId = hutoolUntil.getID();
+                    String optionId = hutoolUntil.getID();
                     o.setSurveyId(surveyId);
                     o.setQuestionId(questionId);
                     o.setId(optionId);
@@ -167,7 +167,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
 //            if (questionMapper.selectQuestionType(q.getId())!=3){
             if (!Constant.QUESTION_TYPE_TIAN.equals(q.getQuestionType())){
                 //2.4根据问卷id以及问题id查询对应选项
-                Long questionId =q.getId();
+                String questionId =q.getId();
                 optionQueryWrapper = new QueryWrapper<>();
                 optionQueryWrapper.eq("survey_id",id);
                 optionQueryWrapper.eq("question_id",questionId);

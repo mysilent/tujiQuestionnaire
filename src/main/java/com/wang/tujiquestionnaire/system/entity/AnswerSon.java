@@ -27,13 +27,13 @@ public class AnswerSon implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
     @ApiModelProperty("答案主表id")
-    private Long answerId;
+    private String answerId;
 
     @ApiModelProperty("选项主表id")
-    private Long optionId;
+    private String optionId;
 
     @ApiModelProperty("答案内容")
     private String optionContent;

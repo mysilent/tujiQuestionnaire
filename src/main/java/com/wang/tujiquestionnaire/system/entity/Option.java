@@ -26,13 +26,13 @@ public class Option implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
     @ApiModelProperty("调查问卷ID")
-    private Long surveyId;
+    private String surveyId;
 
     @ApiModelProperty("问题ID")
-    private Long questionId;
+    private String questionId;
 
     @ApiModelProperty("选项名称")
     private String optionName;

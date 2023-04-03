@@ -28,16 +28,17 @@
 </template>
 
 <script lang="ts" setup>
-import {loginAPI} from "@/axios/api/login.api";
+// import {loginAPI} from "@/axios/api/login.api";
+import {loginApi} from "@/axios/api/login.api";
 import type { FormInstance, FormRules} from "element-plus";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
 import {reactive, ref} from "vue";
-import {useCounterStore} from '@/stores/UserLogin'
+import {useLoginStore} from '@/stores/UserLogin'
 
 
 
-const userLogin = useCounterStore();
+const userLogin = useLoginStore();
 const ruleFormRef = ref<FormInstance>();
 const router = useRouter();
 
@@ -76,7 +77,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      loginAPI(user).then((map:any) => {
+      loginApi(user).then((map:any) => {
         if (map.data.code !== 200) {
           ElMessage({message: '用户名或密码错误', type: 'error'})
         } else {
@@ -87,7 +88,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             state.nickname = map.data.data.nickname
           })
           router.push({
-            name: "home"
+            path:'/home'
           })
         }
       })

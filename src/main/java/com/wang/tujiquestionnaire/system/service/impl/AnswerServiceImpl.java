@@ -51,7 +51,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         BeanUtils.copyProperties(answerDto,answer);
         List<AnswerSon> answerSonList = answerDto.getAnswerSonList();
         for (AnswerSon answerSon: answerSonList) {
-            Long id = hutoolUntil.getID();
+            String id = hutoolUntil.getID();
             answerSon.setId(id);
             answerSon.setAnswerId(answerDto.getId());
             answerSonLists.add(answerSon);

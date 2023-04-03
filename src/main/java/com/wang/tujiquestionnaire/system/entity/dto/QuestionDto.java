@@ -25,10 +25,10 @@ import java.util.List;
 public class QuestionDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private String id;
 
     @ApiModelProperty("关联调查问卷主表ID")
-    private Long surveyId;
+    private String surveyId;
 
     @ApiModelProperty("1 单选 2多选 3填空")
     private String questionType;

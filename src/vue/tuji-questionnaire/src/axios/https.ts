@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {getTokenAUTH} from '@/utils/auth';
+import {ElMessage} from "element-plus";
 function myAxios(axiosConfig: any, customOptions: any) {
     const service = axios.create({
         baseURL: 'http://localhost:8080', // 设置统一的请求前缀
@@ -17,11 +18,9 @@ function myAxios(axiosConfig: any, customOptions: any) {
         config => {
             removePending(config);
             custom_options.repeat_request_cancel && addPending(config);
-            // config.headers['token'] = getTokenAUTH.token;  // 设置请求头
-            // console.log(getTokenAUTH())
-            // 设置请求头
             if (getTokenAUTH() && typeof window !== "undefined") {
-                config.headers.Authorization = getTokenAUTH();
+                // 设置请求头
+                config.headers['token'] = getTokenAUTH();
             }
             return config;
         },
@@ -29,25 +28,14 @@ function myAxios(axiosConfig: any, customOptions: any) {
             // return Promise.reject(error)；
             // httpErrorStatusHandle(error);
             custom_options.error_message_show && httpErrorStatusHandle(error);  // 处理错误状态码
+
             return Promise.reject(error); // 错误继续返回给到具体页面
 
         }
     );
 
-    // service.interceptors.request.use(
-    //     config => {
-    //         removePending(config);
-    //         addPending(config);
-    //         //自动携带token
-    //         if(getTokenAUTH&& typeof window !== "undefined"){
-    //             config.headers.Authorization = getTokenAUTH();
-    //         }
-    //         return config;
-    //     },
-    //     error => {
-    //         return Promise.reject(error);
-    //     }
-    // );
+
+
     //返回数据处理
     service.interceptors.response.use(
         response => {
@@ -66,41 +54,14 @@ function myAxios(axiosConfig: any, customOptions: any) {
         },
         error => {
             error.config && removePending(error.config);
-            return Promise.reject(error);
+            const elmes = custom_options.error_message_show && httpErrorStatusHandle(error);  // 处理错误状态码
+            // return Promise.reject(error);
+            ElMessage({message:elmes,type:"error"})
+            return Promise.reject(error)
         }
-    );
+    )
     return service(axiosConfig)
 }
-
-// function myAxios(axiosConfig) {
-//     const service = axios.create({
-//         baseURL: 'http://localhost:8080', // 设置统一的请求前缀
-//         timeout: 10000, // 设置统一的超时时长
-//     });
-//     service.interceptors.request.use(
-//         config => {
-//             removePending(config);
-//             addPending(config);
-//             return config;
-//         },
-//         error => {
-//             return Promise.reject(error);
-//         }
-//     );
-//
-//     service.interceptors.response.use(
-//         response => {
-//             removePending(response.config);
-//             return response;
-//         },
-//         error => {
-//             error.config && removePending(error.config);
-//             return Promise.reject(error);
-//         }
-//     );
-//
-//     return service(axiosConfig)
-// }
 
 const pendingMap = new Map();
 
@@ -198,10 +159,10 @@ function httpErrorStatusHandle(error: any) {
     if (error.message.includes('timeout')) message = '网络请求超时！';
     if (error.message.includes('Network')) message = window.navigator.onLine ? '服务端异常！' : '您断网了！';
 
-    const ElMessage = ({
-        type: 'error',
-        message
-    })
+    // const ElMessage = ({
+    //     message
+    // })
+   return message
 }
 
 export default myAxios;

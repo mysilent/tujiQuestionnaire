@@ -21,8 +21,17 @@ const router = createRouter({
                 }, {
                     path: '/home/myQuestionnaire',
                     name: 'myQuestionnaire',
-                    component: () => import('../views/HomePageView/MyQuestionnaire.vue')
-                },
+                    component: () => import('../views/HomePageView/MyQuestionnaire.vue'),
+                },{
+                        path: '/home/myQuestionnaire/preview',
+                        name: 'preview',
+                        component:()=>import('../views/MyQuestion/preview.vue'),
+                        // component:previews,
+                },{
+                        path: '/home/myQuestionnaire/revise',
+                        name: 'revise',
+                        component:()=>import('../views/MyQuestion/answer.vue'),
+                }
                 ]
             }, {
                 path: '/about',

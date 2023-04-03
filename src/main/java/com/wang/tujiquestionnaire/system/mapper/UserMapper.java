@@ -43,7 +43,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 成功、失败
      */
     @Insert("insert into user(id,username,password) values (${id},'${username}','${password}')")
-    Integer enroll(@Param("id") Long id,@Param("username") String username , @Param("password") String password);
+    Integer enroll(@Param("id") String id,@Param("username") String username , @Param("password") String password);
 
     /**
      * 根据用户名查询用户的一些用户信息

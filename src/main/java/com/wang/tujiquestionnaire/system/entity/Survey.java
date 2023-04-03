@@ -31,7 +31,7 @@ public class Survey implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
     @ApiModelProperty("主题")
     private String surveyName;
@@ -61,10 +61,10 @@ public class Survey implements Serializable {
     private LocalDateTime updateDate;
 
     @ApiModelProperty("创建人员ID")
-    private Long creatorId;
+    private String creatorId;
 
     @ApiModelProperty("更新人员ID")
-    private Long updatorId;
+    private String updatorId;
 
     @ApiModelProperty("图片id")
     private Integer surveyPicId;

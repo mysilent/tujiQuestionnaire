@@ -36,7 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Integer enroll(String username, String password) {
             if (userMapper.usernameSelectSame(username)==0) {
-                Long id= hutoolUntil.getID();
+                String id= hutoolUntil.getID();
             return (userMapper.enroll(id,username, password)==1) ? 1:0;
         }
         return 2;

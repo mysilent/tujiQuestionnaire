@@ -27,16 +27,16 @@ public class UserCreateAnswer implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private String id;
 
     @ApiModelProperty("用户名")
     private String userId;
 
     @ApiModelProperty("问卷主表id")
-    private Long surveyId;
+    private String surveyId;
 
     @ApiModelProperty("答案主表id")
-    private Long answerId;
+    private String answerId;
 
     @ApiModelProperty("创建时间")
     private LocalDateTime createDate;
