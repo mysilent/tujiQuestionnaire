@@ -31,7 +31,7 @@ export const http = {
         //调用封装好的axios实例，下文同理
         return request(config, customOptions)
     },
-    post(url: any, params: any) {
+    post_login(url: any, params: any) {
         const config = {
             method: 'post',
             url: url,
@@ -41,9 +41,37 @@ export const http = {
             },
             transformRequest: [
                 (data :any) => {
+                    // console.log(qs.stringify(data))
                     return qs.stringify(data)
+                    // return data
                 }
             ],
+        }
+        const customOptions: any = {
+            // 是否开启取消重复请求, 默认为 false
+            repeat_request_cancel: true,
+            // 是否开启接口错误信息展示，默认为true
+            error_message_show: true
+        }
+
+        return request(config,customOptions)
+    },
+    post_survey(url: any, params: any) {
+        const config = {
+            method: 'post',
+            url: url,
+            data: JSON.stringify(params),
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            dataType:'json',
+            // transformRequest: [
+            //     (data :any) => {
+            //         // console.log(qs.stringify(data))
+            //         return qs.stringify(data)
+            //         // return data
+            //     }
+            // ],
         }
         const customOptions: any = {
             // 是否开启取消重复请求, 默认为 false

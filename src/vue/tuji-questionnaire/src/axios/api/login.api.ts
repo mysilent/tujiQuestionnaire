@@ -1,10 +1,10 @@
 import {http} from "@/axios/api/api";
 
 function loginApi(params:any){
-    return http.post('/system/user/login',params)
+    return http.post_login('/system/user/login',params)
 }
 function enrollApi(params:any){
-    return http.post('/system/user/enroll',params)
+    return http.post_login('/system/user/enroll',params)
 }
 export {
     loginApi,

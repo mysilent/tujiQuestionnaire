@@ -31,7 +31,7 @@ public class SurveyController {
 
     @ApiOperation("问卷添加")
     @PostMapping("/createQuestionnaire")
-    public Result createQuestionnaire(SurveyCreateDto surveyCreateDto){
+    public Result createQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto){
         return surveyService.createQuestionnaire(surveyCreateDto);
 }
     @ApiOperation("问卷查询")

@@ -62,12 +62,13 @@ export default {
 
 <style>
 .top {
-  width: 100vi;
+  width: 98.5vi;
   height: 40px;
   margin: 0;
   display: flex;
   justify-content: space-between;
   background-color: #f2f2f2;
+  box-shadow:0 0  12px rgba(0, 0, 0, 0.12);
 }
 
 .logo-top {

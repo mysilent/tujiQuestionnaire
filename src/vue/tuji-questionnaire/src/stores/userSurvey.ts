@@ -1,5 +1,6 @@
 import { reactive} from 'vue'
 import { defineStore } from 'pinia'
+import type SurveyCreateDto from '@/type/SurveyCreateDto'
 
 export const useSurveyPreviewStore = defineStore('userSurveyPreviewStore',  {
     state: () => ({
@@ -24,43 +25,42 @@ export const useSurveyPreviewStore = defineStore('userSurveyPreviewStore',  {
 
 
 
-interface OptionDto {
-    "id": string,
-    "surveyId": string,
-    "questionId": string,
-    "optionName": string,
-    "optionSort": number,
-    "optionPicId": string,
-}
+// interface OptionDto {
+//     "id": string,
+//     "surveyId": string,
+//     "questionId": string,
+//     "optionName": string,
+//     "optionSort": number,
+//     "optionPicId": string,
+// }
 
-interface QuestionDto {
-    "id": string,
-    "surveyId": string,
-    "questionType": '1' | '2' | '3',
-    "questionDescription":string,
-    "questionSort":number,
-    "requiredFlag": string,
-    "questionPicId":string,
-    type: '1' | '2' | '3'
-    optionList?: OptionDto[]
-}
+// interface QuestionDto {
+//     "id": string,
+//     "surveyId": string,
+//     "questionType": '1' | '2' | '3',
+//     "questionDescription":string,
+//     "questionSort":number,
+//     "requiredFlag": string,
+//     "questionPicId":string,
+//     optionList?: OptionDto[]
+// }
 
-interface SurveyCreateDto {
-    "id": string,
-    "surveyName": string,
-    "surveyDescription": string,
-    "startTime":string,
-    "endTime": string,
-    "status": string,
-    "surveySort": number,
-    "topFlag": string,
-    "createDate": string,
-    "updateDate": string,
-    "creatorId": string,
-    "updatorId": string,
-    "surveyPicId": string,
-    questionDtoList: QuestionDto[]
-}
+// interface SurveyCreateDto {
+//     "id": string,
+//     "surveyName": string,
+//     "surveyDescription": string,
+//     "startTime":string,
+//     "endTime": string,
+//     "status": string,
+//     "surveySort": number,
+//     "topFlag": string,
+//     "createDate": string,
+//     "updateDate": string,
+//     "creatorId": string,
+//     "updatorId": string,
+//     "surveyPicId": string,
+//     questionDtoList: QuestionDto[]
+// }
 
 interface State {
     survey: SurveyCreateDto

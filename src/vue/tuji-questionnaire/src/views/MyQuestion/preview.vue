@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 75px;display: grid">
+  <div class="topbox">
     <!--      撑其下面的div-->
     <div class="backbox">
       <router-link tag="button" to="/home/myQuestionnaire" style=color:black;font-size:17px>
@@ -12,18 +12,18 @@
   <div class="questionnaire">
     <h1>{{ survey.surveyName }}</h1>
     <p class="description">{{ survey.surveyDescription }}</p>
-    <div v-for="(question, index) in survey.questionDtoList" :key="index">
+    <div v-for="(question, index) in survey.questionDtoList.sort((a,b)=>a.questionSort-b.questionSort)" :key="index">
       <h3>{{ index + 1 }}. {{ question.questionDescription }}</h3>
       <div v-if="question.questionType === '1'">
         <el-radio-group v-model="answers[question.questionSort]">
-          <el-radio v-for="(option, index) in question.optionList" :key="index" :label="option.optionSort">
+          <el-radio v-for="(option, index) in question.optionList.sort((a,b)=>a.optionSort-b.optionSort)" :key="index" :label="option.optionSort">
             {{ option.optionName }}
           </el-radio>
         </el-radio-group>
       </div>
       <div v-else-if="question.questionType === '2'">
         <el-checkbox-group v-model="answers[question.questionSort]">
-          <el-checkbox v-for="(option, index) in question.optionList" :key="index" :label="option.optionSort">
+          <el-checkbox v-for="(option, index) in question.optionList " :key="index" :label="option.optionSort">
             {{ option.optionName }}
           </el-checkbox>
         </el-checkbox-group>
@@ -65,13 +65,15 @@ export default defineComponent({
       console.log(answers)
     }
 
-
     return {
       submitSurvey,
       survey,
       answers
     }
   },
+  computed:{
+
+  }
 })
 </script>
 <style scoped>
@@ -96,6 +98,10 @@ export default defineComponent({
   float: right;
   margin-left: 50px;
   margin-top: 25px;
+}
+.topbox{
+  height: 75px;
+  display: grid
 }
 
 h1 {

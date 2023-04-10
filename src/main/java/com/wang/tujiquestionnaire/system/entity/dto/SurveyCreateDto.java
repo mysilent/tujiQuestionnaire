@@ -1,11 +1,10 @@
 package com.wang.tujiquestionnaire.system.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
-import javax.persistence.Id;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,10 +53,10 @@ public class SurveyCreateDto implements Serializable {
     private LocalDateTime updateDate;
 
     @ApiModelProperty("创建人员ID")
-    private Integer creatorId;
+    private String creatorId;
 
     @ApiModelProperty("更新人员ID")
-    private Integer updatorId;
+    private String updatorId;
 
     @ApiModelProperty("图片id")
     private Integer surveyPicId;

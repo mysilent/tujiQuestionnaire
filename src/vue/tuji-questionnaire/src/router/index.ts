@@ -13,24 +13,23 @@ const router = createRouter({
                 children: [{
                     path: '/home/questionnairePreview',
                     name: 'questionnairePreview',
-                    component: () => import('../views/HomePageView/QuestionnairePreview.vue')
+                    component: () => import('../views/HomePageView/QuestionnairePreview.vue'),
                 }, {
                     path: '/home/publishQuestionnaire',
                     name: 'publishQuestionnaire',
-                    component: () => import('../views/HomePageView/PublishQuestionnaire.vue')
-                }, {
+                    component: () => import('../views/PublishQuestion/QuestionCreat.vue'),
+                },{
                     path: '/home/myQuestionnaire',
                     name: 'myQuestionnaire',
                     component: () => import('../views/HomePageView/MyQuestionnaire.vue'),
-                },{
-                        path: '/home/myQuestionnaire/preview',
-                        name: 'preview',
-                        component:()=>import('../views/MyQuestion/preview.vue'),
-                        // component:previews,
-                },{
-                        path: '/home/myQuestionnaire/revise',
-                        name: 'revise',
-                        component:()=>import('../views/MyQuestion/answer.vue'),
+                }, {
+                    path: '/home/myQuestionnaire/preview',
+                    name: 'preview',
+                    component: () => import('../views/MyQuestion/preview.vue'),
+                }, {
+                    path: '/home/myQuestionnaire/revise',
+                    name: 'revise',
+                    component: () => import('../views/MyQuestion/answer.vue'),
                 }
                 ]
             }, {
@@ -40,12 +39,12 @@ const router = createRouter({
             }, {
                 path: '/login',
                 name: 'login',
-                redirect:'/',
+                redirect: '/',
                 component: LoginView,
                 children: [{
                     path: '/',
                     name: 'login',
-                    component:Login,
+                    component: Login,
                 }, {
                     path: '/enroll',
                     name: 'enroll',
