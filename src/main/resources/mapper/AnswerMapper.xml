@@ -2,4 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wang.tujiquestionnaire.system.mapper.AnswerMapper">
 
+    <insert id="insertAnswerList" parameterType="list">
+        insert into answer_info(id,user_id,survey_id,question_id,option_content,create_date)
+        values
+        <foreach item="item" index="index" collection="answerList" separator=",">
+            (
+            #{item.id},
+            #{item.userId},
+            #{item.surveyId},
+            #{item.questionId},
+            #{item.optionContent},
+            #{item.createDate}
+            )
+        </foreach>
+
+    </insert>
+
+
 </mapper>

@@ -12,7 +12,7 @@
         #{item.questionDescription},
         #{item.questionSort},
         #{item.requiredFlag},
-        #{item.questionPicId},
+        #{item.questionPicId}
         )
     </foreach>
 </insert>

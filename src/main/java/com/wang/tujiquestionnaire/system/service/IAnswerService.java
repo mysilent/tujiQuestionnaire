@@ -20,5 +20,11 @@ public interface IAnswerService extends IService<Answer> {
      * @param answerDto AnswerDto 对象
      * @return 返回定义的统一返回类
      */
+//    Result submitAnswer(AnswerDto answerDto);
+    /**
+     * 提交填写好的问卷至问题表
+     * @param answerDto AnswerDto 对象
+     * @return 返回定义的统一返回类
+     */
     Result submitAnswer(AnswerDto answerDto);
 }

@@ -7,11 +7,11 @@
     <foreach item="item" index="index" collection="optionLists" separator=",">
         (
         #{item.id},
-        #{item.survey_id},
-        #{item.question_id},
-        #{item.option_name},
-        #{item.option_sort},
-        #{item.option_pic_id}
+        #{item.surveyId},
+        #{item.questionId},
+        #{item.optionName},
+        #{item.optionSort},
+        #{item.optionPicId}
         )
     </foreach>
 </insert>

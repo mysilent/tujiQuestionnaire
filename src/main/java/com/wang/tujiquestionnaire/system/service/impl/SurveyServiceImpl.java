@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +46,6 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Result createQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto) {
-//        SurveyCreateDto surveyCreateDto = surveyCreateDto1.get(0);
-        System.out.println(surveyCreateDto);
         Survey survey = new Survey();
         Question question = null;
         //1.获取前端传输的各种信息
@@ -76,7 +73,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
             //2.2.4若为填空则停止
             if (Constant.QUESTION_TYPE_DAN.equals(q.getQuestionType()) || Constant.QUESTION_TYPE_DUO.equals(q.getQuestionType())) {
                 List<Option> optionList = q.getOptionList();
-                if (optionList!=null){
+                if (optionList != null) {
                     for (Option o : optionList) {
                         //2.2.2若为单选、多选将问题表的主键记录下来
                         String optionId = hutoolUntil.getID();
@@ -131,24 +128,23 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
                 }
             }
         }
-        try {
-            createQuestionnaireSql(survey, questionLists, optionLists);
-            return Result.success();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        createQuestionnaireSql(survey, questionLists, optionLists);
+        return Result.success(surveyId);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void createQuestionnaireSql(Survey survey, List<Question> questionLists, List<Option> optionLists) {
+    protected void createQuestionnaireSql(Survey survey, List<Question> questionLists, List<Option> optionLists) {
         surveyMapper.insert(survey);
         questionMapper.insertQuestionList(questionLists);
-        optionMapper.insertOptionList(optionLists);
+        System.out.println(optionLists.isEmpty());
+        if (!optionLists.isEmpty()) {
+            optionMapper.insertOptionList(optionLists);
+        }
     }
 
-
     @Override
-    public SurveyCreateDto selectQuestionnaire(Long id) {
+    public SurveyCreateDto selectQuestionnaire(String id) {
         //mybatis-plus 条件查询构造器
         QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
         QueryWrapper<Option> optionQueryWrapper = null;
@@ -159,19 +155,19 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
         //dtoList时QuestionDto的一个列表实例化
         List<QuestionDto> dtoList = new ArrayList<>();
         //1.对问卷基础信息进行查询，并记录问卷id
+        System.out.println("id="+id);
         Survey survey = surveyMapper.selectById(id);
+        System.out.println(survey);
         BeanUtils.copyProperties(survey, surveyCreateDto);
         //2.0判断是否为选项，并将属于选项问题的选项加入到里面
         //2.1根据问卷id查找属于该问卷的问题
         queryWrapper.eq("survey_id", id);
         //2.2将每一个问卷的问题查询出来并放入questionList
         List<Question> questionList = questionMapper.selectList(queryWrapper);
+        System.out.println();
         for (Question q : questionList) {
             questionDto = new QuestionDto();
             //2.3判断是否为选项
-            System.out.println(q.getQuestionType());
-            //TODO 取消掉去数据库查询问题类型，改为直接读取前面查询到的数据中的
-//            if (questionMapper.selectQuestionType(q.getId())!=3){
             if (!Constant.QUESTION_TYPE_TIAN.equals(q.getQuestionType())) {
                 //2.4根据问卷id以及问题id查询对应选项
                 String questionId = q.getId();
@@ -181,9 +177,9 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
                 List<Option> optionList = optionMapper.selectList(optionQueryWrapper);
                 //2.5将选项分别添加到对应的问题列表dtoList中
                 questionDto.setOptionList(optionList);
-                BeanUtils.copyProperties(q, questionDto);
-                dtoList.add(questionDto);
             }
+            BeanUtils.copyProperties(q, questionDto);
+            dtoList.add(questionDto);
         }
         //3.将问题以及带有选项的加入到问卷对象surveyCreateDto上
         surveyCreateDto.setQuestionDtoList(dtoList);
@@ -194,9 +190,83 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
     public List<Survey> selectUserSurvey(Long id) {
         QueryWrapper<Survey> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("creator_id", id);
-        List<Survey> surveys = surveyMapper.selectList(queryWrapper);
-        return surveys;
+        return surveyMapper.selectList(queryWrapper);
     }
 
+
+    @Override
+    public Result deleteQuestionnaire(String id) {
+        QueryWrapper<Question> questionQueryWrapper = new QueryWrapper<>();
+        questionQueryWrapper.eq("survey_id", id);
+        QueryWrapper<Option> optionQueryWrapper = new QueryWrapper<>();
+        optionQueryWrapper.eq("survey_id", id);
+        int i = deleteQuestionnaireSql(id, questionQueryWrapper, optionQueryWrapper);
+        return i == 1 ? Result.success() : Result.error();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    protected int deleteQuestionnaireSql(String id, QueryWrapper<Question> questionQueryWrapper, QueryWrapper<Option> optionQueryWrapper) {
+        int i = surveyMapper.deleteById(id);
+        questionMapper.delete(questionQueryWrapper);
+        optionMapper.delete(optionQueryWrapper);
+        return i == 1 ? 1 : 0;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Result reviseQuestionnaire(SurveyCreateDto surveyCreateDto) {
+/*        //1.接受前端对问卷修改之后的数据,进行数据提取
+        //1.1获取survey的数据
+        Survey survey = new Survey();
+        BeanUtils.copyProperties(surveyCreateDto,survey);
+        //1.2获取question的数据  (questionList)
+        //survey中的questionDto的列表
+        List<Question> questionList = new ArrayList<Question>();
+        List<Option> optionList = new ArrayList<Option>();
+        Question question = new Question();
+        List<QuestionDto> questionDtoList = surveyCreateDto.getQuestionDtoList();
+        for (QuestionDto questionDto:questionDtoList) {
+            BeanUtils.copyProperties(questionDto,question);
+            questionList.add(question);
+            optionList.addAll(questionDto.getOptionList());
+        }
+        System.out.println(questionList);
+        System.out.println(optionList);
+        //1.4进行构造方法的设置
+        QueryWrapper<Question> questionQueryWrapper = new QueryWrapper<>();
+        questionQueryWrapper.eq("survey_id", survey.getId());
+        QueryWrapper<Option> optionQueryWrapper = new QueryWrapper<>();
+        optionQueryWrapper.eq("survey_id", survey.getId());
+        //2.调用update方法对问卷信息主表进行修改
+        try {
+            reviseQuestionnaireSql(survey, questionQueryWrapper, optionQueryWrapper, questionList, optionList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }*/
+
+        deleteQuestionnaire(surveyCreateDto.getId());
+        return createQuestionnaire1(surveyCreateDto);
+    }
+
+/*    @Transactional(rollbackFor = Exception.class)
+    protected void reviseQuestionnaireSql(Survey survey,QueryWrapper<Question> questionQueryWrapper, QueryWrapper<Option> optionQueryWrapper, List<Question> questionList, List<Option> optionList) {
+        surveyMapper.updateById(survey);
+        //3.将对应该问卷id的问题进行删除
+        questionMapper.delete(questionQueryWrapper);
+        //3.1删除之后就调用sql对问题进行重新储存
+        questionMapper.insertQuestionList(questionList);
+        //4.将对应问卷id的选项进行删除
+        optionMapper.delete(optionQueryWrapper);
+        //4.1选项删除之后在对选项进行重新存储
+        optionMapper.insertOptionList(optionList);
+    }*/
+
+
+    @Override
+    public List<Survey> selectOtherUserSurvey(String id) {
+        QueryWrapper<Survey> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ne("creator_id", id);
+        return surveyMapper.selectList(queryWrapper);
+    }
 
 }

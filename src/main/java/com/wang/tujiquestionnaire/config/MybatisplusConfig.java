@@ -39,7 +39,7 @@ public class MybatisplusConfig {
                             .pathInfo(Collections.singletonMap(OutputFile.xml, mapperPath)); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("user_create_answer") // 设置需要生成的表名
+                    builder.addInclude("user_history") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_") // 设置过滤表前缀
                             .addTableSuffix("_info")
                             .controllerBuilder().enableRestStyle()

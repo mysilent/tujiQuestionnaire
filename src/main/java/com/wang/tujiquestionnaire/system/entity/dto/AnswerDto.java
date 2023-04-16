@@ -1,13 +1,6 @@
 package com.wang.tujiquestionnaire.system.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.wang.tujiquestionnaire.system.entity.AnswerSon;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * ClassName: AnswerDto
@@ -15,27 +8,17 @@ import java.util.List;
  * Description:
  *
  * @Author: wang
- * Create:2023/3/8-9:17
+ * Create:2023/4/13-20:06
  */
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerDto {
-    private String id;
-
-    @ApiModelProperty("成员id")
     private String userId;
-
-    @ApiModelProperty("问卷主表ID")
-    private String surveyId;
-
-    @ApiModelProperty("问题主表ID")
-    private String questionId;
-
-    @ApiModelProperty("创建时间")
-    private LocalDateTime createDate;
-
-    @ApiModelProperty("答案子表列表")
-    private List<AnswerSon> answerSonList;
+    private String surveyName;
+   private String surveyId;
+   private String[] questionList;
+   private String[] answers;
 }

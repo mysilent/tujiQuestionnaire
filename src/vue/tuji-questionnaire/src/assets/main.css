@@ -15,15 +15,11 @@ a,
   /*transition: 0.4s;*/
 }
 
-/*  #app {*/
-/*    display: grid;*/
-/*    grid-template-columns: 1fr 1fr;*/
-/*    padding: 0 ;*/
-/*  }*/
 .icon-float{
     transform:  translateY(0.15em);
 }
 .margin-lift-5{
     margin-left: 5px
 }
+
 

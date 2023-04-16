@@ -21,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class SurveyCreateDto implements Serializable {
     private static final long serialVersionUID = 1L;
     private String id;
@@ -62,4 +61,24 @@ public class SurveyCreateDto implements Serializable {
     private Integer surveyPicId;
     @ApiModelProperty("调查问卷问题主表列表")
     private List<QuestionDto> questionDtoList;
+
+    @Override
+    public String toString() {
+        return "SurveyCreateDto{" +
+                "id='" + id + '\'' +
+                ", surveyName='" + surveyName + '\'' +
+                ", surveyDescription='" + surveyDescription + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", status='" + status + '\'' +
+                ", surveySort=" + surveySort +
+                ", topFlag='" + topFlag + '\'' +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                ", creatorId='" + creatorId + '\'' +
+                ", updatorId='" + updatorId + '\'' +
+                ", surveyPicId=" + surveyPicId +
+                ", questionDtoList=" + questionDtoList +
+                '}';
+    }
 }

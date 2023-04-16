@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -21,6 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 @TableName("answer_info")
 @ApiModel(value = "Answer对象", description = "用户答案表")
 public class Answer implements Serializable {
@@ -29,16 +31,14 @@ public class Answer implements Serializable {
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
-
     @ApiModelProperty("成员id")
     private String userId;
-
     @ApiModelProperty("问卷主表ID")
     private String surveyId;
-
     @ApiModelProperty("问题主表ID")
     private String questionId;
-
+    @ApiModelProperty("答案内容")
+    private String optionContent;
     @ApiModelProperty("创建时间")
     private LocalDateTime createDate;
 

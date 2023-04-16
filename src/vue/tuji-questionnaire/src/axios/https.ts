@@ -22,7 +22,6 @@ function myAxios(axiosConfig: any, customOptions: any) {
                 // 设置请求头
                 config.headers['token'] = getTokenAUTH();
             }
-            console.log(config.data)
             return config;
         },
         error => {

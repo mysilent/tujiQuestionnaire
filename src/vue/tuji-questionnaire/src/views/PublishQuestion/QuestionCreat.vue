@@ -1,7 +1,7 @@
 <template>
   <div class="questionnaireBox">
     <div class="questionnaire-editor">
-      <el-form :model="survey1.data" label-width="80px" :rules="rules" ref="survey">
+      <el-form :model="survey1.data" label-width="80px" :rules="rules" ref="ruleFormRef">
         <el-form-item label="问卷标题" prop="surveyName">
           <el-input v-model="survey1.data.surveyName" placeholder="请输入问卷名称"></el-input>
         </el-form-item>
@@ -22,7 +22,12 @@
                 {{ index + 1 }}.
               </div>
               <div class="question">
-                <el-input type="textarea" autosize show-word-limit maxlength="100" v-model="question.questionDescription"></el-input>
+                <el-form :model="question" :rules="rules" ref="ruleFormRef">
+                  <el-form-item prop="questionDescription">
+                    <el-input type="textarea" autosize show-word-limit maxlength="100"
+                              v-model="question.questionDescription"></el-input>
+                  </el-form-item>
+                </el-form>
               </div>
               <div class="button-deleteQuestion" style="justify-content: center">
                 <el-button type="danger" @click="removeQuestion(index)">删除问题</el-button>
@@ -32,18 +37,23 @@
               <template #item="{element :option,index}">
                 <el-radio-group v-model="awer[question.questionSort]">
                   <div class="option">
-                    <el-radio :key="index" :label="option.optionSort">
-                      <el-input v-model="option.optionName"></el-input>
+                    <el-radio :key="index" :label="option.optionSort" style="height: auto;margin-right:0">
+                      <el-form :model="option" :rules="rules" ref="ruleFormRef">
+                        <el-form-item prop="optionName">
+                          <el-input v-model="option.optionName"></el-input>
+                        </el-form-item>
+                      </el-form>
                     </el-radio>
+                    <div class="icon-option-delete" @click="removeItem(question,index)">
+                      <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
+                        <path fill="currentColor"
+                              d="m466.752 512-90.496-90.496a32 32 0 0 1 45.248-45.248L512 466.752l90.496-90.496a32 32 0 1 1 45.248 45.248L557.248 512l90.496 90.496a32 32 0 1 1-45.248 45.248L512 557.248l-90.496 90.496a32 32 0 0 1-45.248-45.248L466.752 512z"></path>
+                        <path fill="currentColor"
+                              d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
+                      </svg>
+                    </div>
                   </div>
-                  <div class="icon" @click="removeItem(question,index)">
-                    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
-                      <path fill="currentColor"
-                            d="m466.752 512-90.496-90.496a32 32 0 0 1 45.248-45.248L512 466.752l90.496-90.496a32 32 0 1 1 45.248 45.248L557.248 512l90.496 90.496a32 32 0 1 1-45.248 45.248L512 557.248l-90.496 90.496a32 32 0 0 1-45.248-45.248L466.752 512z"></path>
-                      <path fill="currentColor"
-                            d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
-                    </svg>
-                  </div>
+
                 </el-radio-group>
               </template>
             </draggable>
@@ -55,7 +65,12 @@
                 {{ index + 1 }}.
               </div>
               <div class="question">
-                <el-input type="textarea" autosize show-word-limit maxlength="100" v-model="question.questionDescription"></el-input>
+                <el-form :model="question" :rules="rules" ref="ruleFormRef">
+                  <el-form-item prop="questionDescription">
+                    <el-input type="textarea" autosize show-word-limit maxlength="100"
+                              v-model="question.questionDescription"></el-input>
+                  </el-form-item>
+                </el-form>
               </div>
               <div class="button-deleteQuestion">
                 <el-button type="danger" @click="removeQuestion(index)">删除问题</el-button>
@@ -65,17 +80,21 @@
               <template #item="{element :option,index}">
                 <el-checkbox-group v-model="awer[question.questionSort]">
                   <div class="option">
-                    <el-checkbox :key="index" :label="option.optionSort">
-                      <el-input v-model="option.optionName"></el-input>
+                    <el-checkbox :key="index" :label="option.optionSort" style="height: auto">
+                      <el-form :model="option" :rules="rules" ref="ruleFormRef">
+                        <el-form-item prop="optionName">
+                          <el-input v-model="option.optionName"></el-input>
+                        </el-form-item>
+                      </el-form>
                     </el-checkbox>
-                  </div>
-                  <div class="icon" @click="removeItem(question,index)">
-                    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
-                      <path fill="currentColor"
-                            d="m466.752 512-90.496-90.496a32 32 0 0 1 45.248-45.248L512 466.752l90.496-90.496a32 32 0 1 1 45.248 45.248L557.248 512l90.496 90.496a32 32 0 1 1-45.248 45.248L512 557.248l-90.496 90.496a32 32 0 0 1-45.248-45.248L466.752 512z"></path>
-                      <path fill="currentColor"
-                            d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
-                    </svg>
+                    <div class="icon-option-delete" @click="removeItem(question,index)">
+                      <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" data-v-ea893728="">
+                        <path fill="currentColor"
+                              d="m466.752 512-90.496-90.496a32 32 0 0 1 45.248-45.248L512 466.752l90.496-90.496a32 32 0 1 1 45.248 45.248L557.248 512l90.496 90.496a32 32 0 1 1-45.248 45.248L512 557.248l-90.496 90.496a32 32 0 0 1-45.248-45.248L466.752 512z"></path>
+                        <path fill="currentColor"
+                              d="M512 896a384 384 0 1 0 0-768 384 384 0 0 0 0 768zm0 64a448 448 0 1 1 0-896 448 448 0 0 1 0 896z"></path>
+                      </svg>
+                    </div>
                   </div>
                 </el-checkbox-group>
               </template>
@@ -89,7 +108,8 @@
                 {{ index + 1 }}.
               </div>
               <div class="question">
-                <el-input type="textarea" autosize show-word-limit maxlength="100" v-model="question.questionDescription"></el-input>
+                <el-input type="textarea" autosize show-word-limit maxlength="100"
+                          v-model="question.questionDescription"></el-input>
               </div>
               <div class="button-deleteQuestion">
                 <el-button type="danger" @click="removeQuestion(index)">删除问题</el-button>
@@ -104,7 +124,7 @@
         </template>
       </draggable>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button type="primary" @click="submitForm(ruleFormRef)">提交</el-button>
       </el-form-item>
     </div>
   </div>
@@ -126,18 +146,24 @@ import type QuestionDto from "@/type/QusetionDto";
 import type OptionDto from "@/type/OptionDto";
 import type SurveyCreateDto from "@/type/SurveyCreateDto";
 import draggable from 'vuedraggable'
-import {defineComponent, markRaw, reactive, ref} from 'vue'
+import {defineComponent, reactive, ref} from 'vue'
 import {Remove} from "@element-plus/icons-vue";
 import {saveSurveyApi} from '@/axios/api/publishquestionnaire.api'
 import {useLoginStore} from '@/stores/UserLogin'
+import {ElMessage} from "element-plus";
+import type {FormInstance, FormRules} from "element-plus";
+import {useRouter} from "vue-router";
+
 export default defineComponent({
   components: {
     Remove,
-    draggable
+    draggable,
   },
   setup() {
+    const router = useRouter();
+    const ruleFormRef = ref<FormInstance>();
     const storeId = useLoginStore()
-    const surveys :SurveyCreateDto = <SurveyCreateDto>({})
+    const surveys: SurveyCreateDto = <SurveyCreateDto>({})
     const survey = ({
       id: '',
       surveyName: '',
@@ -159,17 +185,80 @@ export default defineComponent({
     survey.creatorId = storeId.id
     survey.status = "0"
     survey1.data = survey
-    return {survey1, awer,surveys}
-  },
-  data() {
-    // const answers: Record<string, string | string[]> = reactive({})
-    return {
-      rules: {
-        surveyName: [{required: true, message: '请输入问卷标题', trigger: 'blur'}],
-        surveyDescription: [{required: true, message: '请输入问卷描述', trigger: 'blur'}],
-        endTime: [{required: true, message: '请选择截止日期', trigger: 'blur'}]
-      },
+
+    const SENSITIVE_REGEX = /[\u4e00-\u9fa5]|[^\w\s]/g;
+    const username = (rule: any, value: any, callback: any) => {
+      if (value === '') {
+        callback(new Error('请输入问卷标题'))
+      } else {
+        if (SENSITIVE_REGEX.test(value)) {
+          callback(new Error('输入内容包含敏感字符'));
+        } else {
+          callback();
+        }
+      }
     }
+    const validatePass = (rule: any, value: any, callback: any) => {
+      if (value === '') {
+        callback(new Error('请输入问卷描述'))
+      } else {
+        if (SENSITIVE_REGEX.test(value)) {
+          callback(new Error('输入内容包含敏感字符'));
+        } else {
+          callback();
+        }
+      }
+    }
+    const endTime = (rule: any, value: any, callback: any) => {
+      if (value === '') {
+        callback(new Error('请选择截止日期'))
+      } else {
+        callback();
+      }
+    }
+
+    const validateSensitive = (rule: any, value: any, callback: any) => {
+      if (value === '' || SENSITIVE_REGEX.test(value)) {
+        if (value === '') {
+          callback(new Error('请输入内容'))
+        } else {
+          callback(new Error('输入内容包含敏感字符'));
+        }
+      } else {
+        callback();
+      }
+    }
+
+    const rules = reactive<FormRules>({
+      surveyName: [{required: true, validator: username, trigger: 'blur'}],
+      surveyDescription: [{required: true, validator: validatePass, trigger: 'blur'}],
+      endTime: [{required: true, validator: endTime, trigger: 'blur'}],
+      questionDescription: [{required: true, validator: validateSensitive, trigger: 'blur'}],
+      optionName: [{required: true, validator: validateSensitive, trigger: 'blur'}],
+    })
+
+
+    const submitForm = (formEl: FormInstance | undefined) => {
+      if (!formEl) return
+      formEl.validate((valid) => {
+        if (valid) {
+          saveSurveyApi(survey1.data).then((map: any) => {
+            if (map.data.code == 200) {
+              ElMessage({message: '添加成功', type: 'success'})
+              router.push({
+                path: '/home/myQuestionnaire'
+              })
+            }
+          })
+        } else {
+          ElMessage({message: '请填写必填项', type: 'error'})
+          return false
+        }
+      })
+    }
+
+
+    return {survey1, awer, surveys, ruleFormRef, router, submitForm, rules, validateSensitive}
   },
   methods: {
     addQuestion(type: any) {
@@ -218,15 +307,7 @@ export default defineComponent({
         sortIndex++
       }
     },
-
-    submitForm() {
-      this.surveys = this.survey1.data
-      // console.log(this.surveys)
-    // saveSurveyApi(this.surveys)
-    saveSurveyApi( this.surveys)
-    }
   }
-
 })
 
 </script>
@@ -262,14 +343,6 @@ export default defineComponent({
   align-items: center
 }
 
-.question {
-  font-size: 20px;
-  width: 550px;
-  height: auto;
-  margin: 5px;
-  padding: 0;
-  display: inline-block;
-}
 
 .button-deleteQuestion {
   margin: 0;
@@ -279,18 +352,6 @@ export default defineComponent({
   display: inline-block;
 }
 
-.option {
-  margin: 5px;
-  padding-right: 50px;
-  padding-left: 10px;
-  display: inline-grid;
-}
-
-.icon {
-  height: 16px;
-  width: 16px;
-  display: inline-grid;
-}
 
 .nav-wrapper {
   border: #F6F6F6 1px solid;

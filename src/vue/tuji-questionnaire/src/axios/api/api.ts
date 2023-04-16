@@ -14,7 +14,6 @@ export const http = {
             url: url,
             params:params,
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
             },
             transformRequest: [
                 (data :any) => {

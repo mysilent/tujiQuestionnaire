@@ -5,7 +5,14 @@ function selectUserSurveyApi(params:any){
 function surveyPreviewApi(params:any){
     return http.get('/system/survey/selectQuestionnaire',params)
 }
+function deleteSurveyApi(params:any){
+    return http.get('/system/survey/deleteQuestionnaire',params)
+}function reviseSurvey(params:any){
+    return http.post_survey('/system/survey/reviseQuestionnaire',params)
+}
 export {
     selectUserSurveyApi,
-    surveyPreviewApi
+    surveyPreviewApi,
+    deleteSurveyApi,
+    reviseSurvey,
 }

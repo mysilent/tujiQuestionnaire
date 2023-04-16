@@ -1,15 +1,14 @@
 <template>
-  <h1>我的问卷</h1>
-
-
+  <h1>历史问卷</h1>
   <div class="index">
-    <div class="box-card" @mouseover="isActive=index" @mouseout="isActive=-1" v-for="(surveys,index) in survey" :key="index">
+    <div class="box-card" @mouseover="isActive=index" @mouseout="isActive=-1" v-for="(surveys,index) in survey"
+         :key="index">
       <div class="header-div">
-        <div class="image"></div>
-        <div class="state"><span class="text">{{ '答题中' }}</span></div>
+        <div class="image"><img src="../../../src/imager/preview-default.png" style=" width: 100%;height: 100%;object-fit:cover;"></div>
+        <div class="state"><span class="text">{{ '收集中' }}</span></div>
         <span class="tag"></span>
       </div>
-      <div class="h"><span>{{surveys.surveyName}}</span></div>
+      <div class="h"><span>{{ surveys.surveyName }}</span></div>
       <div>
         <div class="text-div" v-bind:class="{ 'text-div-add': isActive===index}">
           <span style="flex: auto">{{ '1' }}份</span>
@@ -22,10 +21,27 @@
         </div>
         <div class="bottom-div" v-bind:class="{ 'bottom-div-add':isActive===index}">
           <el-row>
-            <el-button type="info" style="cursor: pointer" :icon="Search" circle @click="preview(surveys.id)"/>
-            <el-button type="primary" :icon="Edit" circle/>
-            <el-button type="warning" :icon="Star" circle/>
-            <el-button type="danger" :icon="Delete" circle/>
+            <el-tooltip content="预览" effect="light">
+              <el-button type="success" :icon="Search" circle @click="preview(surveys.id)"/>
+            </el-tooltip>
+            <el-tooltip content="修改" effect="light">
+              <el-button type="primary" :icon="Edit" circle @click="revise(surveys.id)"/>
+            </el-tooltip>
+            <el-tooltip content="收藏" effect="light">
+              <el-button @click="topFlag(survey.topFlag)" :icon="Star" circle v-if="survey.topFlag=1"/>
+              <el-button @click="topFlag(survey.topFlag)" type="warning" :icon="Star" circle v-if="survey.topFlag=0"/>
+            </el-tooltip>
+            <el-popconfirm
+                confirm-button-text="是的"
+                cancel-button-text="再好好想想"
+                title="你真的想删除它吗？"
+                @confirm="SurveyDelete(surveys.id)"
+                width="220"
+            >
+              <template #reference>
+                <el-button type="danger" :icon="Delete" circle/>
+              </template>
+            </el-popconfirm>
           </el-row>
         </div>
       </div>
@@ -36,51 +52,78 @@
 
 <script lang="ts" setup>
 
-import {Search, Edit, Star, Delete} from "@element-plus/icons-vue";
-import {reactive, ref} from "vue";
-import {selectUserSurveyApi} from "@/axios/api/myquestionnaire.api";
+import {Search, Edit, Star, Delete, InfoFilled} from "@element-plus/icons-vue";
+import {reactive, ref, render, watchEffect} from "vue";
+import {selectUserSurveyApi, deleteSurveyApi} from "@/axios/api/myquestionnaire.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
 import {useSurveyPreviewStore} from '@/stores/userSurvey'
+import {ElMessage} from "element-plus";
 
 
 const router = useRouter();
 const userLogin = useLoginStore();
 const isActive = ref(-1);
 const user = ref([])
-const id = reactive({
-  id:''
-})
 const surveyStore = useSurveyPreviewStore()
-
-const survey:any =reactive([])
+const id = reactive({
+  id: ''
+})
+const survey: any = reactive([])
 id.id = userLogin.id
-selectUserSurveyApi(id).then(map=>{
+selectUserSurveyApi(id).then(map => {
   let i = 0
-  for (i ;i<map.data.data.length;i++){
+  for (i; i < map.data.data.length; i++) {
     survey.push(map.data.data[i]);
   }
 })
 
+function SurveyDelete(id: any) {
+  const Id = reactive({
+    id: id
+  })
+  deleteSurveyApi(Id).then(map => {
+    if (map.data.code === 200) {
+      ElMessage.success("删除成功")
+      router.go(0);
+    } else {
+      ElMessage.error("好像出错了QAQ")
+    }
+  })
+}
+function topFlag(topFlag: any) {
+  if (topFlag == 1) {
+    topFlag = 0
+    return topFlag
+  } else {
+    topFlag = 1
+    return topFlag
+  }
 
-function preview(id:any){
-  surveyStore.$patch((state)=>{
-    state.cont.id=id
+}
+function preview(id: any) {
+  surveyStore.$patch((state) => {
+    state.cont.id = id
   })
   router.push({
-    name:"preview",
+    name: "preview",
   })
 }
 
-
-
+function revise(id: any) {
+  surveyStore.$patch((state) => {
+    state.cont.id = id
+  })
+  router.push({
+    name: "revise",
+  })
+}
 </script>
 
 <style scoped>
 el-button {
   pointer-events: none
 }
-
 .index {
   display: grid;
   /*width: 220px;*/
@@ -119,8 +162,6 @@ el-button {
   padding: 0 16px;
   height: 24px;
   transition: opacity 0.5s, transform 0.5s, height 1s ease;
-  /*transition: opacity 0.3s, transform 0.3s ease, -webkit-transform 0.3s ease;*/
-  /*transform: scale(1, 0.1);*/
 }
 
 .text-div-add {
@@ -158,16 +199,17 @@ el-button {
   width: 220px;
   height: 210px;
   border-radius: 5px;
-  transition: border-radius 0.3s, -webkit-box-shadow 0.3s, box-shadow 0.3s ease;
+  transition: border-radius 0.3s, -webkit-box-shadow 0.3s, box-shadow 0.3s,transform 0.5s ease;
   overflow: hidden;
-  -webkit-box-shadow: 2px 2px 3px #888888;
-  box-shadow: 2px 2px 3px #888888;
+  -webkit-box-shadow: 2px 2px 7px #888888;
+  box-shadow: 3px 2px 7px #888888;
 }
 
 .box-card:hover {
   border-radius: 5px;
   -webkit-box-shadow: 3px 3px 10px #888888;
   box-shadow: 3px 3px 10px #888888;
+  transform: scale(1.05);
 }
 
 .bottom-div {
@@ -206,6 +248,4 @@ el-button {
   line-height: 26px;
   padding: 8px 16px 8px;
 }
-
-
 </style>

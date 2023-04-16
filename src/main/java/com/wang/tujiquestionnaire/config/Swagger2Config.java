@@ -23,10 +23,12 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class Swagger2Config {
         @Bean
         public Docket createRestApi() {
-            return new Docket(DocumentationType.OAS_30) // v2 不同
+            // v2 不同
+            return new Docket(DocumentationType.OAS_30)
                     .apiInfo(apiInfo())
                     .select()
-                    .apis(RequestHandlerSelectors.basePackage("com.wang.tujiquestionnaire.system")) // 设置扫描路径
+                    // 设置扫描路径
+                    .apis(RequestHandlerSelectors.basePackage("com.wang.tujiquestionnaire.system"))
                     .build();
         }
     /**
@@ -41,5 +43,6 @@ public class Swagger2Config {
                 .termsOfServiceUrl("locahost:3306/")
                 .description("api文档")
                 .build();
+
     }
 }

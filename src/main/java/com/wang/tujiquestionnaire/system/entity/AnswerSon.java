@@ -28,16 +28,12 @@ public class AnswerSon implements Serializable {
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
-
     @ApiModelProperty("答案主表id")
     private String answerId;
-
     @ApiModelProperty("选项主表id")
     private String optionId;
-
     @ApiModelProperty("答案内容")
     private String optionContent;
-
     @ApiModelProperty("图片id")
     private Integer answerPicId;
 

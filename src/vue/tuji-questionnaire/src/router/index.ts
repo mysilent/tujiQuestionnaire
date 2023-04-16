@@ -11,31 +11,50 @@ const router = createRouter({
                 name: 'home',
                 component: HomeView,
                 children: [{
-                    path: '/home/questionnairePreview',
-                    name: 'questionnairePreview',
-                    component: () => import('../views/HomePageView/QuestionnairePreview.vue'),
+                    path: '/home/questionnaireCenter',
+                    name: 'questionnaireCenter',
+                    component: () => import('../views/HomePageView/QuestionnaireCenter.vue'),
+                }, {
+                    path: '/home/questionnaireCenter/answer',
+                    name: 'answer',
+                    component: () => import('../views/QuestionCenter/Answer.vue'),
                 }, {
                     path: '/home/publishQuestionnaire',
                     name: 'publishQuestionnaire',
                     component: () => import('../views/PublishQuestion/QuestionCreat.vue'),
-                },{
+                }, {
                     path: '/home/myQuestionnaire',
                     name: 'myQuestionnaire',
                     component: () => import('../views/HomePageView/MyQuestionnaire.vue'),
                 }, {
                     path: '/home/myQuestionnaire/preview',
                     name: 'preview',
-                    component: () => import('../views/MyQuestion/preview.vue'),
+                    component: () => import('../views/MyQuestion/Preview.vue'),
                 }, {
                     path: '/home/myQuestionnaire/revise',
                     name: 'revise',
-                    component: () => import('../views/MyQuestion/answer.vue'),
-                }
+                    component: () => import('../views/MyQuestion/Revise.vue'),
+                },
                 ]
             }, {
-                path: '/about',
-                name: 'about',
-                component: () => import('../views/AboutView.vue')
+                path: '/personal',
+                name: 'personal',
+                component: () => import('../views/PersonalView.vue'),
+                children: [
+                    {
+                        path: '/personal/personalCenter/personalInformation',
+                        name: 'personalInformation',
+                        component: () => import('../views/Personal/son/personalInformation.vue'),
+                    }, {
+                        path: '/personal/personalCenter/historicalAnswers',
+                        name: 'historicalAnswers',
+                        component: () => import('../views/Personal/son/historicalAnswers.vue'),
+                    }, {
+                        path: '/personal/personalCenter/changePassword',
+                        name: 'changePassword',
+                        component: () => import('../views/Personal/son/changePassword.vue'),
+                    },
+                ]
             }, {
                 path: '/login',
                 name: 'login',
@@ -51,7 +70,11 @@ const router = createRouter({
                     component: () => import('../views/Login/Enroll.vue')
                 },
                 ]
-            },
+            },{
+                path: '/personal/personalCenter/historicalAnswers/personalAnswer',
+                name: 'personalAnswer',
+                component: () => import('../views/Personal/PersonalAnswer.vue')
+            }
         ]
     }
 )

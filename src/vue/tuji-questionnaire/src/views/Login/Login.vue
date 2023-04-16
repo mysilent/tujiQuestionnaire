@@ -28,7 +28,6 @@
 </template>
 
 <script lang="ts" setup>
-// import {loginAPI} from "@/axios/api/login.api";
 import {loginApi} from "@/axios/api/login.api";
 import type { FormInstance, FormRules} from "element-plus";
 import {ElMessage} from "element-plus";

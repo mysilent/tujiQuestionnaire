@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * <p>
@@ -21,6 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@ToString
 @TableName("question_info")
 @ApiModel(value = "Question对象", description = "调查问卷问题主表")
 public class Question implements Serializable {

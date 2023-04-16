@@ -5,7 +5,7 @@
         <div class="logo-top"></div>
         <img src="../components/icons/logo.svg"></div>
       <div style="width: 228px">
-        <router-link tag="button" to="/home/questionnairePreview" class="button-link" active-class="router-link-active">
+        <router-link tag="button" to="/home/questionnaireCenter" class="button-link" active-class="router-link-active">
           问卷中心
         </router-link>
         <router-link tag="button" to="/home/publishQuestionnaire" class="button-link" active-class="router-link-active">
@@ -17,17 +17,17 @@
       </div>
       <div>
         <el-dropdown class="user">
-          <div class="button">王小虎
+          <div class="button">{{nickname}}
             <User class="block-col"></User>
           </div>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>
+              <el-dropdown-item @click="personal">
                 <el-icon>
                   <UserFilled/>
                 </el-icon>&nbsp;个人中心
               </el-dropdown-item>
-              <el-dropdown-item>
+              <el-dropdown-item @click="">
                 <el-icon>
                   <Memo/>
                 </el-icon>&nbsp;修改密码
@@ -46,18 +46,28 @@
 
 </template>
 
-<script>
+<script lang="ts" setup>
 import {Memo, SwitchButton, User, UserFilled} from "@element-plus/icons-vue";
+import {storeToRefs} from "pinia";
+import {useRouter} from "vue-router";
+import {useLoginStore} from "@/stores/UserLogin";
+const store = useLoginStore()
+const router =useRouter()
+const {nickname:nickname} = storeToRefs(store)
 
-export default {
-  name: "index-top",
-  components: {Memo, UserFilled, SwitchButton, User,},
-  methods: {
-    exit() {
-      this.$router.push('/')
-    },
-  }
-}
+   const exit=()=> {
+      router.push({
+        path:'/'
+      })
+    }
+    const personal = () => {
+      let newUrl= router.resolve({
+        path: "/personal"
+      })
+      window.open(newUrl.href, "_blank");
+    }
+
+
 </script>
 
 <style>
@@ -121,14 +131,28 @@ img {
 }
 
 .button-link:hover {
-  color: #20894d;
+  color: #9B4E9E;
   cursor: pointer;
-
 }
 
+.button-link:after{
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color:#9B4E9E ;
+  transform: scaleX(0);
+  transition: transform 0.2s ease-in-out;
+}
+.button-link:focus::after{
+  transform: scaleX(1);
+}
+
+
 .router-link-active {
-  color: #20894d;
-  border-bottom: #20894d groove 3px;
+  color: #9B4E9E;
   cursor: pointer;
 }
 

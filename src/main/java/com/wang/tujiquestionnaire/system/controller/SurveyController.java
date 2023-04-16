@@ -31,19 +31,36 @@ public class SurveyController {
 
     @ApiOperation("问卷添加")
     @PostMapping("/createQuestionnaire")
-    public Result createQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto){
-        return surveyService.createQuestionnaire(surveyCreateDto);
-}
+    public Result createQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto) {
+        return surveyService.createQuestionnaire1(surveyCreateDto);
+    }
+
     @ApiOperation("问卷查询")
     @GetMapping("/selectQuestionnaire")
-    public SurveyCreateDto selectQuestionnaire(@RequestParam("id")Long id){
-        SurveyCreateDto surveyCreateDto = surveyService.selectQuestionnaire(id);
-        return surveyCreateDto;
+    public SurveyCreateDto selectQuestionnaire(@RequestParam("id") String id) {
+        return surveyService.selectQuestionnaire(id);
     }
+
     @ApiOperation("根据用户id查询属于他的问卷")
     @GetMapping("/selectUserSurvey")
-    public Result selectUserSurvey(@RequestParam("id") Long id){
-        List<Survey> surveys = surveyService.selectUserSurvey(id);
-        return Result.success(surveys);
+    public Result selectUserSurvey(@RequestParam("id") Long id) {
+        return Result.success(surveyService.selectUserSurvey(id));
+    }
+    @ApiOperation("查询除本用户id之外的问卷")
+    @GetMapping("/selectOtherUserSurvey")
+    public Result selectOtherUserSurvey (@RequestParam("id")String id){
+        return Result.success(surveyService.selectOtherUserSurvey(id));
+    }
+    @ApiOperation("问卷删除")
+    @GetMapping("/deleteQuestionnaire")
+    public Result deleteQuestionnaire(@RequestParam("id") String id) {
+        return surveyService.deleteQuestionnaire(id);
+    }
+    @ApiOperation("问卷修改")
+    @PostMapping("/reviseQuestionnaire")
+    public Result reviseQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto){
+        return surveyService.reviseQuestionnaire(surveyCreateDto);
     }
 }
+
+
