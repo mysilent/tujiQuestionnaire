@@ -67,12 +67,13 @@ el-button {
 }
 
 .box-dev {
-  display: flex;
+  display: grid;
   min-height: 500px;
+  max-width: 1000px;
   height: auto;
-  grid-template-columns: repeat(auto-fill, 220px);
-  grid-gap: 26px;
-  padding: 10px 32px;
+  grid-template-columns: repeat(auto-fill, 230px);
+  grid-gap: 18px;
+  padding: 10px 40px;
 }
 
 .image {
@@ -123,6 +124,7 @@ el-button {
   overflow: hidden;
   -webkit-box-shadow: 2px 2px 7px #888888;
   box-shadow: 3px 2px 7px #888888;
+  background: white;
 }
 
 .box-card:hover {

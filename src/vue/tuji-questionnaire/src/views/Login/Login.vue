@@ -1,8 +1,9 @@
 <template>
-  <div class="login"  >
-    <div class="login-box" >
+  <div class="login">
+    <div class="login-box">
+      <div class="shake-crazy">
       <div class="owl" id="owl" v-bind:class="{'password': isActive===1}">
-        <div class="duihua"><span style="font-size: 14px">如果你还未加入我们,就快去<span @click="enroll" style="color: #72afd3;cursor: pointer;">注册</span>吧！</span></div>
+
         <div class="hand"></div>
         <div class="hand hand-r"></div>
         <div class="arms">
@@ -10,16 +11,24 @@
           <div class="arm arm-r"></div>
         </div>
       </div>
+      </div>
+      <div class="duihua"><span style="font-size: 14px">如果你还未加入我们,就快去<span @click="enroll"
+                                                                                       style="color: #72afd3;cursor: pointer;">注册</span>吧！</span>
+      </div>
+
+
+
       <div class="input-box">
         <el-form :model="user" :rules="rules" ref="ruleFormRef" class="demo-ruleForm ">
-          <el-form-item prop="username" >
+          <el-form-item prop="username">
             <el-input v-model="user.username" placeholder="账户名" style="height: 35px"></el-input>
           </el-form-item>
-          <el-form-item prop="password" >
-            <el-input v-model="user.password" placeholder="密码" style="height: 35px" @click="isActive=1" @blur="isActive=0" type="password"></el-input>
+          <el-form-item prop="password">
+            <el-input v-model="user.password" placeholder="密码" style="height: 35px" @click="isActive=1"
+                      @blur="isActive=0" type="password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm(ruleFormRef)" class="button">登录</el-button>
+            <el-button type="primary" @click="login(ruleFormRef)" class="button">登录</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -29,12 +38,11 @@
 
 <script lang="ts" setup>
 import {loginApi} from "@/axios/api/login.api";
-import type { FormInstance, FormRules} from "element-plus";
+import type {FormInstance, FormRules} from "element-plus";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
 import {reactive, ref} from "vue";
 import {useLoginStore} from '@/stores/UserLogin'
-
 
 
 const userLogin = useLoginStore();
@@ -61,7 +69,7 @@ const username = (rule: any, value: any, callback: any) => {
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === '') {
     callback(new Error('请输入密码'))
-  }else {
+  } else {
     callback();
   }
 }
@@ -72,22 +80,23 @@ const rules = reactive<FormRules>({
 })
 
 
-const submitForm = (formEl: FormInstance | undefined) => {
+const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      loginApi(user).then((map:any) => {
+      loginApi(user).then((map: any) => {
         if (map.data.code !== 200) {
           ElMessage({message: '用户名或密码错误', type: 'error'})
         } else {
           localStorage.setItem("token", map.data.data.token)
-          userLogin.$patch((state)=>{
-            state.id=map.data.data.id
+          userLogin.$patch((state) => {
+            state.id = map.data.data.id
             state.username = map.data.data.username
             state.nickname = map.data.data.nickname
           })
+          ElMessage({message: "登陆成功~", type: "success"})
           router.push({
-            path:'/home'
+            path: '/home'
           })
         }
       })
@@ -97,9 +106,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
     }
   })
 }
-const enroll = ()=>{
+const enroll = () => {
   router.push({
-    path:"/enroll"
+    path: "/enroll"
   })
 }
 
@@ -146,9 +155,8 @@ const enroll = ()=>{
 }
 
 
-
 /* 接下来是猫头鹰的样式 */
-.owl{
+.owl {
   width: 211px;
   height: 108px;
   /* 背景图片 */
@@ -160,7 +168,8 @@ const enroll = ()=>{
   left: 50%;
   transform: translateX(-50%);
 }
-.owl .hand{
+
+.owl .hand {
   width: 34px;
   height: 34px;
   border-radius: 40px;
@@ -174,23 +183,28 @@ const enroll = ()=>{
   /* 动画过渡 */
   transition: 0.3s ease-out;
 }
-.owl .hand.hand-r{
+
+.owl .hand.hand-r {
   left: 170px;
 }
-.owl.password .hand{
+
+.owl.password .hand {
   transform: translateX(42px) translateY(-15px) scale(0.7);
 }
-.owl.password .hand.hand-r{
+
+.owl.password .hand.hand-r {
   transform: translateX(-42px) translateY(-15px) scale(0.7);
 }
-.owl .arms{
+
+.owl .arms {
   position: absolute;
   top: 58px;
   width: 100%;
   height: 41px;
   overflow: hidden;
 }
-.owl .arms .arm{
+
+.owl .arms .arm {
   width: 40px;
   height: 65px;
   position: absolute;
@@ -200,29 +214,35 @@ const enroll = ()=>{
   transform: rotate(-20deg);
   transition: 0.3s ease-out;
 }
-.owl .arms .arm.arm-r{
+
+.owl .arms .arm.arm-r {
   transform: rotate(20deg) scaleX(-1);
   left: 158px;
 }
-.owl.password .arms .arm{
+
+.owl.password .arms .arm {
   transform: translateY(-40px) translateX(40px);
 }
-.owl.password .arms .arm.arm-r{
+
+.owl.password .arms .arm.arm-r {
   transform: translateY(-40px) translateX(-40px) scaleX(-1);
 }
 
 
-
-.duihua{
+.duihua {
+  position: absolute;
   width: 125px;
-  height:50px;
+  height: 50px;
+  left: 60px;
+  bottom: 200px;
   border-radius: 5px;
   background-color: #F6F6F6;
-  position: relative;
-  margin-left:175px;
+  /*position: relative;*/
+  margin-left: 175px;
 
 }
-.duihua:before{
+
+.duihua:before {
   content: "";
   border-top: 30px solid transparent;
   border-bottom: 5px solid transparent;

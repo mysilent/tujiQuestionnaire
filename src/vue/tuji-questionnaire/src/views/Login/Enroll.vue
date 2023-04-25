@@ -1,11 +1,9 @@
 <template>
   <div class="enroll">
     <div class="enroll-box">
+      <div class="shake-crazy">
       <div class="owl" id="owl" v-bind:class="{'password': isActive===1}">
-        <div class="duihua">
-          <span style="font-size: 14px">如果你已经加入我们,就快去
-            <span @click="login" style="color: #72afd3;cursor: pointer;">登录</span>吧！
-          </span></div>
+
         <div class="hand"></div>
         <div class="hand hand-r"></div>
         <div class="arms">
@@ -13,6 +11,12 @@
           <div class="arm arm-r"></div>
         </div>
       </div>
+      </div>
+      <div class="duihua">
+          <span style="font-size: 14px">如果你已经加入我们,就快去
+            <span @click="login" style="color: #72afd3;cursor: pointer;">登录</span>吧！
+          </span></div>
+
       <div class="input-box">
         <el-form
             ref="ruleFormRef"
@@ -250,11 +254,14 @@ const login = ()=>{
 }
 
 .duihua{
+  position: absolute;
+  left: 60px;
+  bottom: 300px;
   width: 125px;
   height:50px;
   border-radius: 5px;
   background-color: #F6F6F6;
-  position: relative;
+  /*position: relative;*/
   margin-left:175px;
 
 }

@@ -2,6 +2,7 @@ package com.wang.tujiquestionnaire.system.controller;
 
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.service.impl.UserHistoryServiceImpl;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author wang
  * @since 2023-04-14
  */
+@Api
+@ApiOperation("调查问卷答案表")
 @RestController
 @RequestMapping("/system/userHistory")
 public class UserHistoryController {

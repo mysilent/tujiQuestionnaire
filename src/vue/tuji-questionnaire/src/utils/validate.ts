@@ -1,4 +1,5 @@
-const SENSITIVE_REGEX = /[\u4e00-\u9fa5]|[^\w\s]/g;
+// const SENSITIVE_REGEX = /[\u4e00-\u9fa5]|[^\w\s]/g;
+ export const SENSITIVE_REGEX = /[\^\$\.\*\+\?\|\[\]\(\)\{\}\\\/]/g;
 
 
 

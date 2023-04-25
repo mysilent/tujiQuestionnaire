@@ -9,7 +9,9 @@ import 'element-plus/dist/index.css'
 import './assets/main.css'
 import './assets/Creat-Revise.css'
 import './assets/Preview-Answer.css'
+import './assets/button.css'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
 
 const app = createApp(App)
 

@@ -1,5 +1,6 @@
 package com.wang.tujiquestionnaire.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.Answer;
 import com.wang.tujiquestionnaire.system.entity.UserCreateAnswer;
@@ -90,5 +91,14 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         answerMapper.insertAnswerList(answerList);
         userCreateAnswerMapper.insertUserCreateAnswerList(userCreateAnswerList);
         userHistoryMapper.insert(userHistory);
+    }
+
+    @Override
+    public Result historyAnswer(String userId, String surveyId) {
+        QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<>();
+        answerQueryWrapper.eq("survey_id",surveyId);
+        answerQueryWrapper.eq("user_id",userId);
+        List<Answer> userHistoryList = answerMapper.selectList(answerQueryWrapper);
+        return Result.success(userHistoryList);
     }
 }

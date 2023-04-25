@@ -20,10 +20,10 @@
                   <UserFilled/>
                 </el-icon>&nbsp;个人中心
               </el-dropdown-item>
-              <el-dropdown-item @click="">
+              <el-dropdown-item @click="background">
                 <el-icon>
-                  <Memo/>
-                </el-icon>&nbsp;修改密码
+                  <SwitchButton/>
+                </el-icon>&nbsp;后台管理
               </el-dropdown-item>
               <el-dropdown-item @click="exit">
                 <el-icon>
@@ -50,12 +50,18 @@ const {nickname:nickname} = storeToRefs(store)
 
 const exit=()=> {
   router.push({
-    path:'/'
+    path:'/login'
   })
 }
 const personal = () => {
   let newUrl= router.resolve({
     path: "/personal"
+  })
+  window.open(newUrl.href, "_blank");
+}
+const background=()=>{
+  let newUrl= router.resolve({
+    path: "/background"
   })
   window.open(newUrl.href, "_blank");
 }
@@ -116,29 +122,5 @@ img {
   flex-direction: row-reverse
 }
 
-.button-link {
-  text-align: center;
-  color: #181818;
-  width: 76px;
-  height: 40px;
-  line-height: 36px;
-  cursor: pointer;
-  display: inline-block;
-  /*鼠标移上去缓慢变色*/
-  transition-property: border-bottom, color;
-  transition-duration: .01s, .5s;
-}
-
-.button-link:hover {
-  color: #20894d;
-  cursor: pointer;
-
-}
-
-.router-link-active {
-  color: #20894d;
-  border-bottom: #20894d groove 3px;
-  cursor: pointer;
-}
 
 </style>

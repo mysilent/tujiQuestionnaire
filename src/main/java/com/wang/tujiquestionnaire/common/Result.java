@@ -26,6 +26,9 @@ public class Result {
     public static Result success(Object date){
         return new Result(200,"成功",date);
     }
+    public static Result success(String msg){
+        return new Result(200,msg,null);
+    }
     public static Result error(String msg){
         return new Result(500,msg,null);
     }

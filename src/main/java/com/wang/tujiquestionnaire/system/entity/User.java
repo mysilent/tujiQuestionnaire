@@ -36,12 +36,6 @@ public class User implements Serializable {
     @ApiModelProperty("昵称")
     private String nickname;
 
-    @ApiModelProperty("邮箱")
-    private String email;
-
-    @ApiModelProperty("电话")
-    private String phone;
-
     @ApiModelProperty("创建日期")
     private LocalDateTime createDate;
 

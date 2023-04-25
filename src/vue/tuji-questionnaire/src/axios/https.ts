@@ -20,7 +20,9 @@ function myAxios(axiosConfig: any, customOptions: any) {
             custom_options.repeat_request_cancel && addPending(config);
             if (getTokenAUTH() && typeof window !== "undefined") {
                 // 设置请求头
-                config.headers['token'] = getTokenAUTH();
+                // config.headers['token'] = getTokenAUTH();
+                let token = getTokenAUTH();
+                config.headers.Authorization = `Bearer ${token}`;
             }
             return config;
         },
@@ -120,6 +122,7 @@ function httpErrorStatusHandle(error: any) {
                 break;
             case 401:
                 message = '您未登录，或者登录已经超时，请先登录！';
+                window.location.href = '/login';
                 break;
             case 403:
                 message = '您没有权限操作！';

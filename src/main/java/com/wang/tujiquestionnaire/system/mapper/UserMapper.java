@@ -3,10 +3,7 @@ package com.wang.tujiquestionnaire.system.mapper;
 import com.wang.tujiquestionnaire.system.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * <p>
@@ -52,4 +49,13 @@ public interface UserMapper extends BaseMapper<User> {
      */
     @Select("select id,nickname from user where username='${username}'")
     UserDto selectUser(String username);
+
+
+    /**
+     * 对用户的密码进行修改
+     * @param newPassword  前端传来的新密码
+     * @param username  前端传来的要进行修改密码的用户名
+     */
+    @Update("update user set password='${newPassword}' where username='${username}'")
+    void updatePassword(String newPassword, String username);
 }

@@ -1,5 +1,14 @@
 <template>
   <h1>历史问卷</h1>
+  <div v-if="!isTure" class="isNull">
+    <n-empty description="你好像还没创作自己的问卷" size="huge">
+      <template #extra>
+        <n-button @click="push()">
+          去创作！
+        </n-button>
+      </template>
+    </n-empty>
+  </div>
   <div class="index">
     <div class="box-card" @mouseover="isActive=index" @mouseout="isActive=-1" v-for="(surveys,index) in survey"
          :key="index">
@@ -52,8 +61,8 @@
 
 <script lang="ts" setup>
 
-import {Search, Edit, Star, Delete, InfoFilled} from "@element-plus/icons-vue";
-import {reactive, ref, render, watchEffect} from "vue";
+import {Search, Edit, Star, Delete} from "@element-plus/icons-vue";
+import {reactive, ref,} from "vue";
 import {selectUserSurveyApi, deleteSurveyApi} from "@/axios/api/myquestionnaire.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
@@ -70,9 +79,14 @@ const id = reactive({
   id: ''
 })
 const survey: any = reactive([])
+const isTure = ref(false)
 id.id = userLogin.id
 selectUserSurveyApi(id).then(map => {
   let i = 0
+  for (let mapKey in map.data.data) {
+    isTure.value=true
+  }
+
   for (i; i < map.data.data.length; i++) {
     survey.push(map.data.data[i]);
   }
@@ -118,9 +132,18 @@ function revise(id: any) {
     name: "revise",
   })
 }
+function push() {
+  router.push({
+    name:"publishQuestionnaire"
+  })
+}
 </script>
 
 <style scoped>
+.isNull{
+  top: 250px;
+  height: auto;
+}
 el-button {
   pointer-events: none
 }

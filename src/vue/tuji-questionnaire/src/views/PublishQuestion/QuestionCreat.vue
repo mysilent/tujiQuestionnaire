@@ -6,7 +6,7 @@
           <el-input v-model="survey1.data.surveyName" placeholder="请输入问卷名称"></el-input>
         </el-form-item>
         <el-form-item label="问卷描述" prop="surveyDescription">
-          <el-input v-model="survey1.data.surveyDescription" placeholder="请输入问卷描述"></el-input>
+          <el-input v-model="survey1.data.surveyDescription" placeholder="请输入问卷描述" type="textarea" autosize></el-input>
         </el-form-item>
         <el-form-item label="截止日期" prop="endTime">
           <el-date-picker v-model="survey1.data.endTime" type="date" placeholder="请输入问卷截至日期"></el-date-picker>
@@ -153,6 +153,7 @@ import {useLoginStore} from '@/stores/UserLogin'
 import {ElMessage} from "element-plus";
 import type {FormInstance, FormRules} from "element-plus";
 import {useRouter} from "vue-router";
+import {SENSITIVE_REGEX} from '@/utils/validate'
 
 export default defineComponent({
   components: {
@@ -186,23 +187,20 @@ export default defineComponent({
     survey.status = "0"
     survey1.data = survey
 
-    const SENSITIVE_REGEX = /[\u4e00-\u9fa5]|[^\w\s]/g;
     const username = (rule: any, value: any, callback: any) => {
-      if (value === '') {
+      if (!value) {
         callback(new Error('请输入问卷标题'))
-      } else {
-        if (SENSITIVE_REGEX.test(value)) {
+      } else if  (!SENSITIVE_REGEX.test(value)) {
           callback(new Error('输入内容包含敏感字符'));
         } else {
           callback();
         }
       }
-    }
     const validatePass = (rule: any, value: any, callback: any) => {
-      if (value === '') {
+      if (!value) {
         callback(new Error('请输入问卷描述'))
       } else {
-        if (SENSITIVE_REGEX.test(value)) {
+        if (!SENSITIVE_REGEX.test(value)) {
           callback(new Error('输入内容包含敏感字符'));
         } else {
           callback();
@@ -210,7 +208,7 @@ export default defineComponent({
       }
     }
     const endTime = (rule: any, value: any, callback: any) => {
-      if (value === '') {
+      if (!value) {
         callback(new Error('请选择截止日期'))
       } else {
         callback();
@@ -218,15 +216,14 @@ export default defineComponent({
     }
 
     const validateSensitive = (rule: any, value: any, callback: any) => {
-      if (value === '' || SENSITIVE_REGEX.test(value)) {
-        if (value === '') {
+        if (!value ) {
           callback(new Error('请输入内容'))
-        } else {
+        } else if (!SENSITIVE_REGEX.test(value)) {
           callback(new Error('输入内容包含敏感字符'));
+          console.log(value)
+        } else {
+          callback();
         }
-      } else {
-        callback();
-      }
     }
 
     const rules = reactive<FormRules>({

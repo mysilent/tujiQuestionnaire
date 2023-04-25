@@ -5,10 +5,7 @@ import com.wang.tujiquestionnaire.system.entity.dto.AnswerDto;
 import com.wang.tujiquestionnaire.system.service.impl.AnswerServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -29,8 +26,13 @@ public class AnswerController {
     }
     @ApiOperation("提交答案表")
     @PostMapping("/submitAnswer")
-    public Result submitAnswer1(@RequestBody AnswerDto answerDto){
+    public Result submitAnswer(@RequestBody AnswerDto answerDto){
         return answerService.submitAnswer(answerDto);
+    }
+    @ApiOperation("用户浏览自己的答卷记录时对问题答案的查询")
+    @GetMapping("/historyAnswer")
+    public Result historyAnswer(@RequestParam("userId") String userId,@RequestParam("surveyId") String surveyId){
+        return answerService.historyAnswer(userId,surveyId);
     }
 
 }

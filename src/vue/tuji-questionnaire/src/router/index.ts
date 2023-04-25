@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
 import Login from '../views/Login/Login.vue';
+import BackgroundHome from '../views/Background/BackgroundHome.vue'
 
 const router = createRouter({
         history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,7 +75,29 @@ const router = createRouter({
                 path: '/personal/personalCenter/historicalAnswers/personalAnswer',
                 name: 'personalAnswer',
                 component: () => import('../views/Personal/PersonalAnswer.vue')
-            }
+            },{
+                path: '/top',
+                name: 'top',
+                component: () => import('../components/top.vue')
+            },{
+                path: '/background',
+                name: 'background',
+                component: () => import('../views/Background/ManageView.vue'),
+                children: [{
+                    path: '/background/home',
+                    name: 'backgroundUser',
+                    component: BackgroundHome
+                },{
+                    path: '/user',
+                    name: 'backgroundUser',
+                    component: () => import('../views/Background/User.vue')
+                },{
+                    path: '/administrator',
+                    name: 'backgroundAdministrator',
+                    component: () => import('../views/Background/Administrator.vue')
+                }
+                ]
+            },
         ]
     }
 )

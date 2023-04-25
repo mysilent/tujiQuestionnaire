@@ -1,7 +1,6 @@
 <template>
   <personal-top></personal-top>
   <PersonalCenter></PersonalCenter>
-<!--  <router-view></router-view>-->
 </template>
 <script lang="ts">
 

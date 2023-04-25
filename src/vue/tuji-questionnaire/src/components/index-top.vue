@@ -4,21 +4,27 @@
       <div class="logo">
         <div class="logo-top"></div>
         <img src="../components/icons/logo.svg"></div>
-      <div style="width: 228px">
-        <router-link tag="button" to="/home/questionnaireCenter" class="button-link" active-class="router-link-active">
-          问卷中心
-        </router-link>
-        <router-link tag="button" to="/home/publishQuestionnaire" class="button-link" active-class="router-link-active">
-          发布问卷
-        </router-link>
-        <router-link tag="button" to="/home/myQuestionnaire" class="button-link " active-class="router-link-active">
-          我的问卷
-        </router-link>
+      <div style="width: 300px">
+        <nav>
+          <div class="line" id="line" :style="{left:left1+'px',width:width1+'px'}"></div>
+          <router-link id="link1" tag="a" to="/home/questionnaireCenter" class="button-link"
+                       active-class="router-link-active">
+            问卷中心
+          </router-link>
+          <router-link id="link2" tag="a" to="/home/publishQuestionnaire" class="button-link"
+                       active-class="router-link-active">
+            发布问卷
+          </router-link>
+          <router-link id="link3" tag="a" to="/home/myQuestionnaire" class="button-link "
+                       active-class="router-link-active">
+            我的问卷
+          </router-link>
+        </nav>
       </div>
       <div>
         <el-dropdown class="user">
-          <div class="button">{{nickname}}
-            <User class="block-col"></User>
+          <div class="button">{{ nickname }}
+            <User class="block-col"/>
           </div>
           <template #dropdown>
             <el-dropdown-menu>
@@ -27,7 +33,7 @@
                   <UserFilled/>
                 </el-icon>&nbsp;个人中心
               </el-dropdown-item>
-              <el-dropdown-item @click="">
+              <el-dropdown-item @click="changePassword">
                 <el-icon>
                   <Memo/>
                 </el-icon>&nbsp;修改密码
@@ -46,30 +52,76 @@
 
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
 import {Memo, SwitchButton, User, UserFilled} from "@element-plus/icons-vue";
 import {storeToRefs} from "pinia";
 import {useRouter} from "vue-router";
 import {useLoginStore} from "@/stores/UserLogin";
-const store = useLoginStore()
-const router =useRouter()
-const {nickname:nickname} = storeToRefs(store)
-
-   const exit=()=> {
+import {defineComponent, onMounted, ref} from "vue";
+import { createPinia } from 'pinia'
+export default defineComponent({
+  components:{Memo, SwitchButton, User, UserFilled},
+  setup() {
+    const store = useLoginStore()
+    const router = useRouter()
+    const {nickname: nickname} = storeToRefs(store)
+    const exit = () => {
+      clearUserData()
       router.push({
-        path:'/'
+        path: '/'
       })
     }
     const personal = () => {
-      let newUrl= router.resolve({
+      let newUrl = router.resolve({
         path: "/personal"
       })
       window.open(newUrl.href, "_blank");
     }
+    const changePassword=()=>{
+      let newUrl = router.resolve({
+        path: "/personal/personalCenter/changePassword"
+      })
+      window.open(newUrl.href, "_blank");
+    }
+    const left1 = ref(0);
+    const width1 = ref(0);
+    const Click = (link: string) => {
+      // console.log(document.getElementById(link)!.getBoundingClientRect())
+      const {left, width} = document.getElementById(link)!.getBoundingClientRect()
+      left1.value = left - 559;
+      width1.value = width;
+    }
+    onMounted(() => {
+      document.getElementById("link1")!.addEventListener('click', () => Click("link1"));
+      document.getElementById("link2")!.addEventListener('click', () => Click("link2"));
+      document.getElementById("link3")!.addEventListener('click', () => Click("link3"));
+    });
 
 
+
+
+    const pinia = createPinia()
+
+    function clearUserData() {
+      // 清除用户的Pinia状态和数据
+      // pinia.reset()
+      // 删除保存在客户端的Token
+      localStorage.removeItem('token')
+      localStorage.removeItem('id')
+      localStorage.removeItem('login')
+    }
+    return {
+      exit,
+      personal,
+      nickname,
+      left1,
+      width1,
+      Click,
+      changePassword
+    }
+  }
+})
 </script>
-
 <style>
 .top {
   width: 98.5vi;
@@ -78,7 +130,7 @@ const {nickname:nickname} = storeToRefs(store)
   display: flex;
   justify-content: space-between;
   background-color: #f2f2f2;
-  box-shadow:0 0  12px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);
 }
 
 .logo-top {
@@ -131,29 +183,32 @@ img {
 }
 
 .button-link:hover {
-  color: #9B4E9E;
+  color: #2775b6;
   cursor: pointer;
 }
 
-.button-link:after{
-  content: "";
+nav {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 4vmin;
+}
+
+nav a {
+  font-size: 16px;
+  color: #fff;
+  text-decoration: none;
+}
+
+nav .line {
   position: absolute;
-  bottom: -3px;
+  width: 0;
+  height: 0.5vmin;
+  background: linear-gradient(200deg, #b1f4cf, #9890e3);
+  border-radius: 1vmin;
   left: 0;
-  width: 100%;
-  height: 2px;
-  background-color:#9B4E9E ;
-  transform: scaleX(0);
-  transition: transform 0.2s ease-in-out;
+  bottom: -1%;
+  transition: .8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-.button-link:focus::after{
-  transform: scaleX(1);
-}
-
-
-.router-link-active {
-  color: #9B4E9E;
-  cursor: pointer;
-}
-
 </style>
