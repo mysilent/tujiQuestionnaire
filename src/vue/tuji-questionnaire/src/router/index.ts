@@ -86,16 +86,6 @@ const router = createRouter({
             },
 
 
-            {
-                path: '/plane',
-                name: 'plane',
-                component:()=>import("../components/plane.vue")
-            },
-
-
-
-
-
 
             {
                 path: '/BackgroundLogin',

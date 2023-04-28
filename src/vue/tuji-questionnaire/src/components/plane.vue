@@ -1,60 +1,54 @@
 <template>
-  <div id="plane" @click.stop>
-    <i class="fa fa-paper-plane" aria-hidden="true"></i>
-  </div>
+  <div class="img"></div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
+<script>
+export default {
+  mounted() {
+    let img = document.querySelector('.img')
+    let deg = 0
+    let imgx = 0
+    let imgy = 0
+    let imgl = 0
+    let imgt = 0
+    let y = 0
+    let index = 0
 
-let plane = null;
-let deg = ref(0);
-let ex = ref(0);
-let ey = ref(0);
-let vx = ref(0);
-let vy = ref(0);
-let count = ref(0);
+    window.addEventListener('mousemove', function(xyz) {
+      imgx = xyz.x - img.offsetLeft - img.clientWidth / 2
+      imgy = xyz.y - img.offsetTop - img.clientHeight / 2
+      deg = 360 * Math.atan(imgy / imgx) / (2 * Math.PI)
+      index = 0
+      let x = event.clientX
+      if (img.offsetLeft < x) {
+        y = -180
+      } else {
+        y = 0
+      }
+    })
 
-onMounted(() => {
-  plane = document.getElementById('plane');
-  window.addEventListener('mousemove', (e) => {
-    ex.value = e.x - plane.offsetLeft - plane.clientWidth / 2;
-    ey.value = e.y - plane.offsetTop - plane.clientHeight / 2;
-    deg.value = 360 * Math.atan(ey.value / ex.value) / (2 * Math.PI) + 45;
-    if (ex.value < 0) {
-      deg.value += 180;
-    }
-    count.value = 0;
-  });
-});
-
-function draw() {
-  plane.style.transform = 'rotate(' + deg.value + 'deg)';
-  if (count.value < 100) {
-    vx.value += ex.value / 100;
-    vy.value += ey.value / 100;
+    setInterval(() => {
+      img.style.transform = "rotateZ(" + deg + "deg) rotateY(" + y + "deg)"
+      index++
+      if (index < 200) {
+        imgl += imgx / 200
+        imgt += imgy / 200
+      }
+      img.style.left = imgl + "px"
+      img.style.top = imgt + "px"
+    }, 10)
   }
-  plane.style.left = vx.value + 'px';
-  plane.style.top = vy.value + 'px';
-  count.value++;
 }
-
-setInterval(draw, 1);
 </script>
 
 <style>
-#plane{
-  color: #fff;
-  font-size: 70px;
+
+
+.img {
+  width: 50px;
+  height: 50px;
   position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-}
-.fa-paper-plane {
-  color: #0062cc;
-  opacity: 0.3;
-  /*background: linear-gradient(to right bottom, #828892, #728a9c, #598ea1, #38929e, #0d9592);*/
+  background-image: url('1.gif');
+  background-size: cover;
 }
 </style>
