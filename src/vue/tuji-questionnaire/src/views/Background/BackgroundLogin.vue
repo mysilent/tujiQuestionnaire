@@ -1,24 +1,16 @@
 <template>
   <div class="login">
     <div class="login-box">
-      <div class="owl" id="owl">
-        <div class="hand"></div>
-        <div class="hand hand-r"></div>
-        <div class="arms">
-          <div class="arm"></div>
-          <div class="arm arm-r"></div>
-        </div>
-      </div>
       <div class="input-box">
-        <el-form :model="user" :rules="rules" ref="user" class="demo-ruleForm ,s">
+        <el-form :model="user" :rules="rules" ref="ruleFormRef" class="demo-ruleForm ">
           <el-form-item prop="username">
             <el-input v-model="user.username" placeholder="账户名" style="height: 35px"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="user.password" placeholder="密码" style="height: 35px"></el-input>
+            <el-input v-model="user.password" placeholder="密码" style="height: 35px" type="password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button @click="login(ruleFormRef)" class="button">登录</el-button>
+            <el-button type="primary" @click="login(ruleFormRef)" class="button">登录</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -27,10 +19,11 @@
 </template>
 
 <script lang="ts" setup>
+import {BackgroundLogin} from "@/axios/api/Background"
 import {reactive, ref} from "vue";
 import {useRouter} from "vue-router";
-import {ElMessage, FormInstance, FormRules} from "element-plus";
-import {loginApi} from "@/axios/api/login.api";
+import {ElMessage,} from "element-plus";
+import type {FormInstance, FormRules} from "element-plus"
 const router =useRouter()
 const ruleFormRef = ref<FormInstance>();
 const user = reactive({
@@ -59,7 +52,7 @@ const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      loginApi(user).then((map: any) => {
+      BackgroundLogin(user).then((map: any) => {
         if (map.data.code !== 200) {
           ElMessage({message: '用户名或密码错误', type: 'error'})
         } else {
@@ -77,7 +70,7 @@ const login = (formEl: FormInstance | undefined) => {
 }
 </script>
 
-<style>
+<style scoped>
 .button {
   border: none;
   height: 45px;
@@ -90,30 +83,23 @@ const login = (formEl: FormInstance | undefined) => {
 }
 
 .login {
-  /* 100%窗口高度 */
   height: 100vh;
-  /* 弹性布局 居中 */
   display: flex;
   justify-content: center;
   align-items: center;
-  /* 渐变背景 */
-  background: linear-gradient(200deg, #72afd3, #96fbc4);
 }
 
 .login-box {
-  /* 相对定位 */
   position: relative;
   width: 320px;
 }
 
 .input-box {
-  /* 弹性布局 垂直排列 */
   display: flex;
   flex-direction: column;
 }
 
-.input-box input:focus {
-  outline: 1px solid lightseagreen;
-}
+
+
 
 </style>

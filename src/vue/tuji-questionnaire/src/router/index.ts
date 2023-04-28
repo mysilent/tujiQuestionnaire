@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
 import Login from '../views/Login/Login.vue';
 import BackgroundHome from '../views/Background/BackgroundHome.vue'
-
+import BackgroundLogin from '../views/Background/BackgroundLogin.vue'
 const router = createRouter({
         history: createWebHistory(import.meta.env.BASE_URL),
         routes: [
@@ -76,10 +76,33 @@ const router = createRouter({
                 name: 'personalAnswer',
                 component: () => import('../views/Personal/PersonalAnswer.vue')
             },{
-                path: '/top',
-                name: 'top',
-                component: () => import('../components/top.vue')
+                path: '/BackgroundPreview',
+                name: 'BackgroundPreview',
+                component: () => import('../views/Background/BackgroundPreview.vue')
             },{
+                path: '/BackgroundTemplatePreview',
+                name: 'BackgroundTemplatePreview',
+                component: () => import('../views/Background/BackgroundTemplatePreview.vue')
+            },
+
+
+            {
+                path: '/plane',
+                name: 'plane',
+                component:()=>import("../components/plane.vue")
+            },
+
+
+
+
+
+
+            {
+                path: '/BackgroundLogin',
+                name: 'BackgroundLogin',
+                component:BackgroundLogin,
+            },
+            {
                 path: '/background',
                 name: 'background',
                 component: () => import('../views/Background/ManageView.vue'),
@@ -95,6 +118,18 @@ const router = createRouter({
                     path: '/administrator',
                     name: 'backgroundAdministrator',
                     component: () => import('../views/Background/Administrator.vue')
+                },{
+                    path: '/backgroundSurvey',
+                    name: 'backgroundSurvey',
+                    component: () => import('../views/Background/BackgroundSurvey.vue')
+                },{
+                    path: '/backgroundSurveyTemplate',
+                    name: 'backgroundSurveyTemplate',
+                    component: () => import('../views/Background/BackgroundSurveyTemplate.vue')
+                },{
+                    path: '/Template',
+                    name: 'Template',
+                    component: () => import('../views/Background/Template.vue')
                 }
                 ]
             },

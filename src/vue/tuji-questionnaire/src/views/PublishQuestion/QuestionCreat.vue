@@ -190,7 +190,7 @@ export default defineComponent({
     const username = (rule: any, value: any, callback: any) => {
       if (!value) {
         callback(new Error('请输入问卷标题'))
-      } else if  (!SENSITIVE_REGEX.test(value)) {
+      } else if  (SENSITIVE_REGEX.test(value)) {
           callback(new Error('输入内容包含敏感字符'));
         } else {
           callback();
@@ -200,7 +200,7 @@ export default defineComponent({
       if (!value) {
         callback(new Error('请输入问卷描述'))
       } else {
-        if (!SENSITIVE_REGEX.test(value)) {
+        if (SENSITIVE_REGEX.test(value)) {
           callback(new Error('输入内容包含敏感字符'));
         } else {
           callback();
@@ -218,7 +218,7 @@ export default defineComponent({
     const validateSensitive = (rule: any, value: any, callback: any) => {
         if (!value ) {
           callback(new Error('请输入内容'))
-        } else if (!SENSITIVE_REGEX.test(value)) {
+        } else if (SENSITIVE_REGEX.test(value)) {
           callback(new Error('输入内容包含敏感字符'));
           console.log(value)
         } else {

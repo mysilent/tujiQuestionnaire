@@ -29,7 +29,7 @@
     </div>
     <el-dialog style="display:table;" :before-close="showDialog" v-model="dialogFormVisible" title="请填写你要修改的信息~">
       <div style="display:flex;">
-        <el-form style="display:flex;"
+        <el-form style="display:-webkit-box;"
                  ref="ruleFormRef"
                  :model="users"
                  :rules="rules"

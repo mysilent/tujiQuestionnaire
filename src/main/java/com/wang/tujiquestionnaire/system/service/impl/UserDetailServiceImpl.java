@@ -62,6 +62,7 @@ UserDetailMapper userDetailMapper;
         map.put("total", total);
         return map;
     }
+
 //    @Override
 //
 //    public boolean delete(Integer id) {

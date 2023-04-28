@@ -10,9 +10,11 @@ function deleteSurveyApi(params:any){
 }function reviseSurvey(params:any){
     return http.post_survey('/system/survey/reviseQuestionnaire',params)
 }
+
 export {
     selectUserSurveyApi,
     surveyPreviewApi,
     deleteSurveyApi,
     reviseSurvey,
+
 }

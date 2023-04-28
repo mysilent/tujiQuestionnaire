@@ -24,6 +24,7 @@ public interface IUserDetailService extends IService<UserDetail> {
 //    public Integer selectTotal( String username);
 //
     public Map<String,Object> page(Integer pageNum, Integer pageSize, String username,String userId,String email,String phone);
+
 //
 //    public boolean delete(Integer id);
 //

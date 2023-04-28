@@ -1,11 +1,58 @@
 import {http} from "@/axios/api/api";
 
+function BackgroundLogin(params:any){
+    return http.get('/background/user/backgroundLogin',params)
+}
+function updateState(params:any){
+    return http.post_login('/background/user/updateState',params)
+}
 function findPage(params:any){
     return http.get('/background/user/page',params)
 }
 function AdminFindPage(params:any){
     return http.get('/background/user/adminPage',params)
 }
-export {findPage,
+function AdminSave(params:any){
+    return http.post_survey('/background/user/save',params)
+}
+function AdminUpdate(params:any){
+    return http.post_survey('/background/user/update',params)
+}
+function AdminDelete(params:any){
+    return http.delete('/background/user/delete',params)
+}
+function selectSurvey(params:any){
+    return http.get('/background/survey/selectAll',params)
+}
+function selectTemplate(params:any){
+    return http.get('/background/surveyTemplate/selectTemplate',params)
+}
+function surveyTemplateApplication(params:any){
+    return http.post_survey('/background/surveyTemplate/templateApplication',params)
+}
+function selectTemplateApplication(params:any){
+    return http.get('/background/surveyTemplate/selectTemplateApplication',params)
+}
+function templateApplicationYes(params:any){
+    return http.get('/background/surveyTemplate/templateApplicationYes',params)
+}
+function templateApplicationNo(params:any){
+    return http.get('/background/surveyTemplate/templateApplicationNo',params)
+}
+
+export {
+    BackgroundLogin,
+    updateState,
+    findPage,
     AdminFindPage,
+    AdminSave,
+    AdminUpdate,
+    AdminDelete,
+    selectSurvey,
+    selectTemplate,
+    surveyTemplateApplication,
+    selectTemplateApplication,
+    templateApplicationYes,
+    templateApplicationNo,
+
 }

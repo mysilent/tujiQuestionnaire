@@ -20,24 +20,35 @@
         <template #title><span>信息管理</span></template>
         <el-menu-item index="user">账户信息管理</el-menu-item>
         <el-menu-item index="administrator">管理员信息管理</el-menu-item>
-        <el-menu-item index="1-2">问卷信息管理</el-menu-item>
       </el-menu-item-group>
-      <el-menu-item-group title="Group Two">
-        <el-menu-item index="1-3">item three</el-menu-item>
+      <el-menu-item-group title="问卷管理">
+        <el-menu-item index="backgroundSurvey">问卷信息管理</el-menu-item>
+        <el-menu-item index="Template">问卷模板管理</el-menu-item>
       </el-menu-item-group>
-      <el-sub-menu index="1-4">
-        <template #title><span>item four</span></template>
-        <el-menu-item index="1-4-1">item one</el-menu-item>
-      </el-sub-menu>
+    </el-sub-menu>
+
+    <el-sub-menu index="2">
+      <template #title>
+        <el-icon><ChatDotSquare /></el-icon>
+        <span>申请处理</span>
+      </template>
+      <el-menu-item-group>
+        <template #title><span>信息处理</span></template>
+        <el-menu-item index="backgroundSurveyTemplate">问卷模板审核</el-menu-item>
+        <el-menu-item index="">举报处理</el-menu-item>
+      </el-menu-item-group>
+      <el-menu-item-group title="通知处理">
+        <el-menu-item index="backgroundSurveyTemplate">问卷模板审核</el-menu-item>
+      </el-menu-item-group>
     </el-sub-menu>
   </el-menu>
 </template>
 <script lang="ts">
-import {defineComponent, ref} from "vue";
-import {Location, Monitor,} from '@element-plus/icons-vue'
+import {defineComponent} from "vue";
+import {ChatDotSquare, Location, Monitor,} from '@element-plus/icons-vue'
     export default defineComponent({
       name:"sidebar",
-      components: {Monitor, Location},
+      components: {ChatDotSquare, Monitor, Location},
         props:{
             isCollapse:Boolean,
             login:Boolean

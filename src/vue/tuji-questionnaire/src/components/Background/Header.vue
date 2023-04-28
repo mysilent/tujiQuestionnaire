@@ -10,7 +10,7 @@
     </div>
     <div>
       <el-dropdown>
-        <div class="button" style="target: none">王小虎
+        <div class="right-div" style="target: none">{{ 王小虎 }}
           <User class="block-col"/>
         </div>
         <template #dropdown>
@@ -42,6 +42,20 @@ export default defineComponent({
 </script>
 
 
-<style>
+<style scoped>
 
+.right-div {
+  width: 100px;
+  height: 40px;
+  line-height: 36px;
+  cursor: pointer;
+}
+
+.block-col {
+  top: 3px;
+  left: 2px;
+  /*display: inline-flex;*/
+  height: 14px;
+  width: 14px;
+}
 </style>

@@ -40,9 +40,7 @@ export const http = {
             },
             transformRequest: [
                 (data :any) => {
-                    // console.log(qs.stringify(data))
                     return qs.stringify(data)
-                    // return data
                 }
             ],
         }
@@ -114,6 +112,7 @@ export const http = {
             },
             transformRequest: [
                 (data :any) => {
+                    console.log(data)
                     return qs.stringify(data)
                 }
             ],

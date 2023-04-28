@@ -23,7 +23,7 @@
       </div>
       <div>
         <el-dropdown class="user">
-          <div class="button">{{ nickname }}
+          <div class="right-div">{{ nickname }}
             <User class="block-col"/>
           </div>
           <template #dropdown>
@@ -86,7 +86,6 @@ export default defineComponent({
     const left1 = ref(0);
     const width1 = ref(0);
     const Click = (link: string) => {
-      // console.log(document.getElementById(link)!.getBoundingClientRect())
       const {left, width} = document.getElementById(link)!.getBoundingClientRect()
       left1.value = left - 559;
       width1.value = width;
@@ -162,7 +161,7 @@ img {
   width: 14px;
 }
 
-.button {
+.right-div {
   width: 100px;
   height: 40px;
   line-height: 36px;

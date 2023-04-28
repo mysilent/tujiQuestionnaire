@@ -58,4 +58,13 @@ public interface UserMapper extends BaseMapper<User> {
      */
     @Update("update user set password='${newPassword}' where username='${username}'")
     void updatePassword(String newPassword, String username);
+
+    /**
+     * 对用户的状态进行修改
+     * @param id id标识
+     * @param state 封禁状态
+     * @return 返回修改没修改
+     */
+@Update("update user set state=${state} where id=${id}")
+    Boolean updateState(String id, int state);
 }

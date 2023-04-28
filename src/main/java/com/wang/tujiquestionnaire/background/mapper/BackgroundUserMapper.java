@@ -20,7 +20,7 @@ import java.util.List;
 public interface BackgroundUserMapper extends BaseMapper<BackgroundUser> {
 
     @Select("select * from background_user where name like concat('%',#{name},'%') and username like concat('%',#{username},'%') limit #{pageNum},#{pageSize}")
-    List<UserAndUserDetailDto> findPage(Integer pageNum, Integer pageSize, String name, String username);
+    List<BackgroundUser> findPage(Integer pageNum, Integer pageSize, String name, String username);
 
     @Select("select count(*) from background_user where name like concat('%',#{name},'%')and username like concat('%',#{username},'%')")
     Integer selectTotal(String name, String username);

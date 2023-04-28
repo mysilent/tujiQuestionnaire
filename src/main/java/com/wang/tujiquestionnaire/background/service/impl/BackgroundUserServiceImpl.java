@@ -1,10 +1,13 @@
 package com.wang.tujiquestionnaire.background.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.background.entity.BackgroundUser;
 import com.wang.tujiquestionnaire.background.mapper.BackgroundUserMapper;
 import com.wang.tujiquestionnaire.background.service.IBackgroundUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.dto.UserAndUserDetailDto;
+import com.wang.tujiquestionnaire.system.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +27,31 @@ import java.util.Map;
 public class BackgroundUserServiceImpl extends ServiceImpl<BackgroundUserMapper, BackgroundUser> implements IBackgroundUserService {
 @Autowired
 BackgroundUserMapper backgroundUserMapper;
+@Autowired
+    UserMapper userMapper;
+
+    @Override
+    public Boolean backgroundLogin(String username, String password) {
+        QueryWrapper<BackgroundUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username",username).eq("password",password);
+        Long count = backgroundUserMapper.selectCount(queryWrapper);
+        return count==1;
+    }
+
     @Override
     public Map<String, Object> findpage(Integer pageNum,Integer pageSize,String name,String username) {
         pageNum = (pageNum - 1) * pageSize;
         Map<String, Object> map = new HashMap<>();
         Integer total = backgroundUserMapper.selectTotal(name,username);
-        List<UserAndUserDetailDto> data = backgroundUserMapper.findPage(pageNum, pageSize,name,username);
+        List<BackgroundUser> data = backgroundUserMapper.findPage(pageNum, pageSize,name,username);
         map.put("data", data);
         map.put("total", total);
         return map;
+    }
+
+    @Override
+    public Result updateState(String id, int state) {
+        return userMapper.updateState(id,state)?Result.success():Result.error();
+
     }
 }

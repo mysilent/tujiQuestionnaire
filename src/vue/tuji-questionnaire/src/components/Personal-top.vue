@@ -10,7 +10,7 @@
       </div>
       <div>
         <el-dropdown class="user">
-          <div class="button">{{nickname}}
+          <div class="right-div">{{nickname}}
             <User class="block-col"></User>
           </div>
           <template #dropdown>
@@ -61,7 +61,7 @@ const personal = () => {
 }
 const background=()=>{
   let newUrl= router.resolve({
-    path: "/background"
+    path: "/BackgroundLogin"
   })
   window.open(newUrl.href, "_blank");
 }
@@ -109,7 +109,7 @@ img {
   width: 14px;
 }
 
-.button {
+.right-div {
   width: 100px;
   height: 40px;
   line-height: 36px;

@@ -2,19 +2,18 @@ package com.wang.tujiquestionnaire.config;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 import java.util.Collections;
 
 /**
- * ClassName: MybatisplusConfig
+ * ClassName: MybatisPlus
  * Package: IntelliJ IDEA
  * Description:
  *
  * @Author: wang
  * Create:2023/2/28-10:28
  */
-public class MybatisplusConfig {
+public class MybatisPlus {
     //获取项目路径
     private static final String projectPath = System.getProperty("user.dir");
     //输出路径
@@ -39,7 +38,7 @@ public class MybatisplusConfig {
                             .pathInfo(Collections.singletonMap(OutputFile.xml, mapperPath)); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("background_user") // 设置需要生成的表名
+                    builder.addInclude("survey_template") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_") // 设置过滤表前缀
                             .addTableSuffix("_info")
                             .controllerBuilder().enableRestStyle()
