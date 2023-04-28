@@ -1,6 +1,7 @@
 package com.wang.tujiquestionnaire.system.controller;
 
 import com.wang.tujiquestionnaire.common.Result;
+import com.wang.tujiquestionnaire.common.SensitiveWord;
 import com.wang.tujiquestionnaire.system.entity.Question;
 import com.wang.tujiquestionnaire.system.entity.Survey;
 import com.wang.tujiquestionnaire.system.entity.dto.SurveyCreateDto;
@@ -31,6 +32,7 @@ public class SurveyController {
 
     @ApiOperation("问卷添加")
     @PostMapping("/createQuestionnaire")
+    @SensitiveWord("/createQuestionnaire")
     public Result createQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto) {
         return surveyService.createQuestionnaire1(surveyCreateDto);
     }
