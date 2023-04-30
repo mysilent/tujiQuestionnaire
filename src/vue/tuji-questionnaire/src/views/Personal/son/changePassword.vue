@@ -2,83 +2,105 @@
   <div class="wrapper-changPassword">
     <div class="card-changPassword">
       <div class="password-changPassword">
-    <el-form ref="form" :model="form" label-width="100px" @submit.prevent="changePassword">
-      <el-form-item label="旧密码" prop="oldPassword">
-        <input type="password" v-model="form.oldPassword" class="input">
-      </el-form-item>
-      <el-form-item label="新密码" prop="newPassword" :error="newPasswordError" :error-message="newPasswordErrorMessage">
-        <input type="password" v-model="form.newPassword" class="input">
-      </el-form-item>
-      <el-form-item label="确认密码" prop="confirmPassword" :error="confirmPasswordError" :error-message="confirmPasswordErrorMessage">
-        <input type="password" v-model="form.confirmPassword" class="input">
-      </el-form-item>
-      <el-form-item>
-        <button class="greenButton">修改密码</button>
-      </el-form-item>
-    </el-form>
+        <el-form  ref="ruleFormRef"
+                  :model="form"
+                  status-icon
+                  :rules="rules"
+                  label-width="80px"
+                  class="demo-ruleForm">
+          <el-form-item label="旧密码" prop="oldPassword">
+            <el-input v-model="form.oldPassword" show-password></el-input>
+          </el-form-item>
+          <el-form-item label="新密码" prop="newPassword">
+            <el-input v-model="form.newPassword" show-password></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="confirmPassword">
+            <el-input v-model="form.confirmPassword" show-password></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="changeUserPassword(ruleFormRef)">提交</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-import {ElForm, ElFormItem, ElInput, ElButton, ElMessage} from 'element-plus';
+<script lang="ts" setup>
+import {reactive, ref,} from 'vue';
+import {ElForm, ElFormItem, ElMessage, } from 'element-plus';
+import type {FormInstance, FormRules} from 'element-plus';
 import {changePassword} from "@/axios/api/Personal.api";
+import {useLoginStore} from "@/stores/UserLogin";
 
+const store = useLoginStore()
+const ruleFormRef = ref<FormInstance>()
+const form = reactive({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+  username: store.username,
+})
 
-export default defineComponent({
-  components: { ElForm, ElFormItem, ElInput, ElButton },
-  data() {
-    return {
-      form: {
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      },
-      newPasswordError: false,
-      newPasswordErrorMessage: '',
-      confirmPasswordError: false,
-      confirmPasswordErrorMessage: '',
-    };
-  },
-  methods: {
-    changePassword() {
-    changePassword(this.form).then(map=>{
-      if (map.data.code!=200){
-      ElMessage({message:map.data.msg,type:"error"})
-      }else {
-        ElMessage({message:map.data.msg,type:"success"})
-      }
-    })
-    },
-    validateNewPassword() {
-      if (this.form.newPassword.length < 6) {
-        this.newPasswordError = true;
-        this.newPasswordErrorMessage = '密码长度不能少于6位！';
-      } else {
-        this.newPasswordError = false;
-        this.newPasswordErrorMessage = '';
-      }
-    },
-    validateConfirmPassword() {
-      if (this.form.confirmPassword !== this.form.newPassword) {
-        this.confirmPasswordError = true;
-        this.confirmPasswordErrorMessage = '两次输入的密码不一致！';
-      } else {
-        this.confirmPasswordError = false;
-        this.confirmPasswordErrorMessage = '';
-      }
-    },
-  },
-  watch: {
-    'form.newPassword': 'validateNewPassword',
-    'form.confirmPassword': 'validateConfirmPassword',
-  },
-});
+const validatePass = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入新密码'))
+  } else {
+    if (form.confirmPassword !== '') {
+      if (!ruleFormRef.value) return
+      ruleFormRef.value.validateField('checkPass', () => null)
+    }
+    callback()
+  }
+}
+const validatePass2 = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请再次输入新密码'))
+  } else if (value !== form.newPassword) {
+    callback(new Error("两次输入密码不相同!"))
+  } else {
+    callback()
+  }
+}
+
+const validatePass3 = (rule: any, value: any, callback: any) => {
+  if (!value) {
+    callback(new Error('请输入旧密码'))
+  } else {
+    callback()
+  }
+}
+const rules = reactive<FormRules>({
+  newPassword: [{ validator: validatePass, trigger: 'blur' }],
+  confirmPassword: [{ validator: validatePass2, trigger: 'blur' }],
+  oldPassword: [{ validator: validatePass3, trigger: 'blur' }],
+})
+
+const changeUserPassword = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      changePassword(form).then(map => {
+        if (map.data.code != 200) {
+          ElMessage({message: map.data.msg, type: "error"})
+        } else {
+          ElMessage({message: map.data.msg, type: "success"})
+          form.confirmPassword=''
+          form.newPassword=''
+          form.oldPassword=''
+        }
+      })
+    } else {
+      console.log('请正确填写')
+      return false
+    }
+  })
+}
+
 </script>
 
-<style>
+
+<style scoped>
 form {
   display: flex;
   flex-direction: column;
@@ -98,27 +120,30 @@ input[type=password] {
   font-size: 16px;
 }
 
-.wrapper-changPassword{
+.wrapper-changPassword {
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 1000px;
 }
-.card-changPassword{
+
+.card-changPassword {
   width: 50%;
   background: white;
   border-radius: 59px;
-  animation:slide-in 2s forwards;
+  animation: slide-in 2s forwards;
 }
-.password-changPassword{
+
+.password-changPassword {
   width: auto;
   left: -20px;
 }
+
 @keyframes slide-in {
- 0%{
-   opacity: 0;
- }
-  100%{
+  0% {
+    opacity: 0;
+  }
+  100% {
     opacity: 1;
   }
 }

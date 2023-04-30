@@ -5,6 +5,7 @@
         <div class="header-div">
           <div ></div>
           <div ></div>
+          <div ></div>
           <div></div>
           <div class="line" id="line" :style="{left:left1+'px',width:width1+'px'}"></div>
           <button id="link1" class="header-button" @click="personalInformation">个人信息</button>

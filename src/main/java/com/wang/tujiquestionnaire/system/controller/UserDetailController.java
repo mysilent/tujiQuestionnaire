@@ -2,6 +2,7 @@ package com.wang.tujiquestionnaire.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.common.Result;
+import com.wang.tujiquestionnaire.common.SensitiveWord;
 import com.wang.tujiquestionnaire.system.entity.UserDetail;
 import com.wang.tujiquestionnaire.system.service.impl.UserDetailServiceImpl;
 import io.swagger.annotations.Api;
@@ -30,6 +31,7 @@ public class UserDetailController {
     }
     @ApiOperation("用户信息修改")
     @PostMapping("/userDetail")
+    @SensitiveWord
     public Result userUpdate(@RequestBody UserDetail userDetail){
         if (userDetail.getEmail().isEmpty()){
             userDetail.setEmail(null);

@@ -2,22 +2,19 @@
   <div class="login">
     <div class="login-box">
       <div class="shake-crazy">
-      <div class="owl" id="owl" v-bind:class="{'password': isActive===1}">
+        <div class="owl" id="owl" v-bind:class="{'password': isActive===1}">
 
-        <div class="hand"></div>
-        <div class="hand hand-r"></div>
-        <div class="arms">
-          <div class="arm"></div>
-          <div class="arm arm-r"></div>
+          <div class="hand"></div>
+          <div class="hand hand-r"></div>
+          <div class="arms">
+            <div class="arm"></div>
+            <div class="arm arm-r"></div>
+          </div>
         </div>
       </div>
+      <div class="duihua">
+        <span style="font-size: 14px">如果你还未加入我们,就快去<span @click="enroll" style="color: #72afd3;cursor: pointer;">注册</span>吧！</span>
       </div>
-      <div class="duihua"><span style="font-size: 14px">如果你还未加入我们,就快去<span @click="enroll"
-                                                                                       style="color: #72afd3;cursor: pointer;">注册</span>吧！</span>
-      </div>
-
-
-
       <div class="input-box">
         <el-form :model="user" :rules="rules" ref="ruleFormRef" class="demo-ruleForm ">
           <el-form-item prop="username">
@@ -44,11 +41,9 @@ import {useRouter} from "vue-router";
 import {reactive, ref} from "vue";
 import {useLoginStore} from '@/stores/UserLogin'
 
-
 const userLogin = useLoginStore();
 const ruleFormRef = ref<FormInstance>();
 const router = useRouter();
-
 const user = reactive({
   username: '',
   password: ''
@@ -86,7 +81,7 @@ const login = (formEl: FormInstance | undefined) => {
     if (valid) {
       loginApi(user).then((map: any) => {
         if (map.data.code !== 200) {
-          ElMessage({message: '用户名或密码错误', type: 'error'})
+          ElMessage({message: map.data.msg, type: 'error'})
         } else {
           localStorage.setItem("token", map.data.data.token)
           userLogin.$patch((state) => {

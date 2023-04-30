@@ -24,6 +24,9 @@ import {reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import {ElMessage,} from "element-plus";
 import type {FormInstance, FormRules} from "element-plus"
+import {useAdminLoginStore} from "@/stores/UserLogin";
+
+const loginStore =useAdminLoginStore()
 const router =useRouter()
 const ruleFormRef = ref<FormInstance>();
 const user = reactive({
@@ -56,6 +59,12 @@ const login = (formEl: FormInstance | undefined) => {
         if (map.data.code !== 200) {
           ElMessage({message: '用户名或密码错误', type: 'error'})
         } else {
+          loginStore.$patch((state) => {
+            state.id = map.data.data.id
+            state.username = map.data.data.username
+            state.name = map.data.data.name
+            state.permissions=map.data.data.permissions
+          })
           ElMessage({message: "登陆成功~", type: "success"})
           router.push({
             path: '/background'

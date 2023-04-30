@@ -6,7 +6,7 @@
     >
       <el-table-column prop="id" label="问卷id" width="190"></el-table-column>
       <el-table-column prop="surveyName" label="问卷名称" width="190"></el-table-column>
-      <el-table-column prop="createId" label="创建人id" width="190"></el-table-column>
+      <el-table-column prop="creatorId" label="创建人id" width="190"></el-table-column>
       <el-table-column prop="createDate" label="提交时间" width="170"></el-table-column>
       <el-table-column label="操作">
         <template #default="{row}">
@@ -118,6 +118,7 @@ const load = () => {
   })
 };
 selectTemplateApplication(selectForm).then(map => {
+  console.log(map.data)
   state.tableData = map.data.data;
   state.total = map.data.total;
 })

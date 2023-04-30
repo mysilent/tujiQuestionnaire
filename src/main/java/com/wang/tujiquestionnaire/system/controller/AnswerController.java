@@ -1,6 +1,7 @@
 package com.wang.tujiquestionnaire.system.controller;
 
 import com.wang.tujiquestionnaire.common.Result;
+import com.wang.tujiquestionnaire.common.SensitiveWord;
 import com.wang.tujiquestionnaire.system.entity.dto.AnswerDto;
 import com.wang.tujiquestionnaire.system.service.impl.AnswerServiceImpl;
 import io.swagger.annotations.Api;
@@ -26,6 +27,7 @@ public class AnswerController {
     }
     @ApiOperation("提交答案表")
     @PostMapping("/submitAnswer")
+    @SensitiveWord
     public Result submitAnswer(@RequestBody AnswerDto answerDto){
         return answerService.submitAnswer(answerDto);
     }

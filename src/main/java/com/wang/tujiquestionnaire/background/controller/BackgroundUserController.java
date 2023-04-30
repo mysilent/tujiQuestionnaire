@@ -1,5 +1,6 @@
 package com.wang.tujiquestionnaire.background.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.background.entity.BackgroundUser;
 import com.wang.tujiquestionnaire.background.service.impl.BackgroundUserServiceImpl;
 import com.wang.tujiquestionnaire.common.Result;
@@ -85,6 +86,12 @@ public class BackgroundUserController {
     @ApiModelProperty("管理员登录")
     @GetMapping("/backgroundLogin")
     public Result backgroundLogin(@RequestParam("username") String username, @RequestParam("password")String password){
-        return backgroundUserService.backgroundLogin(username,password)?Result.success():Result.error();
+        return backgroundUserService.backgroundLogin(username,password);
+    }
+
+    @ApiModelProperty("管理员修改密码")
+    @PostMapping("backgroundChangePassword")
+    public Result backgroundChangePassword(@RequestParam("username") String username,@RequestParam("newPassword")String password){
+        return backgroundUserService.changePassword(username,password);
     }
 }

@@ -50,5 +50,6 @@ export default {
   position: absolute;
   background-image: url('1.gif');
   background-size: cover;
+  pointer-events: none;
 }
 </style>

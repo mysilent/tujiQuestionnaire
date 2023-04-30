@@ -11,7 +11,7 @@
     >
       <el-table-column prop="id" label="模板id" width="190"></el-table-column>
       <el-table-column prop="surveyName" label="模板名称" width="190"></el-table-column>
-      <el-table-column prop="createId" label="申请人id" width="190"></el-table-column>
+      <el-table-column prop="creatorId" label="申请人id" width="190"></el-table-column>
       <el-table-column prop="createDate" label="申请时间" width="170"></el-table-column>
       <el-table-column label="操作">
         <template #default="{row}">

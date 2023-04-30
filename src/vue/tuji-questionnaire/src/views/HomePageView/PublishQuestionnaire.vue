@@ -1,10 +1,13 @@
 <template>
-<h1>问卷发布</h1>
+  <router-view></router-view>
 </template>
 
-<script>
+<script lang="ts">
+import QuestionCreat from "@/views/PublishQuestion/QuestionCreat.vue";
+
 export default {
-  name: "PublishQuestionnaire"
+  name: "PublishQuestionnaire",
+  components: {QuestionCreat}
 }
 </script>
 

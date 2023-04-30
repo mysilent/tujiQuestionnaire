@@ -156,6 +156,7 @@ import {useRouter} from "vue-router";
 import {surveyPreviewApi} from "@/axios/api/myquestionnaire.api";
 import {useSurveyPreviewStore} from "@/stores/userSurvey";
 import {storeToRefs} from "pinia";
+import {SENSITIVE_REGEX} from '@/utils/validate'
 
 export default defineComponent({
   components: {
@@ -169,39 +170,34 @@ export default defineComponent({
     const surveys: SurveyCreateDto = <SurveyCreateDto>({})
     const {cont: Id} = storeToRefs(surveyStore)
     const surveyId = ({
-      id: ''
+      id: Id.value.id
     })
-    surveyId.id = Id.value.id
     const survey1 = reactive({data: []})
     let awer = ref([])
     surveyPreviewApi(surveyId).then(map => {
       survey1.data = map.data
     })
-    const SENSITIVE_REGEX = /[\u4e00-\u9fa5]|[^\w\s]/g;
+    console.log(survey1)
     const username = (rule: any, value: any, callback: any) => {
-      if (value === '') {
+      if (!value) {
         callback(new Error('请输入问卷标题'))
+      } else if (SENSITIVE_REGEX.test(value)) {
+        callback(new Error('输入内容包含敏感字符'));
       } else {
-        if (SENSITIVE_REGEX.test(value)) {
-          callback(new Error('输入内容包含敏感字符'));
-        } else {
-          callback();
-        }
+        callback();
       }
     }
     const validatePass = (rule: any, value: any, callback: any) => {
-      if (value === '') {
+      if (!value) {
         callback(new Error('请输入问卷描述'))
+      } else if (SENSITIVE_REGEX.test(value)) {
+        callback(new Error('输入内容包含敏感字符'));
       } else {
-        if (SENSITIVE_REGEX.test(value)) {
-          callback(new Error('输入内容包含敏感字符'));
-        } else {
-          callback();
-        }
+        callback();
       }
     }
     const endTime = (rule: any, value: any, callback: any) => {
-      if (value === '') {
+      if (!value) {
         callback(new Error('请选择截止日期'))
       } else {
         callback();
@@ -209,8 +205,8 @@ export default defineComponent({
     }
 
     const validateSensitive = (rule: any, value: any, callback: any) => {
-      if (value === '' || SENSITIVE_REGEX.test(value)) {
-        if (value === '') {
+      if ((!value)|| SENSITIVE_REGEX.test(value)) {
+        if (!value) {
           callback(new Error('请输入内容'))
         } else {
           callback(new Error('输入内容包含敏感字符'));
@@ -234,6 +230,7 @@ export default defineComponent({
         if (valid) {
           reviseSurvey(survey1.data).then((map: any) => {
             if (map.data.code == 200) {
+              console.log(map.data)
               ElMessage({message: '修改成功', type: 'success'})
               surveyStore.$patch((state) => {
                 state.cont.id = map.data.data

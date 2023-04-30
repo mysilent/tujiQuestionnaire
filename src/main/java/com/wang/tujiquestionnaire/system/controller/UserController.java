@@ -30,14 +30,17 @@ public class UserController {
     @ApiOperation("用户登录")
     @PostMapping ("/login")
     public Result login(@RequestParam("username") String username, @RequestParam("password")String password) {
-        Integer i = userService.login(username, password);
-        if (i == 1) {
+        int state = userService.selectState(username);
+        System.out.println(state);
+        if (userService.login(username, password) == 1 && state==1) {
             UserDto userDto = userService.selectUser(username);
             String token = JwtUtil.generateToken(username,String.valueOf(userDto.getId()));
             userDto.setToken(token);
             if (token != null){
                 return Result.success(userDto);
             }
+        }else if (state==0){
+            return Result.error(10000, "账户已被封禁");
         }
         return Result.error(10000, "账户或密码错误");
     }
@@ -57,29 +60,20 @@ public class UserController {
     @ApiOperation("修改密码")
     @PostMapping("/changePassword")
     public Result changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
-
-
-//    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
-//            @AuthenticationPrincipal UserDetails userDetails) {
-//        // 验证用户是否已登录
-//        if (userDetails == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("请先登录！"));
-//        }
-
+        System.out.println(changePasswordDto);
         // 验证旧密码是否正确
         if (!isValidOldPassword(changePasswordDto)) {
             return Result.error("密码不正确");
         }
-        // 对新密码进行加密处理
-//        String encryptedPassword = encryptPassword(changePasswordRequest.getNewPassword());
         // 更新数据库中的密码信息
+
         updateUserPassword(changePasswordDto);
         // 返回修改密码成功的信息
         return Result.success("密码修改成功！");
     }
 
     // 验证旧密码是否正确
-    private boolean isValidOldPassword(ChangePasswordDto changePasswordDto) {
+    private boolean isValidOldPassword( ChangePasswordDto changePasswordDto) {
         return userService.isValidOldPassword(changePasswordDto);
     }
 

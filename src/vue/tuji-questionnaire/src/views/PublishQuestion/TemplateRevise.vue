@@ -6,8 +6,7 @@
           <el-input v-model="survey1.data.surveyName" placeholder="请输入问卷名称"></el-input>
         </el-form-item>
         <el-form-item label="问卷描述" prop="surveyDescription">
-          <el-input v-model="survey1.data.surveyDescription" placeholder="请输入问卷描述" type="textarea"
-                    autosize></el-input>
+          <el-input v-model="survey1.data.surveyDescription" placeholder="请输入问卷描述"></el-input>
         </el-form-item>
         <el-form-item label="截止日期" prop="endTime">
           <el-date-picker v-model="survey1.data.endTime" type="date" placeholder="请输入问卷截至日期"></el-date-picker>
@@ -38,7 +37,7 @@
               <template #item="{element :option,index}">
                 <el-radio-group v-model="awer[question.questionSort]">
                   <div class="option">
-                    <el-radio :key="index" :label="option.optionSort" style="height: auto;margin-right:0">
+                    <el-radio :key="index" :label="option.optionSort" style="height: auto;margin-right: 0">
                       <el-form :model="option" :rules="rules" ref="ruleFormRef">
                         <el-form-item prop="optionName">
                           <el-input v-model="option.optionName"></el-input>
@@ -97,6 +96,7 @@
                       </svg>
                     </div>
                   </div>
+
                 </el-checkbox-group>
               </template>
             </draggable>
@@ -145,16 +145,17 @@
 <script lang="ts">
 import type QuestionDto from "@/type/QusetionDto";
 import type OptionDto from "@/type/OptionDto";
-import type SurveyCreateDto from "@/type/SurveyCreateDto";
 import draggable from 'vuedraggable'
 import {defineComponent, reactive, ref} from 'vue'
 import {Remove} from "@element-plus/icons-vue";
-import {saveSurveyApi} from '@/axios/api/publishquestionnaire.api'
-import {useLoginStore} from '@/stores/UserLogin'
+import {reviseSurvey} from '@/axios/api/myquestionnaire.api'
 import {ElMessage} from "element-plus";
 import type {FormInstance, FormRules} from "element-plus";
 import {useRouter} from "vue-router";
+import {useSurveyPreviewStore,useSurveyStore} from "@/stores/userSurvey";
 import {SENSITIVE_REGEX} from '@/utils/validate'
+import type SurveyCreateDto from "@/type/SurveyCreateDto";
+import {useLoginStore} from "@/stores/UserLogin";
 
 export default defineComponent({
   components: {
@@ -162,32 +163,15 @@ export default defineComponent({
     draggable,
   },
   setup() {
+    const loginId=useLoginStore()
+    const store = useSurveyStore()
+    const surveyStore = useSurveyPreviewStore()
     const router = useRouter();
     const ruleFormRef = ref<FormInstance>();
-    const storeId = useLoginStore()
-    const surveys: SurveyCreateDto = <SurveyCreateDto>({})
-    const survey = ({
-      id: '',
-      surveyName: '',
-      surveyDescription: '',
-      startTime: '',
-      endTime: '',
-      status: '',
-      surveySort: 0,
-      topFlag: '',
-      createDate: '',
-      updateDate: '',
-      creatorId: '',
-      updatorId: '',
-      surveyPicId: '',
-      questionDtoList: []
-    })
     const survey1 = reactive({data: []})
+    survey1.data=store.survey
+    survey1.data.creatorId=loginId.id
     let awer = ref([])
-    survey.creatorId = storeId.id
-    survey.status = "0"
-    survey1.data = survey
-
     const username = (rule: any, value: any, callback: any) => {
       if (!value) {
         callback(new Error('请输入问卷标题'))
@@ -200,12 +184,10 @@ export default defineComponent({
     const validatePass = (rule: any, value: any, callback: any) => {
       if (!value) {
         callback(new Error('请输入问卷描述'))
+      } else if (SENSITIVE_REGEX.test(value)) {
+        callback(new Error('输入内容包含敏感字符'));
       } else {
-        if (SENSITIVE_REGEX.test(value)) {
-          callback(new Error('输入内容包含敏感字符'));
-        } else {
-          callback();
-        }
+        callback();
       }
     }
     const endTime = (rule: any, value: any, callback: any) => {
@@ -217,11 +199,12 @@ export default defineComponent({
     }
 
     const validateSensitive = (rule: any, value: any, callback: any) => {
-      if (!value) {
-        callback(new Error('请输入内容'))
-      } else if (SENSITIVE_REGEX.test(value)) {
-        callback(new Error('输入内容包含敏感字符'));
-        console.log(value)
+      if (value === '' || SENSITIVE_REGEX.test(value)) {
+        if (value === '') {
+          callback(new Error('请输入内容'))
+        } else {
+          callback(new Error('输入内容包含敏感字符'));
+        }
       } else {
         callback();
       }
@@ -235,28 +218,30 @@ export default defineComponent({
       optionName: [{required: true, validator: validateSensitive, trigger: 'blur'}],
     })
 
-
     const submitForm = (formEl: FormInstance | undefined) => {
       if (!formEl) return
       formEl.validate((valid) => {
         if (valid) {
-          saveSurveyApi(survey1.data).then((map: any) => {
+          reviseSurvey(survey1.data).then((map: any) => {
             if (map.data.code == 200) {
-              ElMessage({message: '添加成功', type: 'success'})
+              ElMessage({message: '操作成功', type: 'success'})
+              surveyStore.$patch((state) => {
+                state.cont.id = map.data.data
+              })
               router.push({
-                path: '/home/myQuestionnaire'
+                path: '/home/myQuestionnaire/preview'
               })
             }
           })
         } else {
-          ElMessage({message: '请填写必填项', type: 'error'})
+          ElMessage({message: '请正确填写必填项', type: 'error'})
           return false
         }
       })
     }
 
 
-    return {survey1, awer, surveys, ruleFormRef, router, submitForm, rules, validateSensitive}
+    return {survey1, awer, ruleFormRef, router, submitForm, rules, validateSensitive}
   },
   methods: {
     addQuestion(type: any) {

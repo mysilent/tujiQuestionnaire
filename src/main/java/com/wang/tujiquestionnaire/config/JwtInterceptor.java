@@ -19,17 +19,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class JwtInterceptor implements HandlerInterceptor {
     // 定义静态变量 HEADER_AUTHORIZATION 和 BEARER_PREFIX
-
     private static final String HEADER_AUTHORIZATION = "Authorization";
-//    private static final String HEADER_AUTHORIZATION = "token";
     private static final String BEARER_PREFIX = "Bearer ";
-
     // 实现 preHandle 方法
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获取请求头中的 Authorization 字段
         String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
-        System.out.println(authorizationHeader);
         // 如果 Authorization 字段存在且以 Bearer 前缀开头
         if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_PREFIX)) {
             // 从 Authorization 字段中获取 JWT Token

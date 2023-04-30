@@ -51,4 +51,11 @@ public interface IUserService extends IService<User> {
      * @param changePasswordDto 前端传来的修改密码的实体类
      */
     void updateUserPassword(ChangePasswordDto changePasswordDto);
+
+    /**
+     * 根据用户名去查询用户状态
+     * @param username 用户名
+     * @return 返回查询到的state是什么
+     */
+    int selectState(String username);
 }

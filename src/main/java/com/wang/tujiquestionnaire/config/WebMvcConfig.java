@@ -3,6 +3,7 @@ package com.wang.tujiquestionnaire.config;
 import com.wang.tujiquestionnaire.common.Constant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -19,6 +20,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JwtInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns(Constant.NO_URL1, Constant.NO_URL2,Constant.NO_URL3,Constant.NO_URL4,"/background/user/**");
+                .excludePathPatterns(Constant.NO_URL1, Constant.NO_URL2,Constant.NO_URL3,Constant.NO_URL4,"/background/user/**","/swagger-resources/**", "/webjars/**", "/v3/**", "/swagger-ui.html/**");
+    }
+
+        @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry){
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 }

@@ -130,9 +130,8 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
                 }
             }
         }
-
         createQuestionnaireSql(survey, questionLists, optionLists);
-        return Result.success(surveyId);
+        return Result.success(null,surveyId);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -193,9 +192,9 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
 
     @Override
     public  SurveyCreateDto  selectQuestionnaire(String  id)  {
+        System.out.println(id);
         //      建立一个空的  Optional<Survey>  对象，初始化为  null  可以有效避免  NullPointerException  的风险。
         Optional<Survey>  optionalSurvey  =  Optional.ofNullable(surveyMapper.selectById(id));
-
         if  (optionalSurvey.isPresent())  {
             //  如果  optionalSurvey  内容存在，则将内容赋值给  survey  变量，get()  函数用于获取  optionalSurvey  中的对象。
             Survey  survey  =  optionalSurvey.get();
@@ -259,11 +258,11 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
     }
 
     @Transactional(rollbackFor  =  Exception.class)
-    protected    int  deleteQuestionnaireSql(String  id,  QueryWrapper<Question>  questionQueryWrapper,  QueryWrapper<Option>  optionQueryWrapper)  {
+    protected    int  deleteQuestionnaireSql(String  id,QueryWrapper<Question>  questionQueryWrapper,QueryWrapper<Option>  optionQueryWrapper)  {
         int  i  =  surveyMapper.deleteById(id);
         int  j  =  questionMapper.delete(questionQueryWrapper);
         int  k  =  optionMapper.delete(optionQueryWrapper);
-        return  i  ==  1  &&  j  >  0  &&  k  >  0  ?  1  :  0;
+        return  i  ==  1  &&  j  >=  0  &&  k  >=  0  ?  1  :  0;
     }
 
     @Override

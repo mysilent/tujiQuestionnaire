@@ -67,5 +67,10 @@ public class SurveyTemplateController {
     public  Result templateApplicationNoNo(@RequestParam("id")String id){
         return surveyTemplateService.templateApplicationNo(id);
     }
+    @ApiModelProperty("问卷模板查看")
+    @GetMapping("/selectTemplatePreview")
+    public SurveyTemplate selectTemplatePreview(@RequestParam("id") String id){
+        return surveyTemplateService.getById(id);
+    }
 
 }

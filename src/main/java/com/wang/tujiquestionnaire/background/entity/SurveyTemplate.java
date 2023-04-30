@@ -38,7 +38,7 @@ public class SurveyTemplate implements Serializable {
     private String content;
 
     @ApiModelProperty("创建人id")
-    private String createId;
+    private String creatorId;
 
     @ApiModelProperty("创建时间")
     private LocalDateTime createDate;

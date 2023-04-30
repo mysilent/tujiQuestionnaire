@@ -5,6 +5,7 @@
       </div>
     </div>
     <div class="questionnaire">
+      <button @click="copyTemplate" class="greenButton" style="left: 600px">复制此模板</button>
       <h1>{{ survey.surveyName }}</h1>
       <p class="description">{{ survey.surveyDescription }}</p>
       <el-divider></el-divider>
@@ -39,11 +40,13 @@ import {useSurveyPreviewStore, useSurveyStore} from '@/stores/userSurvey'
 import {storeToRefs} from "pinia";
 import {Back} from "@element-plus/icons-vue";
 import {selectTemplatePreview} from "@/axios/api/Background";
+import {useRouter} from "vue-router";
 
 export default defineComponent({
   components: {Back},
   setup() {
     const answers: Record<string, string | string[]> = reactive({})
+    const router =useRouter()
     const surveyPreview = useSurveyPreviewStore()
     const surveyId = ({
       id: surveyPreview.cont.id
@@ -53,12 +56,17 @@ export default defineComponent({
     selectTemplatePreview(surveyId).then(map => {
       map.data.questionDtoList=JSON.parse(map.data.content)
       store.setSurvey(map.data)
-      console.log(store.survey)
     })
+    const copyTemplate=()=>{
+      router.push({
+        path:'/home/publishQuestionnaire/TemplateRevise'
+      })
+    }
 
     return {
       survey,
       answers,
+      copyTemplate
     }
   },
   computed: {}

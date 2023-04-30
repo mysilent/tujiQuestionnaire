@@ -1,6 +1,6 @@
 <template>
-  <h1>历史问卷</h1>
-  <div v-if="!isTure" class="isNull">
+  <h1>我的问卷</h1>
+  <div v-show="!isTure" class="isNull">
     <n-empty description="你好像还没创作自己的问卷" size="huge">
       <template #extra>
         <n-button @click="push()">
@@ -13,7 +13,8 @@
     <div class="box-card" @mouseover="isActive=index" @mouseout="isActive=-1" v-for="(surveys,index) in survey"
          :key="index">
       <div class="header-div">
-        <div class="image"><img src="../../../src/imager/preview-default.png" style=" width: 100%;height: 100%;object-fit:cover;"></div>
+        <div class="image"><img src="../../../src/imager/preview-default.png"
+                                style=" width: 100%;height: 100%;object-fit:cover;"></div>
         <div class="state"><span class="text">{{ '收集中' }}</span></div>
         <span class="tag"></span>
       </div>
@@ -76,35 +77,48 @@ const isActive = ref(-1);
 const user = ref([])
 const surveyStore = useSurveyPreviewStore()
 const id = reactive({
-  id: ''
+  id: userLogin.id
 })
 const survey: any = reactive([])
 const isTure = ref(false)
-id.id = userLogin.id
-selectUserSurveyApi(id).then(map => {
-  let i = 0
-  for (let mapKey in map.data.data) {
-    isTure.value=true
-  }
 
-  for (i; i < map.data.data.length; i++) {
+selectUserSurveyApi(id).then(map => {
+  survey.splice(0,survey.length)
+  for (let mapKey in map.data.data) {
+    isTure.value = true
+  }
+  for (let i = 0; i < map.data.data.length; i++) {
     survey.push(map.data.data[i]);
   }
 })
 
-function SurveyDelete(id: any) {
+const select = () => {
+  survey.splice(0,survey.length)
+  selectUserSurveyApi(id).then(map => {
+    for (let mapKey in map.data.data) {
+      isTure.value = true
+    }
+    for (let i = 0; i < map.data.data.length; i++) {
+      survey.push(map.data.data[i]);
+    }
+  })
+}
+
+
+const SurveyDelete=(id: any)=> {
   const Id = reactive({
     id: id
   })
   deleteSurveyApi(Id).then(map => {
     if (map.data.code === 200) {
       ElMessage.success("删除成功")
-      router.go(0);
+      select()
     } else {
       ElMessage.error("好像出错了QAQ")
     }
   })
 }
+
 function topFlag(topFlag: any) {
   if (topFlag == 1) {
     topFlag = 0
@@ -115,6 +129,7 @@ function topFlag(topFlag: any) {
   }
 
 }
+
 function preview(id: any) {
   surveyStore.$patch((state) => {
     state.cont.id = id
@@ -132,21 +147,24 @@ function revise(id: any) {
     name: "revise",
   })
 }
+
 function push() {
   router.push({
-    name:"publishQuestionnaire"
+    name: "publishQuestionnaire"
   })
 }
 </script>
 
 <style scoped>
-.isNull{
+.isNull {
   top: 250px;
   height: auto;
 }
+
 el-button {
   pointer-events: none
 }
+
 .index {
   display: grid;
   /*width: 220px;*/
@@ -222,7 +240,7 @@ el-button {
   width: 220px;
   height: 210px;
   border-radius: 5px;
-  transition: border-radius 0.3s, -webkit-box-shadow 0.3s, box-shadow 0.3s,transform 0.5s ease;
+  transition: border-radius 0.3s, -webkit-box-shadow 0.3s, box-shadow 0.3s, transform 0.5s ease;
   overflow: hidden;
   -webkit-box-shadow: 2px 2px 7px #888888;
   box-shadow: 3px 2px 7px #888888;

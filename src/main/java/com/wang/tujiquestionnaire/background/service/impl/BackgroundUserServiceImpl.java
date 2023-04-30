@@ -31,11 +31,12 @@ BackgroundUserMapper backgroundUserMapper;
     UserMapper userMapper;
 
     @Override
-    public Boolean backgroundLogin(String username, String password) {
+    public Result backgroundLogin(String username, String password) {
         QueryWrapper<BackgroundUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",username).eq("password",password);
         Long count = backgroundUserMapper.selectCount(queryWrapper);
-        return count==1;
+        BackgroundUser backgroundUser = backgroundUserMapper.selectOne(queryWrapper);
+        return count==1?Result.success(backgroundUser):Result.error();
     }
 
     @Override
@@ -53,5 +54,10 @@ BackgroundUserMapper backgroundUserMapper;
     public Result updateState(String id, int state) {
         return userMapper.updateState(id,state)?Result.success():Result.error();
 
+    }
+
+    @Override
+    public Result changePassword(String username, String password) {
+        return backgroundUserMapper.changePassword(username,password)==1?Result.success():Result.error();
     }
 }

@@ -39,6 +39,9 @@ function templateApplicationYes(params:any){
 function templateApplicationNo(params:any){
     return http.get('/background/surveyTemplate/templateApplicationNo',params)
 }
+function selectTemplatePreview(params:any){
+    return http.get('/background/surveyTemplate/selectTemplatePreview',params)
+}
 
 export {
     BackgroundLogin,
@@ -54,5 +57,6 @@ export {
     selectTemplateApplication,
     templateApplicationYes,
     templateApplicationNo,
+    selectTemplatePreview,
 
 }

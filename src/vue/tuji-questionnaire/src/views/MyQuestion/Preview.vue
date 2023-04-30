@@ -11,6 +11,7 @@
     </div>
     <div class="questionnaire">
       <h1>{{ survey.surveyName }}</h1>
+      <button @click="updateTemplate" class="greenButton" style="left: 600px;top: -50px">申请成为模板</button>
       <p class="description">{{ survey.surveyDescription }}</p>
       <el-divider></el-divider>
       <div v-for="(question, index) in survey.questionDtoList.sort((a,b)=>a.questionSort-b.questionSort)" :key="index">
@@ -31,13 +32,11 @@
           </el-checkbox-group>
         </div>
         <div v-else-if="question.questionType === '3'">
-          <!--        <h2>{{ question.questionDescription }}</h2>-->
           <el-input v-model="answers[question.questionSort]" placeholder="请输入答案"></el-input>
         </div>
       </div>
     </div>
   </div>
-  <div @click="updateTemplate">提交</div>
 </template>
 
 <script lang="ts">
@@ -54,23 +53,27 @@ export default defineComponent({
   setup() {
     const answers: Record<string, string | string[]> = reactive({})
     const surveyPreview = useSurveyPreviewStore()
-    const {cont: Id} = storeToRefs(surveyPreview)
     const surveyId = ({
-      id: ''
+      id: surveyPreview.cont.id
     })
-    surveyId.id = Id.value.id
     const store = useSurveyStore()
     const {survey: survey} = storeToRefs(store)
-    surveyPreviewApi(surveyId).then(map => {
-      store.setSurvey(map.data)
-    })
+    console.log(surveyPreview)
+    if (surveyId.id!=null){
+
+      surveyPreviewApi(surveyId).then(map => {
+        store.setSurvey(map.data)
+      })
+    }else {
+      ElMessage.error("好像出错了！")
+    }
 
     const template = reactive({
       id: '',
       surveyName: '',
       surveyDescription: '',
       content: '',
-      createId: '',
+      creatorId: '',
       createDate: '',
       updateDate: '',
       state: '',
@@ -81,11 +84,11 @@ export default defineComponent({
       template.surveyName = survey.value.surveyName
       // 需要进行序列化，但是为了防止后端认为序列化后的数据为非法数据，带有敏感符号，还需要进行url编码
       template.content =  encodeURIComponent(JSON.stringify(survey.value.questionDtoList))
-      template.createId = survey.value.creatorId
+      template.creatorId = survey.value.creatorId
       template.id = survey.value.id
       surveyTemplateApplication(template).then(map => {
         if (map.data.code == 200) {
-          ElMessage.success("添加成功")
+          ElMessage.success("操作成功")
         } else if (map.data.code == 1000) {
           ElMessage.error(map.data.msg)
         } else {

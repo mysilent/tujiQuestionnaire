@@ -22,7 +22,7 @@ public interface IBackgroundUserService extends IService<BackgroundUser> {
      * @param password 管理员密码
      * @return 返回是否登陆成功
      */
-    Boolean backgroundLogin(String username, String password);
+    Result backgroundLogin(String username, String password);
 
     /**
      * 根据前端出传来的信息进行分页查询
@@ -43,4 +43,5 @@ public interface IBackgroundUserService extends IService<BackgroundUser> {
     Result updateState(String id, int state);
 
 
+    Result changePassword(String username, String password);
 }

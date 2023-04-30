@@ -1,6 +1,5 @@
 <template>
   <h1>问卷中心</h1>
-<!--  <div class="index">-->
     <div class="questionnaires">
       <div v-for="questionnaire in survey" :key="questionnaire.id" class="questionnaire-card">
         <div class="questionnaire-header">
@@ -25,13 +24,11 @@
         <div class="questionnaire-body">
           <p class="questionnaire-description">{{ questionnaire.surveyDescription }}</p>
           <div class="questionnaire-meta">
-<!--            <span class="questionnaire-author">{{ questionnaire.author }}</span>-->
                         <span class="questionnaire-date">{{ questionnaire.createDate }}</span>
           </div>
         </div>
       </div>
     </div>
-<!--  </div>-->
 
 </template>
 
@@ -75,12 +72,6 @@ el-button {
   pointer-events: none
 }
 
-/*.index {*/
-/*  display: grid;*/
-/*  grid-template-columns: repeat(auto-fill, 220px);*/
-/*  grid-gap: 26px;*/
-/*  padding: 10px 32px;*/
-/*}*/
 
 .questionnaires {
   padding: 10px 32px;

@@ -10,7 +10,7 @@
     </div>
     <div>
       <el-dropdown>
-        <div class="right-div" style="target: none">{{ 王小虎 }}
+        <div class="right-div" style="target: none">{{ adminLogin.name }}
           <User class="block-col"/>
         </div>
         <template #dropdown>
@@ -28,16 +28,34 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
-import {Expand, Fold, Memo, SwitchButton, UserFilled} from "@element-plus/icons-vue";
+import {defineComponent, reactive} from "vue";
+import {Expand, Fold, Memo, SwitchButton, User, UserFilled} from "@element-plus/icons-vue";
+import {useAdminLoginStore} from "@/stores/UserLogin";
+import {useRouter} from "vue-router";
+
 
 export default defineComponent({
+  setup(){
+    const router = useRouter()
+    const store = useAdminLoginStore()
+    const adminLogin=reactive({
+      name:store.name,
+    })
+    const exit=()=>{
+      router.push({
+        path:'/BackgroundLogin'
+      })
+    }
+    return{
+      adminLogin,
+    }
+  },
   name: "header",
-  components: {Expand, Fold, Memo, UserFilled, SwitchButton},
+  components: {User, Expand, Fold, Memo, UserFilled, SwitchButton},
   props: {
     collapseBtnClass: Boolean,
     collapse: Function
-  }
+  },
 })
 </script>
 

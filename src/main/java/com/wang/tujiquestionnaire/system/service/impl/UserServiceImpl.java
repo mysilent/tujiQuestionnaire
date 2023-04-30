@@ -69,8 +69,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Boolean isValidOldPassword(ChangePasswordDto changePasswordDto) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username",changePasswordDto.getUsername());
-        queryWrapper.eq("password",changePasswordDto.getOldPassword());
+        queryWrapper.eq("username",changePasswordDto.getUsername())
+                    .eq("password",changePasswordDto.getOldPassword());
         Integer i = userMapper.selectCount(queryWrapper).intValue();
         return i==1? true:false;
     }
@@ -78,6 +78,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public void updateUserPassword(ChangePasswordDto changePasswordDto) {
         userMapper.updatePassword(changePasswordDto.getNewPassword(),changePasswordDto.getUsername());
+    }
+
+    @Override
+    public int selectState(String username) {
+        return userMapper.selectState(username);
     }
 
 

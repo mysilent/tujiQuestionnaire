@@ -32,7 +32,7 @@ public class SurveyController {
 
     @ApiOperation("问卷添加")
     @PostMapping("/createQuestionnaire")
-    @SensitiveWord("/createQuestionnaire")
+    @SensitiveWord
     public Result createQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto) {
         return surveyService.createQuestionnaire1(surveyCreateDto);
     }
@@ -60,6 +60,7 @@ public class SurveyController {
     }
     @ApiOperation("问卷修改")
     @PostMapping("/reviseQuestionnaire")
+    @SensitiveWord
     public Result reviseQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto){
         return surveyService.reviseQuestionnaire(surveyCreateDto);
     }

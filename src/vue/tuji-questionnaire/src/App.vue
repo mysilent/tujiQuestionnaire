@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import Plane from "@/components/plane.vue";
+import Plane from "@/components/sheep.vue";
 </script>
 
 <style>
