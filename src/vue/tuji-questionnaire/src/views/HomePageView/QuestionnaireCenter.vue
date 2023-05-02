@@ -24,7 +24,7 @@
         <div class="questionnaire-body">
           <p class="questionnaire-description">{{ questionnaire.surveyDescription }}</p>
           <div class="questionnaire-meta">
-                        <span class="questionnaire-date">{{ questionnaire.createDate }}</span>
+                        <span class="questionnaire-date">{{ moment(questionnaire.createDate).format("YYYY-MM-DD") }}</span>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@ import {selectOtherUserSurvey} from "@/axios/api/QuestionnaireCenter.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
 import {useSurveyPreviewStore} from '@/stores/userSurvey'
-
+import moment from 'moment';
 
 const router = useRouter();
 const userLogin = useLoginStore();
@@ -74,9 +74,9 @@ el-button {
 
 
 .questionnaires {
-  padding: 10px 32px;
+  padding: 10px 26px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 474px);
+  grid-template-columns: repeat(auto-fill, 471px);
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -88,7 +88,6 @@ el-button {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s;
-  /*width: 100%;*/
 }
 .questionnaire-card:hover{
   transform: scale(1.05);

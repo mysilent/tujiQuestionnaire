@@ -15,7 +15,7 @@
       <div class="header-div">
         <div class="image"><img src="../../../src/imager/preview-default.png"
                                 style=" width: 100%;height: 100%;object-fit:cover;"></div>
-        <div class="state"><span class="text">{{ '收集中' }}</span></div>
+        <div class="state"><span :class="getStateClass(surveys.status)">{{getStateText(surveys.status)}}</span></div>
         <span class="tag"></span>
       </div>
       <div class="h"><span>{{ surveys.surveyName }}</span></div>
@@ -37,9 +37,8 @@
             <el-tooltip content="修改" effect="light">
               <el-button type="primary" :icon="Edit" circle @click="revise(surveys.id)"/>
             </el-tooltip>
-            <el-tooltip content="收藏" effect="light">
-              <el-button @click="topFlag(survey.topFlag)" :icon="Star" circle v-if="survey.topFlag=1"/>
-              <el-button @click="topFlag(survey.topFlag)" type="warning" :icon="Star" circle v-if="survey.topFlag=0"/>
+            <el-tooltip content="数据分析" effect="light">
+              <el-button type="info"  :icon="Histogram" circle @click="topFlag(survey.topFlag)"/>
             </el-tooltip>
             <el-popconfirm
                 confirm-button-text="是的"
@@ -62,13 +61,14 @@
 
 <script lang="ts" setup>
 
-import {Search, Edit, Star, Delete} from "@element-plus/icons-vue";
+import {Search, Edit, Delete, Histogram} from "@element-plus/icons-vue";
 import {reactive, ref,} from "vue";
 import {selectUserSurveyApi, deleteSurveyApi} from "@/axios/api/myquestionnaire.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
 import {useSurveyPreviewStore} from '@/stores/userSurvey'
 import {ElMessage} from "element-plus";
+// import { isDark } from '/composables/dark'
 
 
 const router = useRouter();
@@ -127,8 +127,27 @@ function topFlag(topFlag: any) {
     topFlag = 1
     return topFlag
   }
-
 }
+const getStateText = (state:any) => {
+  if (state===0){
+    return'收集中'
+  }else if (state===2){
+return '已结束'
+  }else{
+return '已失效'
+  }
+}
+const getStateClass=(state :any)=>{
+  if (state===0){
+    return"state-green"
+  }else if (state===2){
+    return "state-red"
+  }else{
+    return "state-info"
+  }
+}
+
+
 
 function preview(id: any) {
   surveyStore.$patch((state) => {
@@ -167,8 +186,6 @@ el-button {
 
 .index {
   display: grid;
-  /*width: 220px;*/
-  /*height: 210px;*/
   grid-template-columns: repeat(auto-fill, 220px);
   grid-gap: 26px;
   padding: 10px 32px;
@@ -189,9 +206,25 @@ el-button {
   top: 8px;
 }
 
-.text {
+.state-green {
   color: #1ED261;
   border: 1px solid #1ED261;
+  background-color: #F4FDF7;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 0 6px;
+}
+.state-red  {
+  color: #e84118;
+  border: 1px solid #e84118;
+  background-color: #F4FDF7;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 0 6px;
+}
+.state-info {
+  color: #999999;
+  border: 1px solid #999999;
   background-color: #F4FDF7;
   border-radius: 4px;
   font-size: 12px;

@@ -3,6 +3,7 @@ package com.wang.tujiquestionnaire.background.controller;
 import com.wang.tujiquestionnaire.background.service.impl.BackgroundSurveyServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class BackgroundSurveyController {
     @Resource
     BackgroundSurveyServiceImpl backgroundSurveyService;
-    @ApiModelProperty("对所有问卷以及创建问卷的用户进行查询")
+    @ApiOperation("对所有问卷以及创建问卷的用户进行查询")
     @GetMapping("/selectAll")
     public Map<String,Object>selectSurvey(@RequestParam("pageNum") Integer pageNum,
                                           @RequestParam("pageSize") Integer pageSize,

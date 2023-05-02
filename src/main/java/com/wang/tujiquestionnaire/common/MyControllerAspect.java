@@ -31,13 +31,13 @@ public class MyControllerAspect {
         SensitiveWordBs wordBs = SensitiveWordBs.newInstance()
                 .ignoreCase(true) //忽略大小写
                 .ignoreWidth(true)//忽略半角圆角
-                .ignoreNumStyle(true)//忽略数字的写法
+                .ignoreNumStyle(false)//忽略数字的写法
                 .ignoreChineseStyle(true)//忽略中文的书写格式
                 .ignoreEnglishStyle(true)//忽略英文的书写格式
                 .ignoreRepeat(true)//忽略重复词
                 .enableNumCheck(false)//是否启用数字检测。默认连续 8 位数字认为是敏感词
-                .enableEmailCheck(true)//是有启用邮箱检测
-                .enableUrlCheck(true)//是否启用链接检测
+                .enableEmailCheck(false)//是有启用邮箱检测
+                .enableUrlCheck(false)//是否启用链接检测
                 .init();
 
         Object[] arg = point.getArgs();

@@ -12,6 +12,7 @@ const router = createRouter({
                 path: '/home',
                 name: 'home',
                 component: HomeView,
+                redirect:'/home/questionnaireCenter',
                 children: [{
                     path: '/home/questionnaireCenter',
                     name: 'questionnaireCenter',
@@ -62,6 +63,7 @@ const router = createRouter({
                 path: '/personal',
                 name: 'personal',
                 component: () => import('../views/PersonalView.vue'),
+                redirect:'/personal/personalCenter/personalInformation',
                 children: [
                     {
                         path: '/personal/personalCenter/personalInformation',
@@ -117,6 +119,7 @@ const router = createRouter({
                 path: '/background',
                 name: 'background',
                 component: () => import('../views/Background/ManageView.vue'),
+                redirect:'/BackgroundData',
                 children: [{
                     path: '/background/home',
                     name: 'backgroundUser',
@@ -141,6 +144,10 @@ const router = createRouter({
                     path: '/Template',
                     name: 'Template',
                     component: () => import('../views/Background/Template.vue')
+                },{
+                    path: '/BackgroundData',
+                    name: 'BackgroundData',
+                    component: () => import('../views/Background/BackgroundData.vue')
                 }
                 ]
             },

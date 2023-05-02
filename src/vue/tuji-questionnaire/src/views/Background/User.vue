@@ -129,11 +129,9 @@ findPage(selectForm).then(map => {
 const updateStates = (row: any) => {
   console.log(row.state)
   if (row.state==1){
-    console.log("修改为0")
     row.state=0
   }
   else if (row.state==0){
-    console.log("修改为1")
     row.state=1
   }
   updateState(row).then(map=>{
@@ -143,7 +141,6 @@ const updateStates = (row: any) => {
       ElMessage.error("操作失败")
     }
   })
-  console.log(row)
 
 }
 const updatestateAll = () => {

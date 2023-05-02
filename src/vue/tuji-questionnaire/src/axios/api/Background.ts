@@ -1,5 +1,11 @@
 import {http} from "@/axios/api/api";
 
+function surveyCreateData(params:any){
+    return http.get('/background/backgroundData/surveyCreate',params)
+}
+function answerCreateData(params:any){
+    return http.get('/background/backgroundData/answerCreate',params)
+}
 function BackgroundLogin(params:any){
     return http.get('/background/user/backgroundLogin',params)
 }
@@ -44,6 +50,8 @@ function selectTemplatePreview(params:any){
 }
 
 export {
+    surveyCreateData,
+    answerCreateData,
     BackgroundLogin,
     updateState,
     findPage,

@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import {UserDetailSelect, UserDetailUpdate} from "@/axios/api/Personal.api";
 import {useLoginStore} from "@/stores/userLogin";
 import type { FormInstance, FormRules } from 'element-plus'
@@ -134,12 +134,24 @@ UserDetailSelect(surveyId).then(map => {
   user.phone = map.data.phone
   user.birthday = map.data.birthday
 })
+
+ const load=()=>{
+   UserDetailSelect(surveyId).then(map => {
+     user.userId = map.data.userId;
+     user.name = map.data.name
+     user.gender = map.data.gender
+     user.email = map.data.email
+     user.phone = map.data.phone
+     user.birthday = map.data.birthday
+   })
+ }
 const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
 const userDetailUpdate = (users: any) => {
   if((mailReg.test(users.email)||users.email=='')&&(users.phone.length==11||users.phone=='')){
     UserDetailUpdate(users).then(map => {
       if (map.data.code == 200) {
         ElMessage({message: "修改成功~", type: "success"})
+        load()
         dialogFormVisible.value = false
       }else {
         ElMessage.error("好像出错了QAQ,请联系管理员")

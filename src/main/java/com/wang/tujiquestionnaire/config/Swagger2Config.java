@@ -28,7 +28,7 @@ public class Swagger2Config {
                     .apiInfo(apiInfo())
                     .select()
                     // 设置扫描路径
-                    .apis(RequestHandlerSelectors.basePackage("com.wang.tujiquestionnaire.system"))
+                    .apis(RequestHandlerSelectors.basePackage("com.wang.tujiquestionnaire"))
                     .build();
         }
     /**

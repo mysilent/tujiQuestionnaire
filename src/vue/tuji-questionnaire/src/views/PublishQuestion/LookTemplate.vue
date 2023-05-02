@@ -201,5 +201,9 @@ const load = () => {
   margin-right: 24px;
   -webkit-box-shadow: 0 0 15px rgba(152, 152, 152, 0.3);
   box-shadow: 0 0 15px rgba(152, 152, 152, 0.3);
+  transition: box-shadow .5s ease;
+}
+.template-card:hover{
+  box-shadow: 0 0 15px rgba(34,162,245,0.5);
 }
 </style>

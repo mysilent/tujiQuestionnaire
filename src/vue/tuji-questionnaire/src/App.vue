@@ -8,6 +8,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import Plane from "@/components/sheep.vue";
+import * as echarts from "echarts";
+import { provide } from "vue";
+provide("echarts", echarts);
 </script>
 
 <style>

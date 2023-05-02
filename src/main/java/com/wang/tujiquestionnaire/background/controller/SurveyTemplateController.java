@@ -6,6 +6,7 @@ import com.wang.tujiquestionnaire.background.service.impl.SurveyTemplateServiceI
 import com.wang.tujiquestionnaire.common.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +30,13 @@ public class SurveyTemplateController {
     @Autowired
     SurveyTemplateServiceImpl surveyTemplateService;
 
-    @ApiModelProperty("问卷模板查询")
+    @ApiOperation("问卷模板查询")
     @GetMapping("/selectTemplate")
     public Map<String,Object>selectTemplate(@RequestParam("pageSize") Integer pageSize, @RequestParam("pageNum") Integer pageNum,@RequestParam("surveyName")String surveyName,@RequestParam("surveyId") String surveyId){
         return surveyTemplateService.selectTemplate(pageSize,pageNum,"1",surveyName,surveyId);
     }
 
-    @ApiModelProperty("模板申请")
+    @ApiOperation("模板申请")
     @PostMapping("/templateApplication")
     public Result templateApplication(@RequestBody SurveyTemplate surveyTemplate) throws UnsupportedEncodingException {
         boolean save = true;
@@ -50,24 +51,24 @@ public class SurveyTemplateController {
         return save ? Result.success() : Result.error();
     }
 
-    @ApiModelProperty("模板申请查询")
+    @ApiOperation("模板申请查询")
     @GetMapping("/selectTemplateApplication")
     public Map<String, Object> selectTemplateApplicationNo(@RequestParam("pageSize") Integer pageSize, @RequestParam("pageNum") Integer pageNum) {
         return surveyTemplateService.templateApplicationpage(pageSize,pageNum,"0");
 
     }
 
-    @ApiModelProperty("模板申请通过")
+    @ApiOperation("模板申请通过")
     @GetMapping ("/templateApplicationYes")
     public Result templateApplicationNoYes(@RequestParam("id")String id){
         return surveyTemplateService.templateApplicationYes(id);
     }
-    @ApiModelProperty("模板申请不通过")
+    @ApiOperation("模板申请不通过")
     @GetMapping("/templateApplicationNo")
     public  Result templateApplicationNoNo(@RequestParam("id")String id){
         return surveyTemplateService.templateApplicationNo(id);
     }
-    @ApiModelProperty("问卷模板查看")
+    @ApiOperation("问卷模板查看")
     @GetMapping("/selectTemplatePreview")
     public SurveyTemplate selectTemplatePreview(@RequestParam("id") String id){
         return surveyTemplateService.getById(id);
