@@ -7,8 +7,12 @@ function surveyPreviewApi(params:any){
 }
 function deleteSurveyApi(params:any){
     return http.get('/system/survey/deleteQuestionnaire',params)
-}function reviseSurvey(params:any){
+}
+function reviseSurvey(params:any){
     return http.post_survey('/system/survey/reviseQuestionnaire',params)
+}
+function surveyPublish(params:any){
+    return http.post_survey('/system/surveyGold/surveyPublish',params)
 }
 
 export {
@@ -16,5 +20,6 @@ export {
     surveyPreviewApi,
     deleteSurveyApi,
     reviseSurvey,
+    surveyPublish,
 
 }

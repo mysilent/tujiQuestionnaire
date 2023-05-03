@@ -27,7 +27,6 @@ public interface UserDetailMapper extends BaseMapper<UserDetail> {
 //    @Insert("insert into user_detail(username,password,nickname,email,phone,address) value (#{username},#{password},#{nickname},#{email},#{phone},#{address})")
 //    int insert_user(UserDetail user);
 //    int update(UserDetail user);
-
     /**
      * 通过前端传来的条件进行分页查询
      * @param pageNum 分页数量

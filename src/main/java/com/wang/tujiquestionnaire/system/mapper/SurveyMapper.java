@@ -1,4 +1,5 @@
 package com.wang.tujiquestionnaire.system.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.wang.tujiquestionnaire.system.entity.Survey;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -14,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SurveyMapper extends BaseMapper<Survey> {
-
+    Integer updateStatusById(@Param("status") String status, @Param("id") String id);
 }

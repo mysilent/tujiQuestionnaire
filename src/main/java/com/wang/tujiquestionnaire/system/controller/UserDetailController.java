@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.common.SensitiveWord;
 import com.wang.tujiquestionnaire.system.entity.UserDetail;
+import com.wang.tujiquestionnaire.system.entity.dto.UserDetailDto;
 import com.wang.tujiquestionnaire.system.service.impl.UserDetailServiceImpl;
+import com.wang.tujiquestionnaire.system.service.impl.UserGoldServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +27,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserDetailController {
     @Autowired
     UserDetailServiceImpl userDetailService;
+    @Autowired
+    UserGoldServiceImpl userGoldService;
     @ApiOperation("用户详情")
     @GetMapping("/user")
-    public UserDetail userSelect(@RequestParam("id") String id){
-        return userDetailService.getById(id);
+    public UserDetailDto userSelect(@RequestParam("id") String id){
+        UserDetailDto userDetailDto = new UserDetailDto();
+        Integer gold =userGoldService.selectGold(id);
+        UserDetail serviceById = userDetailService.getById(id);
+        BeanUtils.copyProperties(serviceById,userDetailDto);
+        userDetailDto.setGold(gold);
+        return userDetailDto;
     }
     @ApiOperation("用户信息修改")
     @PostMapping("/userDetail")

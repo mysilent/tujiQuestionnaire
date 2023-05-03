@@ -3,9 +3,11 @@ package com.wang.tujiquestionnaire.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.system.entity.User;
 import com.wang.tujiquestionnaire.system.entity.UserDetail;
+import com.wang.tujiquestionnaire.system.entity.UserGold;
 import com.wang.tujiquestionnaire.system.entity.dto.ChangePasswordDto;
 import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
 import com.wang.tujiquestionnaire.system.mapper.UserDetailMapper;
+import com.wang.tujiquestionnaire.system.mapper.UserGoldMapper;
 import com.wang.tujiquestionnaire.system.mapper.UserMapper;
 import com.wang.tujiquestionnaire.system.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -29,11 +31,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     HutoolUntil hutoolUntil;
     final
     UserDetailMapper userDetailMapper;
+    final UserGoldMapper userGoldMapper;
 
-    public UserServiceImpl(UserMapper userMapper, HutoolUntil hutoolUntil, UserDetailMapper userDetailMapper) {
+    public UserServiceImpl(UserMapper userMapper, HutoolUntil hutoolUntil, UserDetailMapper userDetailMapper,UserGoldMapper userGoldMapper) {
         this.userMapper = userMapper;
         this.hutoolUntil = hutoolUntil;
         this.userDetailMapper = userDetailMapper;
+        this.userGoldMapper = userGoldMapper;
     }
 
 
@@ -48,15 +52,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 UserDetail userDetail = new UserDetail();
                 userDetail.setUserId(id);
                 userDetail.setEmail(email);
-            return (enrollUserDetail(id, username, password,userDetail)) ? 1:0;
+                //创建一个激励值的实体类对象
+                UserGold userGold= new UserGold(id,0);
+            return (enrollUserDetail(id, username, password,userDetail,userGold)) ? 1:0;
         }
         return 2;
     }
     @Transactional(rollbackFor = Exception.class)
-    public Boolean enrollUserDetail(String id,String username,String password,UserDetail userDetail){
+    public Boolean enrollUserDetail(String id,String username,String password,UserDetail userDetail,UserGold userGold){
         int i = userMapper.enroll(id, username, password);
         int j = userDetailMapper.insert(userDetail);
-        return i == 1 && j == 1;
+        int k =  userGoldMapper.insert(userGold);
+        return i == 1 && j == 1&&k==1;
     }
 
     @Override
@@ -81,7 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public int selectState(String username) {
+    public Integer selectState(String username) {
         return userMapper.selectState(username);
     }
 

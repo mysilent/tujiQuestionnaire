@@ -21,7 +21,7 @@ public class MybatisPlus {
     // 设置父包名
     private static final String parentPackageName = "com.wang.tujiquestionnaire";
     // 设置父包模块名
-    private static final String moduleName = "background";
+    private static final String moduleName = "system";
     // 设置mapperXml 模板路径
     private static final String mapperPath = projectPath + "\\src\\main\\resources\\mapper\\";
     public static void main(String[] args) {
@@ -38,7 +38,7 @@ public class MybatisPlus {
                             .pathInfo(Collections.singletonMap(OutputFile.xml, mapperPath)); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("survey_template") // 设置需要生成的表名
+                    builder.addInclude("survey_gold") // 设置需要生成的表名
                             .addTablePrefix("t_", "c_") // 设置过滤表前缀
                             .addTableSuffix("_info")
                             .controllerBuilder().enableRestStyle()

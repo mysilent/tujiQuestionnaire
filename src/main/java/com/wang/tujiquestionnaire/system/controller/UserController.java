@@ -30,8 +30,12 @@ public class UserController {
     @ApiOperation("用户登录")
     @PostMapping ("/login")
     public Result login(@RequestParam("username") String username, @RequestParam("password")String password) {
-        int state = userService.selectState(username);
-        System.out.println(state);
+        Integer state = userService.selectState(username);
+        if(state == null){
+            // 查询结果为空，可以抛出自定义异常或者给state赋一个默认值
+            // 给state赋默认值的例子：
+            state = -1;
+        }
         if (userService.login(username, password) == 1 && state==1) {
             UserDto userDto = userService.selectUser(username);
             String token = JwtUtil.generateToken(username,String.valueOf(userDto.getId()));

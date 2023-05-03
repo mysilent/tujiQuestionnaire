@@ -15,7 +15,7 @@
       <div class="header-div">
         <div class="image"><img src="../../../src/imager/preview-default.png"
                                 style=" width: 100%;height: 100%;object-fit:cover;"></div>
-        <div class="state"><span :class="getStateClass(surveys.status)">{{getStateText(surveys.status)}}</span></div>
+        <div class="state"><span :class="getStateClass(surveys.status)">{{ getStateText(surveys.status) }}</span></div>
         <span class="tag"></span>
       </div>
       <div class="h"><span>{{ surveys.surveyName }}</span></div>
@@ -31,6 +31,9 @@
         </div>
         <div class="bottom-div" v-bind:class="{ 'bottom-div-add':isActive===index}">
           <el-row>
+            <el-tooltip content="发布" effect="light">
+              <el-button type="warning" :icon="Promotion" circle @click="surveyGold(surveys.id)"/>
+            </el-tooltip>
             <el-tooltip content="预览" effect="light">
               <el-button type="success" :icon="Search" circle @click="preview(surveys.id)"/>
             </el-tooltip>
@@ -38,7 +41,7 @@
               <el-button type="primary" :icon="Edit" circle @click="revise(surveys.id)"/>
             </el-tooltip>
             <el-tooltip content="数据分析" effect="light">
-              <el-button type="info"  :icon="Histogram" circle @click="topFlag(survey.topFlag)"/>
+              <el-button type="info" :icon="Histogram" circle @click="topFlag(survey.topFlag)"/>
             </el-tooltip>
             <el-popconfirm
                 confirm-button-text="是的"
@@ -56,18 +59,49 @@
       </div>
     </div>
   </div>
+  <div>
+    <el-dialog
+        v-model="dialogVisible"
+        title="Tips"
+        width="30%"
+        :before-close="handleClose"
+    >
+      <span>This is a message</span>
+      <el-input v-model="gold.quantity" placeholder="发布份数(不填默认30份)"></el-input>
+      <el-input v-model="gold.price" placeholder="每份激励值~(不填默认为0)"></el-input>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">我再想想~</el-button>
+        <el-popconfirm
+            confirm-button-text="确认发布"
+            cancel-button-text="我再想想~"
+            title="确认要发布吗?"
+            @confirm="confirmEvent"
+            @cancel="cancelEvent"
+            width="200"
+        >
+          <template #reference>
+        <el-button type="primary">
+          发布
+        </el-button>
+            </template>
+  </el-popconfirm>
+      </span>
+      </template>
+    </el-dialog>
+  </div>
 
 </template>
 
 <script lang="ts" setup>
 
-import {Search, Edit, Delete, Histogram} from "@element-plus/icons-vue";
+import {Search, Edit, Delete, Histogram, Promotion} from "@element-plus/icons-vue";
 import {reactive, ref,} from "vue";
-import {selectUserSurveyApi, deleteSurveyApi} from "@/axios/api/myquestionnaire.api";
+import {selectUserSurveyApi, deleteSurveyApi, surveyPublish} from "@/axios/api/myquestionnaire.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
 import {useSurveyPreviewStore} from '@/stores/userSurvey'
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 // import { isDark } from '/composables/dark'
 
 
@@ -76,14 +110,21 @@ const userLogin = useLoginStore();
 const isActive = ref(-1);
 const user = ref([])
 const surveyStore = useSurveyPreviewStore()
+const dialogVisible = ref(false)
 const id = reactive({
   id: userLogin.id
 })
 const survey: any = reactive([])
 const isTure = ref(false)
+const gold = reactive({
+  id: '',
+  userId: userLogin.id,
+  price: null,
+  quantity: null,
+})
 
 selectUserSurveyApi(id).then(map => {
-  survey.splice(0,survey.length)
+  survey.splice(0, survey.length)
   for (let mapKey in map.data.data) {
     isTure.value = true
   }
@@ -93,7 +134,7 @@ selectUserSurveyApi(id).then(map => {
 })
 
 const select = () => {
-  survey.splice(0,survey.length)
+  survey.splice(0, survey.length)
   selectUserSurveyApi(id).then(map => {
     for (let mapKey in map.data.data) {
       isTure.value = true
@@ -103,9 +144,41 @@ const select = () => {
     }
   })
 }
+const surveyGold = (id: any) => {
+  dialogVisible.value = true
+  gold.id = id
+}
+
+const handleClose = (done: () => void) => {
+  ElMessageBox.confirm('你确定要取消发布吗')
+      .then(() => {
+        done()
+      })
+      .catch(() => {
+        // catch error
+      })
+}
+
+//确认发布
+const confirmEvent = () => {
+  surveyPublish(gold).then(map => {
+
+  })
+  gold.id = ''
+  gold.price = null
+  gold.quantity = null
+  dialogVisible.value = false
+}
+//取消发布
+const cancelEvent = () => {
+  gold.id = ''
+  gold.price = null
+  gold.quantity = null
+  dialogVisible.value = false
+}
 
 
-const SurveyDelete=(id: any)=> {
+const SurveyDelete = (id: any) => {
   const Id = reactive({
     id: id
   })
@@ -128,26 +201,25 @@ function topFlag(topFlag: any) {
     return topFlag
   }
 }
-const getStateText = (state:any) => {
-  if (state===0){
-    return'收集中'
-  }else if (state===2){
-return '已结束'
-  }else{
-return '已失效'
+
+const getStateText = (state: any) => {
+  if (state === 0) {
+    return '收集中'
+  } else if (state === 2) {
+    return '已结束'
+  } else {
+    return '已失效'
   }
 }
-const getStateClass=(state :any)=>{
-  if (state===0){
-    return"state-green"
-  }else if (state===2){
+const getStateClass = (state: any) => {
+  if (state === 0) {
+    return "state-green"
+  } else if (state === 2) {
     return "state-red"
-  }else{
+  } else {
     return "state-info"
   }
 }
-
-
 
 function preview(id: any) {
   surveyStore.$patch((state) => {
@@ -214,7 +286,8 @@ el-button {
   font-size: 12px;
   padding: 0 6px;
 }
-.state-red  {
+
+.state-red {
   color: #e84118;
   border: 1px solid #e84118;
   background-color: #F4FDF7;
@@ -222,6 +295,7 @@ el-button {
   font-size: 12px;
   padding: 0 6px;
 }
+
 .state-info {
   color: #999999;
   border: 1px solid #999999;

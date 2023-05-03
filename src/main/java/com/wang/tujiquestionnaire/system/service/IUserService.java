@@ -57,5 +57,5 @@ public interface IUserService extends IService<User> {
      * @param username 用户名
      * @return 返回查询到的state是什么
      */
-    int selectState(String username);
+    Integer selectState(String username);
 }

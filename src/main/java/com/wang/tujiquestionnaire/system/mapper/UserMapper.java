@@ -76,5 +76,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 查询到的state
      */
     @Select("select state from user where username='${username}'")
-    int selectState(@Param("username") String username);
+    Integer selectState(@Param("username") String username);
 }

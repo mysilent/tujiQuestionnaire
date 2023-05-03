@@ -17,6 +17,7 @@
           <div class="user-card-item"><p>生 日：{{ user.birthday }}</p></div>
           <div class="user-card-item"><p>邮 箱：{{ user.email }}</p></div>
           <div class="user-card-item"><p>电 话：{{ user.phone }}</p></div>
+          <div class="user-card-item"><p>激励值：{{ user.gold }}</p></div>
         </div>
       </el-card>
     </div>
@@ -113,6 +114,7 @@ const user = reactive({
   email: '',
   phone: '',
   birthday: '',
+  gold:0
 })
 const users = reactive({
   userId: usersId,
@@ -133,6 +135,7 @@ UserDetailSelect(surveyId).then(map => {
   user.email = map.data.email
   user.phone = map.data.phone
   user.birthday = map.data.birthday
+  user.gold=map.data.gold
 })
 
  const load=()=>{
@@ -143,6 +146,7 @@ UserDetailSelect(surveyId).then(map => {
      user.email = map.data.email
      user.phone = map.data.phone
      user.birthday = map.data.birthday
+     user.gold=map.data.gold
    })
  }
 const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
