@@ -17,6 +17,9 @@ function reviseSurvey(params:any){
 function surveyPublish(params:any){
     return http.post_survey('/system/surveyGold/surveyPublish',params)
 }
+function userGoldApi(params:any){
+    return http.get('/system/userGold/userGold',params)
+}
 
 export {
     createAnswerData,
@@ -25,5 +28,6 @@ export {
     deleteSurveyApi,
     reviseSurvey,
     surveyPublish,
+    userGoldApi,
 
 }

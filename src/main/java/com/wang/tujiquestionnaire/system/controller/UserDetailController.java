@@ -5,6 +5,7 @@ import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.common.SensitiveWord;
 import com.wang.tujiquestionnaire.system.entity.UserDetail;
 import com.wang.tujiquestionnaire.system.entity.dto.UserDetailDto;
+import com.wang.tujiquestionnaire.system.mapper.UserMapper;
 import com.wang.tujiquestionnaire.system.service.impl.UserDetailServiceImpl;
 import com.wang.tujiquestionnaire.system.service.impl.UserGoldServiceImpl;
 import io.swagger.annotations.Api;
@@ -29,14 +30,18 @@ public class UserDetailController {
     UserDetailServiceImpl userDetailService;
     @Autowired
     UserGoldServiceImpl userGoldService;
+    @Autowired
+    UserMapper userMapper;
     @ApiOperation("用户详情")
     @GetMapping("/user")
     public UserDetailDto userSelect(@RequestParam("id") String id){
         UserDetailDto userDetailDto = new UserDetailDto();
         Integer gold =userGoldService.selectGold(id);
+        String nickname = userMapper.getNickname(id);
         UserDetail serviceById = userDetailService.getById(id);
         BeanUtils.copyProperties(serviceById,userDetailDto);
         userDetailDto.setGold(gold);
+        userDetailDto.setName(nickname);
         return userDetailDto;
     }
     @ApiOperation("用户信息修改")
@@ -54,8 +59,7 @@ public class UserDetailController {
         }
         QueryWrapper<UserDetail> userDetailQueryWrapper = new QueryWrapper<>();
         userDetailQueryWrapper.eq("user_id",userDetail.getUserId());
+        userMapper.updateNickname(userDetail.getUserId(),userDetail.getName());
         return (userDetailService.update(userDetail,userDetailQueryWrapper))?Result.success():Result.error();
     }
-
-
 }

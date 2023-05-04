@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wang.tujiquestionnaire.until.HutoolUntil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Block;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,30 +39,32 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     private UserGoldMapper userGoldMapper;
     @Autowired
     private SurveyGoldMapper surveyGoldMapper;
+    @Autowired
+    private SurveyMapper surveyMapper;
 
     @Override
     public Result submitAnswer(AnswerDto answerDto) {
-        //TODO 判断用户提交过该问卷吗
+        //1. 判断用户提交过该问卷吗
         QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<>();
         answerQueryWrapper.eq("survey_id", answerDto.getSurveyId()).eq("user_id", answerDto.getUserId());
         Long answerCount = answerMapper.selectCount(answerQueryWrapper);
         if (answerCount != 0) {
             return Result.error(1000, "您已经作答过该问卷~");
         }
-        //TODO 新增激励值功能
-        //1.1查询该问卷的激励制度若是有则进行激励逻辑，若没有则跳过
+        //2. 新增激励值功能
+        //2.1查询该问卷的激励制度若是有则进行激励逻辑，若没有则跳过
         QueryWrapper<SurveyGold> surveyGoldQueryWrapper = new QueryWrapper<>();
         surveyGoldQueryWrapper.eq("id", answerDto.getSurveyId());
         SurveyGold surveyGold = surveyGoldMapper.selectOne(surveyGoldQueryWrapper);
+        //2.2查询到问卷有激励值奖励则调用下面逻辑，没有则跳过
         if (surveyGold.getPrice() != 0) {
             if (surveyGold.getQuantity() <= 0) {
                 return Result.error(1000, "该问卷已经被提前作答完啦~");
             } else {
-                surveyGoldMapper.quantityDeleteOne(answerDto.getSurveyId());
-                userGoldMapper.userGoldAdd(surveyGold.getPrice(),answerDto.getUserId());
+                submitAnswerGoldSql(answerDto, surveyGold);
             }
         }
-        //1.创建所需要的对象
+        //3.创建所需要的对象
         Answer answer = new Answer();
         UserHistory userHistory = new UserHistory();
         List<Answer> answerList = new ArrayList<>();
@@ -70,15 +73,15 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         String[] questionList = answerDto.getQuestionList();
         String[] optionList = answerDto.getAnswers();
 
-        //2.进行数据处理
-        //2.1答案表进行用户id以及问卷id的赋值
+        //4.进行数据处理
+        //4.1答案表进行用户id以及问卷id的赋值
         answer.setSurveyId(answerDto.getSurveyId());
         answer.setUserId(answerDto.getUserId());
-        //2.2用户创建答案表进行用户id以及问卷id的赋值，创建一个唯一的用户创建id作为标记以供用户历史表做标记
+        //4.2用户创建答案表进行用户id以及问卷id的赋值，创建一个唯一的用户创建id作为标记以供用户历史表做标记
         userCreateAnswer.setSurveyId(answerDto.getSurveyId());
         userCreateAnswer.setUserId(answerDto.getUserId());
         userCreateAnswer.setUserCreateId(hutoolUntil.getID());
-        //2.3对问卷问题进行遍历往用户答案表以及用户创建答案表进行某些属性的赋值
+        //4.3对问卷问题进行遍历往用户答案表以及用户创建答案表进行某些属性的赋值
         for (int i = 1; i < questionList.length; i++) {
             Answer answer1 = new Answer();
             UserCreateAnswer userCreateAnswer1 = new UserCreateAnswer();
@@ -94,23 +97,37 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
             answerList.add(answer1);
             userCreateAnswerList.add(userCreateAnswer1);
         }
-        //2.5用户历史表进行赋值
+        //4.5用户历史表进行赋值
         userHistory.setUserId(answerDto.getUserId());
         userHistory.setSurveyId(answerDto.getSurveyId());
         userHistory.setUserCreateId(userCreateAnswer.getUserCreateId());
         userHistory.setId(hutoolUntil.getID());
         userHistory.setSurveyName(answerDto.getSurveyName());
 
-        //3调用sql进行存储
+        //6调用sql进行存储
         submitAnswerSql(answerList, userCreateAnswerList, userHistory);
-        return Result.success();
+        return Result.success(surveyGold.getPrice());
     }
 
+    //该方法将上面逻辑一部分sql调用封装起来增加事务
     @Transactional(rollbackFor = Exception.class)
     public void submitAnswerSql(List<Answer> answerList, List<UserCreateAnswer> userCreateAnswerList, UserHistory userHistory) {
         answerMapper.insertAnswerList(answerList);
         userCreateAnswerMapper.insertUserCreateAnswerList(userCreateAnswerList);
         userHistoryMapper.insert(userHistory);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean submitAnswerGoldSql(AnswerDto answerDto, SurveyGold surveyGold) {
+        Integer deleteOne = surveyGoldMapper.quantityDeleteOne(answerDto.getSurveyId());
+        Integer goldAdd = userGoldMapper.userGoldAdd(surveyGold.getPrice(), answerDto.getUserId());
+        QueryWrapper<SurveyGold> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id",surveyGold.getId());
+        SurveyGold surveyGold1 = surveyGoldMapper.selectOne(queryWrapper);
+        if (surveyGold1.getQuantity()==0){
+            surveyMapper.updateStatusById("2",surveyGold1.getId());
+        }
+        return deleteOne == 1 && goldAdd == 1;
     }
 
     @Override

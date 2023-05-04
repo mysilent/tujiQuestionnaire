@@ -89,6 +89,10 @@ export default defineComponent({
       surveys.surveyName = survey.surveyName
       submitAnswer(surveys).then(map=>{
         if (map.data.code === 200) {
+          if (map.data.data>0){
+            ElMessage.success("恭喜获得"+map.data.data+"激励值~")
+          }else
+            ElMessage.success("回答完毕~")
           router.push({
             path: '/home/questionnaireCenter'
           })

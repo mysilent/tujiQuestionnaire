@@ -136,6 +136,7 @@ UserDetailSelect(surveyId).then(map => {
   user.phone = map.data.phone
   user.birthday = map.data.birthday
   user.gold=map.data.gold
+  userStore.nickname=map.data.name
 })
 
  const load=()=>{
@@ -147,6 +148,7 @@ UserDetailSelect(surveyId).then(map => {
      user.phone = map.data.phone
      user.birthday = map.data.birthday
      user.gold=map.data.gold
+     userStore.nickname=map.data.name
    })
  }
 const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/

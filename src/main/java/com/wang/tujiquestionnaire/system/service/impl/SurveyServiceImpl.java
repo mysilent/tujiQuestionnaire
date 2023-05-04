@@ -280,7 +280,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
     @Override
     public List<Survey> selectOtherUserSurvey(String id) {
         QueryWrapper<Survey> queryWrapper = new QueryWrapper<>();
-        queryWrapper.ne("creator_id", id);
+        queryWrapper.ne("creator_id", id).eq("status","0");
         return surveyMapper.selectList(queryWrapper);
     }
 

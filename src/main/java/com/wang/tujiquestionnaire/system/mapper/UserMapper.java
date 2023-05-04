@@ -77,4 +77,21 @@ public interface UserMapper extends BaseMapper<User> {
      */
     @Select("select state from user where username='${username}'")
     Integer selectState(@Param("username") String username);
+
+    /**
+     * 根据用户id去user表查询用户昵称
+     * @param id 用户名id
+     * @return 返回查询到的昵称
+     */
+    @Select("select nickname from user where id='${id}'")
+    String getNickname(@Param("id") String id);
+
+    /**
+     * 根据用户id去user表修改用户昵称
+     * @param id 用户名id
+     * @param username 用户名id
+     * @return 返回修改条数
+     */
+    @Update("update user set nickname='${nickname}' where id='${id}'")
+    Integer updateNickname(@Param("id") String id,@Param("nickname") String nickname);
 }

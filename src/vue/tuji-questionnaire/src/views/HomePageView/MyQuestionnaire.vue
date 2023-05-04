@@ -66,7 +66,7 @@
         width="30%"
         :before-close="handleClose"
     >
-      <span>This is a message</span>
+      <span>请输入你要发布的数量~您的激励值:{{userGold}}</span>
       <el-input v-model="gold.quantity" placeholder="发布份数(不填默认30份)"></el-input>
       <el-input v-model="gold.price" placeholder="每份激励值~(不填默认为0)"></el-input>
       <template #footer>
@@ -97,7 +97,13 @@
 
 import {Search, Edit, Delete, Histogram, Promotion} from "@element-plus/icons-vue";
 import {reactive, ref,} from "vue";
-import {selectUserSurveyApi, deleteSurveyApi, surveyPublish, createAnswerData} from "@/axios/api/myquestionnaire.api";
+import {
+  selectUserSurveyApi,
+  deleteSurveyApi,
+  surveyPublish,
+  createAnswerData,
+  userGoldApi
+} from "@/axios/api/myquestionnaire.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
 import {useSurveyPreviewStore} from '@/stores/userSurvey'
@@ -122,6 +128,12 @@ const gold = reactive({
   price: null,
   quantity: null,
 })
+const userGold = ref(0)
+const selectUserGold = () => {
+  userGoldApi(id).then(map => {
+    userGold.value=map.data
+  })
+}
 
 selectUserSurveyApi(id).then(map => {
   survey.data.splice(0, survey.data.length)
@@ -155,6 +167,7 @@ const select = () => {
 const surveyGold = (id: any) => {
   dialogVisible.value = true
   gold.id = id
+  selectUserGold()
 }
 
 const handleClose = (done: () => void) => {
