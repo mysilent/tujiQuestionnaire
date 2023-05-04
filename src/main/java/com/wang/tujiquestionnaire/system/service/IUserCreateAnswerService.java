@@ -21,4 +21,5 @@ public interface IUserCreateAnswerService extends IService<UserCreateAnswer> {
      * @return UserCreateAnswer  list列表对象
      */
     List<UserCreateAnswer> createAnswerHistory(Long userId);
+
 }

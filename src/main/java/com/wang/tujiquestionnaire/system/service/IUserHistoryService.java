@@ -4,6 +4,8 @@ import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.UserHistory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * <p>
  * 用户答卷作答历史记录 服务类
@@ -20,4 +22,6 @@ public interface IUserHistoryService extends IService<UserHistory> {
      * @return 返回封装的统一接口
      */
     Result history(String id);
+
+    Map<Object,Object> createAnswerData(String userId);
 }

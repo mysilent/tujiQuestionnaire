@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * <p>
  * 用户答卷作答历史记录 前端控制器
@@ -31,6 +33,11 @@ public class UserHistoryController {
     public Result history(@RequestParam("id") String id){
         return userHistoryService.history(id);
 
+    }
+    @ApiOperation("查询某一个问卷被填写的数量")
+    @GetMapping("createAnswerData")
+    public Map<Object,Object> createAnswerData(@RequestParam("id") String userId){
+        return userHistoryService.createAnswerData(userId);
     }
 
 }

@@ -171,6 +171,7 @@ export default defineComponent({
     const survey1 = reactive({data: []})
     survey1.data=store.survey
     survey1.data.creatorId=loginId.id
+    survey1.data.status='1'
     let awer = ref([])
     const username = (rule: any, value: any, callback: any) => {
       if (!value) {

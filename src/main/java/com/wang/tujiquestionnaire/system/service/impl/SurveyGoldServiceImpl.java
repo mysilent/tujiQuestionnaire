@@ -1,5 +1,6 @@
 package com.wang.tujiquestionnaire.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.Survey;
 import com.wang.tujiquestionnaire.system.entity.SurveyGold;
@@ -33,9 +34,15 @@ public class SurveyGoldServiceImpl extends ServiceImpl<SurveyGoldMapper, SurveyG
         //1.先进行surveygold的新建数据
         SurveyGold surveyGold = new SurveyGold();
         BeanUtils.copyProperties(surveyGoldDto, surveyGold);
-        Integer insert = surveyGoldMapper.insert(surveyGold);
+        QueryWrapper<SurveyGold> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id",surveyGoldDto.getId()).eq("user_id",surveyGoldDto.getUserId());
+        Long aLong = surveyGoldMapper.selectCount(queryWrapper);
+        if (aLong==1){
+            return Result.error(1000,"该问卷已经发布");
+        }
+        int insert = surveyGoldMapper.insert(surveyGold);
         //2.更改问卷发布状态
-        Integer status = surveyMapper.updateStatusById("1", surveyGoldDto.getId());
+        Integer status = surveyMapper.updateStatusById("0", surveyGoldDto.getId());
         return insert==1&&status==1?Result.success():Result.error();
     }
 }

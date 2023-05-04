@@ -10,6 +10,7 @@ import com.wang.tujiquestionnaire.system.entity.Question;
 import com.wang.tujiquestionnaire.system.entity.Survey;
 import com.wang.tujiquestionnaire.system.mapper.OptionMapper;
 import com.wang.tujiquestionnaire.system.mapper.QuestionMapper;
+import com.wang.tujiquestionnaire.system.mapper.SurveyGoldMapper;
 import com.wang.tujiquestionnaire.system.mapper.SurveyMapper;
 import com.wang.tujiquestionnaire.system.service.ISurveyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -43,6 +44,8 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
     QuestionMapper questionMapper;
     @Autowired
     OptionMapper optionMapper;
+    @Autowired
+    SurveyGoldMapper surveyGoldMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -262,7 +265,8 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
         int  i  =  surveyMapper.deleteById(id);
         int  j  =  questionMapper.delete(questionQueryWrapper);
         int  k  =  optionMapper.delete(optionQueryWrapper);
-        return  i  ==  1  &&  j  >=  0  &&  k  >=  0  ?  1  :  0;
+        int  l  =  surveyGoldMapper.deleteById(id);
+        return  i  ==  1  &&  j  >=  0  &&  k  >=  0 && l==1 ?  1  :  0;
     }
 
     @Override

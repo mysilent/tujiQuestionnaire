@@ -177,7 +177,7 @@ export default defineComponent({
     surveyPreviewApi(surveyId).then(map => {
       survey1.data = map.data
     })
-    console.log(survey1)
+
     const username = (rule: any, value: any, callback: any) => {
       if (!value) {
         callback(new Error('请输入问卷标题'))

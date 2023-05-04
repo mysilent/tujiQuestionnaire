@@ -92,6 +92,8 @@ export default defineComponent({
           router.push({
             path: '/home/questionnaireCenter'
           })
+        }else if (map.data.code === 1000){
+          ElMessage({message:map.data.msg,type:"error"})
         }else {
           ElMessage({message:"服务器出小差了QAQ",type:"error"})
         }

@@ -2,13 +2,9 @@ package com.wang.tujiquestionnaire.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.common.Result;
-import com.wang.tujiquestionnaire.system.entity.Answer;
-import com.wang.tujiquestionnaire.system.entity.UserCreateAnswer;
-import com.wang.tujiquestionnaire.system.entity.UserHistory;
+import com.wang.tujiquestionnaire.system.entity.*;
 import com.wang.tujiquestionnaire.system.entity.dto.AnswerDto;
-import com.wang.tujiquestionnaire.system.mapper.AnswerMapper;
-import com.wang.tujiquestionnaire.system.mapper.UserCreateAnswerMapper;
-import com.wang.tujiquestionnaire.system.mapper.UserHistoryMapper;
+import com.wang.tujiquestionnaire.system.mapper.*;
 import com.wang.tujiquestionnaire.system.service.IAnswerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wang.tujiquestionnaire.until.HutoolUntil;
@@ -38,14 +34,38 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     private HutoolUntil hutoolUntil;
     @Autowired
     private UserHistoryMapper userHistoryMapper;
+    @Autowired
+    private UserGoldMapper userGoldMapper;
+    @Autowired
+    private SurveyGoldMapper surveyGoldMapper;
 
     @Override
     public Result submitAnswer(AnswerDto answerDto) {
+        //TODO 判断用户提交过该问卷吗
+        QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<>();
+        answerQueryWrapper.eq("survey_id", answerDto.getSurveyId()).eq("user_id", answerDto.getUserId());
+        Long answerCount = answerMapper.selectCount(answerQueryWrapper);
+        if (answerCount != 0) {
+            return Result.error(1000, "您已经作答过该问卷~");
+        }
+        //TODO 新增激励值功能
+        //1.1查询该问卷的激励制度若是有则进行激励逻辑，若没有则跳过
+        QueryWrapper<SurveyGold> surveyGoldQueryWrapper = new QueryWrapper<>();
+        surveyGoldQueryWrapper.eq("id", answerDto.getSurveyId());
+        SurveyGold surveyGold = surveyGoldMapper.selectOne(surveyGoldQueryWrapper);
+        if (surveyGold.getPrice() != 0) {
+            if (surveyGold.getQuantity() <= 0) {
+                return Result.error(1000, "该问卷已经被提前作答完啦~");
+            } else {
+                surveyGoldMapper.quantityDeleteOne(answerDto.getSurveyId());
+                userGoldMapper.userGoldAdd(surveyGold.getPrice(),answerDto.getUserId());
+            }
+        }
         //1.创建所需要的对象
         Answer answer = new Answer();
         UserHistory userHistory = new UserHistory();
         List<Answer> answerList = new ArrayList<>();
-        List<UserCreateAnswer>userCreateAnswerList =new ArrayList<>();
+        List<UserCreateAnswer> userCreateAnswerList = new ArrayList<>();
         UserCreateAnswer userCreateAnswer = new UserCreateAnswer();
         String[] questionList = answerDto.getQuestionList();
         String[] optionList = answerDto.getAnswers();
@@ -59,11 +79,11 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         userCreateAnswer.setUserId(answerDto.getUserId());
         userCreateAnswer.setUserCreateId(hutoolUntil.getID());
         //2.3对问卷问题进行遍历往用户答案表以及用户创建答案表进行某些属性的赋值
-        for (int i = 1;i<questionList.length;i++) {
+        for (int i = 1; i < questionList.length; i++) {
             Answer answer1 = new Answer();
             UserCreateAnswer userCreateAnswer1 = new UserCreateAnswer();
-            BeanUtils.copyProperties(answer,answer1);
-            BeanUtils.copyProperties(userCreateAnswer,userCreateAnswer1);
+            BeanUtils.copyProperties(answer, answer1);
+            BeanUtils.copyProperties(userCreateAnswer, userCreateAnswer1);
             String s = questionList[i];
             String o = optionList[i];
             answer1.setId(hutoolUntil.getID());
@@ -82,12 +102,12 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         userHistory.setSurveyName(answerDto.getSurveyName());
 
         //3调用sql进行存储
-        submitAnswerSql(answerList,userCreateAnswerList,userHistory);
+        submitAnswerSql(answerList, userCreateAnswerList, userHistory);
         return Result.success();
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void submitAnswerSql(List<Answer> answerList,List<UserCreateAnswer> userCreateAnswerList,UserHistory userHistory){
+    public void submitAnswerSql(List<Answer> answerList, List<UserCreateAnswer> userCreateAnswerList, UserHistory userHistory) {
         answerMapper.insertAnswerList(answerList);
         userCreateAnswerMapper.insertUserCreateAnswerList(userCreateAnswerList);
         userHistoryMapper.insert(userHistory);
@@ -96,8 +116,8 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
     @Override
     public Result historyAnswer(String userId, String surveyId) {
         QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<>();
-        answerQueryWrapper.eq("survey_id",surveyId);
-        answerQueryWrapper.eq("user_id",userId);
+        answerQueryWrapper.eq("survey_id", surveyId);
+        answerQueryWrapper.eq("user_id", userId);
         List<Answer> userHistoryList = answerMapper.selectList(answerQueryWrapper);
         return Result.success(userHistoryList);
     }

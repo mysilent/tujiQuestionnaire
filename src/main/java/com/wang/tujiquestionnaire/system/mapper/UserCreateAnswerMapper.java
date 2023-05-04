@@ -22,4 +22,5 @@ public interface UserCreateAnswerMapper extends BaseMapper<UserCreateAnswer> {
      * @param userCreateAnswerList 存放userCreateAnswer对象的列表
      */
     void insertUserCreateAnswerList(List<UserCreateAnswer> userCreateAnswerList);
+
 }

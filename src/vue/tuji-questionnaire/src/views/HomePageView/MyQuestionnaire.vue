@@ -10,7 +10,7 @@
     </n-empty>
   </div>
   <div class="index">
-    <div class="box-card" @mouseover="isActive=index" @mouseout="isActive=-1" v-for="(surveys,index) in survey"
+    <div class="box-card" @mouseover="isActive=index" @mouseout="isActive=-1" v-for="(surveys,index) in survey.data"
          :key="index">
       <div class="header-div">
         <div class="image"><img src="../../../src/imager/preview-default.png"
@@ -21,7 +21,7 @@
       <div class="h"><span>{{ surveys.surveyName }}</span></div>
       <div>
         <div class="text-div" v-bind:class="{ 'text-div-add': isActive===index}">
-          <span style="flex: auto">{{ '1' }}份</span>
+          <span style="flex: auto">{{ getCreateAnswerData(surveys.id) }}份</span>
           <span>
         <span class="id">
       <span class="id-title">ID</span>
@@ -41,7 +41,7 @@
               <el-button type="primary" :icon="Edit" circle @click="revise(surveys.id)"/>
             </el-tooltip>
             <el-tooltip content="数据分析" effect="light">
-              <el-button type="info" :icon="Histogram" circle @click="topFlag(survey.topFlag)"/>
+              <el-button type="info" :icon="Histogram" circle @click=""/>
             </el-tooltip>
             <el-popconfirm
                 confirm-button-text="是的"
@@ -97,12 +97,11 @@
 
 import {Search, Edit, Delete, Histogram, Promotion} from "@element-plus/icons-vue";
 import {reactive, ref,} from "vue";
-import {selectUserSurveyApi, deleteSurveyApi, surveyPublish} from "@/axios/api/myquestionnaire.api";
+import {selectUserSurveyApi, deleteSurveyApi, surveyPublish, createAnswerData} from "@/axios/api/myquestionnaire.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
 import {useSurveyPreviewStore} from '@/stores/userSurvey'
 import {ElMessage, ElMessageBox} from "element-plus";
-// import { isDark } from '/composables/dark'
 
 
 const router = useRouter();
@@ -111,10 +110,11 @@ const isActive = ref(-1);
 const user = ref([])
 const surveyStore = useSurveyPreviewStore()
 const dialogVisible = ref(false)
+const AnswerData =reactive({data:[]})
 const id = reactive({
   id: userLogin.id
 })
-const survey: any = reactive([])
+const survey = reactive({data:[]})
 const isTure = ref(false)
 const gold = reactive({
   id: '',
@@ -124,24 +124,32 @@ const gold = reactive({
 })
 
 selectUserSurveyApi(id).then(map => {
-  survey.splice(0, survey.length)
+  survey.data.splice(0, survey.data.length)
   for (let mapKey in map.data.data) {
     isTure.value = true
   }
-  for (let i = 0; i < map.data.data.length; i++) {
-    survey.push(map.data.data[i]);
-  }
+    survey.data=(map.data.data);
 })
 
+createAnswerData(id).then(map=>{
+  AnswerData.data=map.data
+})
+const getCreateAnswerData = (state: number) => {
+   let a=AnswerData.data[state]
+  if (a){
+    return a
+  }else {
+    return 0
+  }
+}
+
 const select = () => {
-  survey.splice(0, survey.length)
+  survey.data.splice(0, survey.data.length)
   selectUserSurveyApi(id).then(map => {
     for (let mapKey in map.data.data) {
       isTure.value = true
     }
-    for (let i = 0; i < map.data.data.length; i++) {
-      survey.push(map.data.data[i]);
-    }
+    survey.data=(map.data.data);
   })
 }
 const surveyGold = (id: any) => {
@@ -162,7 +170,14 @@ const handleClose = (done: () => void) => {
 //确认发布
 const confirmEvent = () => {
   surveyPublish(gold).then(map => {
-
+    if (map.data.code === 200) {
+      ElMessage.success("发布成功成功")
+    }else if (map.data.code==1000){
+      ElMessage.error(map.data.msg)
+    }else {
+      ElMessage.error("好像出错了QAQ")
+    }
+    select()
   })
   gold.id = ''
   gold.price = null
@@ -192,30 +207,25 @@ const SurveyDelete = (id: any) => {
   })
 }
 
-function topFlag(topFlag: any) {
-  if (topFlag == 1) {
-    topFlag = 0
-    return topFlag
-  } else {
-    topFlag = 1
-    return topFlag
-  }
-}
 
 const getStateText = (state: any) => {
-  if (state === 0) {
+  if (state === '0') {
     return '收集中'
-  } else if (state === 2) {
-    return '已结束'
-  } else {
+  } else if (state === '2') {
+    return '收集完'
+  } else if (state==='1') {
+    return '未发布'
+  }else {
     return '已失效'
   }
 }
 const getStateClass = (state: any) => {
-  if (state === 0) {
+  if (state === '0') {
     return "state-green"
-  } else if (state === 2) {
+  } else if (state === '2') {
     return "state-red"
+  }else if (state==='1'){
+return "state-yellow"
   } else {
     return "state-info"
   }
@@ -299,6 +309,14 @@ el-button {
 .state-info {
   color: #999999;
   border: 1px solid #999999;
+  background-color: #F4FDF7;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 0 6px;
+}
+.state-yellow {
+  color: #fcd217;
+  border: 1px solid #fcd217;
   background-color: #F4FDF7;
   border-radius: 4px;
   font-size: 12px;

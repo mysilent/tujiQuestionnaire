@@ -3,7 +3,9 @@ package com.wang.tujiquestionnaire.system.mapper;
 import com.wang.tujiquestionnaire.system.entity.UserGold;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * <p>
@@ -17,4 +19,7 @@ import org.apache.ibatis.annotations.Select;
 public interface UserGoldMapper extends BaseMapper<UserGold> {
 @Select("select gold from user_gold where id='${id}'")
      Integer selectGold(String id);
+
+@Update("UPDATE user_gold SET gold=gold + ${gold} where id='${id}'")
+Integer userGoldAdd(@Param("gold") Integer gold, @Param("id") String id);
 }

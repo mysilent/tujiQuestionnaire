@@ -1,20 +1,19 @@
 <template>
   <div class="index">
-<!--    <el-affix :offset="40">-->
     <div style="display:grid;justify-content: center;">
-        <div class="header-div">
-          <div ></div>
-          <div ></div>
-          <div ></div>
-          <div></div>
-          <div class="line" id="line" :style="{left:left1+'px',width:width1+'px'}"></div>
-          <button id="link1" class="header-button" @click="personalInformation">个人信息</button>
-          <button id="link2" class="header-button" @click="historicalAnswers">历史答卷</button>
-          <button id="link3" class="header-button" @click="changePassword">修改密码</button>
+      <div class="header-div">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div class="line" id="line" :style="{left:left1+'px',width:width1+'px'}"></div>
+        <button id="link1" class="header-button" @click="personalInformation">个人信息</button>
+        <button id="link2" class="header-button" @click="historicalAnswers">历史答卷</button>
+        <button id="link3" class="header-button" @click="changePassword">修改密码</button>
       </div>
     </div>
-<!--    </el-affix>-->
-    <div style="min-height: 87.5vh;display: grid;justify-content: center;background-image:url(../../../src/imager/background.png);background-size: cover;">
+    <div
+        style="min-height: 87.5vh;display: grid;justify-content: center;background-image:url(../../../src/imager/background.png);background-size: cover;">
       <div class="main-div">
         <router-view></router-view>
       </div>
@@ -27,26 +26,25 @@
 
 import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
+
 const router = useRouter();
-
 const index = ref(1)
+const personalInformation = () => {
+  router.push({
+    path: '/personal/personalCenter/personalInformation'
+  })
 
-    const personalInformation = () => {
-      router.push({
-        path:'/personal/personalCenter/personalInformation'
-      })
-
-    }
-    const historicalAnswers = () => {
-      router.push({
-        path:"/personal/personalCenter/historicalAnswers"
-      })
-    }
-    const changePassword = () => {
-      router.push({
-        path:"/personal/personalCenter/changePassword"
-      })
-    }
+}
+const historicalAnswers = () => {
+  router.push({
+    path: "/personal/personalCenter/historicalAnswers"
+  })
+}
+const changePassword = () => {
+  router.push({
+    path: "/personal/personalCenter/changePassword"
+  })
+}
 
 
 const left1 = ref(0);
@@ -66,7 +64,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.header-div{
+.header-div {
 
   /*display:grid;*/
   justify-content: center;
@@ -79,32 +77,33 @@ onMounted(() => {
   justify-items: center;
 
 }
-.main-div{
+
+.main-div {
   display: flex;
   min-width: 1000px;
   max-height: 98vi;
   background: #F6F6F6;
-  background: rgba(255,255,255,.05);
-  box-shadow: 0 0 20px rgba(0,0,0,0.25);
+  background: rgba(255, 255, 255, .05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(20px);
   border-radius: 8px;
 }
 
-.header-button{
+.header-button {
   font-size: initial;
   text-align: center;
   height: 40px;
   width: 80px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
-  border:none;
+  border: none;
   background-color: #F6F6F6;
 
   position: relative;
 }
 
 
-.index{
+.index {
   /*background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);*/
   min-height: 100%;
 }
@@ -123,7 +122,7 @@ nav a {
   text-decoration: none;
 }
 
- .line {
+.line {
   position: absolute;
   width: 0;
   height: 0.5vmin;

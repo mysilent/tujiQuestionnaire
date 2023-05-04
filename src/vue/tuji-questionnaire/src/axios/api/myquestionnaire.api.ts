@@ -1,4 +1,7 @@
 import {http} from "@/axios/api/api";
+function createAnswerData(params:any){
+    return http.get('/system/userHistory/createAnswerData',params)
+}
 function selectUserSurveyApi(params:any){
     return http.get('/system/survey/selectUserSurvey',params)
 }
@@ -16,6 +19,7 @@ function surveyPublish(params:any){
 }
 
 export {
+    createAnswerData,
     selectUserSurveyApi,
     surveyPreviewApi,
     deleteSurveyApi,
