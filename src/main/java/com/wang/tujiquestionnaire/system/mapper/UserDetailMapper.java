@@ -6,6 +6,7 @@ import com.wang.tujiquestionnaire.system.entity.dto.UserAndUserDetailDto;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -50,8 +51,8 @@ public interface UserDetailMapper extends BaseMapper<UserDetail> {
      * @param phone 电话
      * @return 返回两张表的所有数据
      */
-@Select("SELECT * FROM user_detail ud JOIN USER u ON u.id=ud.user_id WHERE name like concat('%',#{name},'%') and ud.user_id like concat('%',#{userId},'%')and ud.email like concat('%',#{email},'%')and ud.phone like concat('%',#{phone},'%') limit #{pageNum},#{pageSize}")
-    List<UserAndUserDetailDto> findPage1(Integer pageNum, Integer pageSize, String name, String userId, String email, String phone);
+@Select("SELECT * FROM user_detail ud JOIN USER u ON u.id=ud.user_id WHERE u.username like concat('%',#{name},'%') and ud.user_id like concat('%',#{userId},'%')and ud.email like concat('%',#{email},'%')and ud.phone like concat('%',#{phone},'%') limit #{pageNum},#{pageSize}")
+    List<UserAndUserDetailDto> findPage1(@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize, @Param("name") String name, @Param("userId") String userId, @Param("email") String email, @Param("phone") String phone);
 
     /**
      * 通过前端传来的条件进行查询数量，为上面的分页查询提供总数进行分页

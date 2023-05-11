@@ -6,10 +6,7 @@ import com.wang.tujiquestionnaire.system.service.impl.SurveyGoldServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -28,7 +25,18 @@ public class SurveyGoldController {
     @ApiOperation("问卷进入发布状态")
     @PostMapping("/surveyPublish")
     public Result surveyPublish(@RequestBody SurveyGoldDto surveyGoldDto){
+        if (surveyGoldDto.getPrice()==null){
+            surveyGoldDto.setPrice(0);
+        }
+        if (surveyGoldDto.getQuantity()==null){
+            surveyGoldDto.setQuantity(30);
+        }
         return surveyGoldService.surveyPublish(surveyGoldDto);
+    }
+    @ApiOperation("问卷停止发布")
+    @PostMapping("/surveyStop")
+    public Result surveyStop(@RequestParam("survey_id") String id){
+        return surveyGoldService.surveyStop(id);
     }
 
 }

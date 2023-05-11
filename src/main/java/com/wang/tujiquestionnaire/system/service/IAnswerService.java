@@ -35,4 +35,8 @@ public interface IAnswerService extends IService<Answer> {
      * @return 返回封装的统一返回类
      */
     Result historyAnswer(String userId, String surveyId);
+
+    Result selectDataBySurveyId(String id);
+
+    Result inputAnswer(String surveyId, String questionId, String content, Integer pageNum, Integer pageSize);
 }

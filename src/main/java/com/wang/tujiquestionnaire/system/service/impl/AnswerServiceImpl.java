@@ -3,6 +3,8 @@ package com.wang.tujiquestionnaire.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.*;
+import com.wang.tujiquestionnaire.system.entity.dto.AnswerBySurveyData;
+import com.wang.tujiquestionnaire.system.entity.dto.AnswerDataDto;
 import com.wang.tujiquestionnaire.system.entity.dto.AnswerDto;
 import com.wang.tujiquestionnaire.system.mapper.*;
 import com.wang.tujiquestionnaire.system.service.IAnswerService;
@@ -14,8 +16,7 @@ import org.springframework.cglib.core.Block;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -29,6 +30,8 @@ import java.util.List;
 public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> implements IAnswerService {
     @Autowired
     private AnswerMapper answerMapper;
+    @Autowired
+    private OptionMapper optionMapper;
     @Autowired
     private UserCreateAnswerMapper userCreateAnswerMapper;
     @Autowired
@@ -137,5 +140,48 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         answerQueryWrapper.eq("user_id", userId);
         List<Answer> userHistoryList = answerMapper.selectList(answerQueryWrapper);
         return Result.success(userHistoryList);
+    }
+
+    @Override
+    public Result selectDataBySurveyId(String id) {
+        Survey survey = surveyMapper.selectById(id);
+        List<AnswerDataDto> dataBySurveyId = answerMapper.selectDataBySurveyId(id);
+        List<Option> optionList = optionMapper.selectAllBySurveyId(id);
+        List<Map<String, String>> any = answerMapper.selectAnyDataBySurvey(id);
+        List<Map<String, Object>> one = answerMapper.selectOneDataBySurveyId(id);
+        List<Map<String, Object>> input = answerMapper.selectInputDataBySurveyId(id);
+        Map<String,Object> surveyAnyData = new HashMap<>(0);
+        //2.多选选项数量处理
+        for ( Map<String,String> map:any) {
+            String count=map.get("count");
+            String[] countList  = count.split(",");
+            Map<String, Integer> countMap = new HashMap<>(0);
+            for (String value : countList) {
+                countMap.put(value, countMap.getOrDefault(value, 0) + 1);
+            }
+            Map<String, Integer> surveyAny = new HashMap<>(countMap);
+            surveyAnyData.put(map.get("question_id"),surveyAny);
+        }
+        AnswerBySurveyData answer = new AnswerBySurveyData();
+        answer.setOneOptionData(one);
+        answer.setAnyOptionData(surveyAnyData);
+        answer.setOptionList(optionList);
+        answer.setInputOptionData(input);
+        answer.setAnswerDataDtoList(dataBySurveyId);
+        answer.setSurveyName(survey.getSurveyName());
+        answer.setSurveyDescription(survey.getSurveyDescription());
+        return Result.success(answer);
+
+    }
+
+    @Override
+    public Result inputAnswer(String surveyId, String questionId, String content, Integer pageNum, Integer pageSize) {
+        pageNum = (pageNum - 1) * pageSize;
+        List<Answer> answerList = answerMapper.inputAnswer(surveyId, questionId, content, pageNum, pageSize);
+        Integer integer = answerMapper.inputAnswerTotal(surveyId, questionId, content);
+        Map<String,Object> map = new HashMap<>(0);
+        map.put("data",answerList);
+        map.put("total",integer);
+        return Result.success(map);
     }
 }

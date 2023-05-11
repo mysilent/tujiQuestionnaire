@@ -69,4 +69,16 @@ public class SurveyGoldServiceImpl extends ServiceImpl<SurveyGoldMapper, SurveyG
         }
         return insert==1&&status==1?Result.success():Result.error();
     }
+
+    @Override
+    public Result surveyStop(String id) {
+        //根据问卷id进行数据准备
+        SurveyGold surveyGold =surveyGoldMapper.selectById(id);
+        Survey survey = surveyMapper.selectById(id);
+        Integer gold = surveyGold.getPrice()*surveyGold.getQuantity();
+        userGoldMapper.userGoldAdd(gold,survey.getCreatorId());
+        surveyGoldMapper.deleteById(id);
+        surveyMapper.updateStatusById("2",id);
+        return Result.success();
+    }
 }

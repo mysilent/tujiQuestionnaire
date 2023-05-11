@@ -51,6 +51,7 @@ onMounted(async () => {
     series: [
       //bar--柱状图
       //line -- 线图
+      //pie -- 饼图
       {
         name: '问卷创建数量',
         type: 'bar',

@@ -15,4 +15,17 @@
         )
     </foreach>
 </insert>
+
+
+    <select id="selectAllBySurveyId"  resultMap="option">
+        select question_id,option_name,option_sort
+        from option_info
+        where
+        survey_id = #{surveyId,jdbcType=VARCHAR}
+    </select>
+    <resultMap id="option" type="com.wang.tujiquestionnaire.system.entity.Option">
+        <id column="question_id" property="questionId"/>
+        <result column="option_name" property="optionName"/>
+        <result column="option_sort" property="optionSort"/>
+    </resultMap>
 </mapper>

@@ -18,6 +18,7 @@
     "echarts": "^5.4.2",
     "el-draggable": "^1.0.6",
     "element-plus": "^2.2.36",
+    "node-segment": "^0.0.2",
     "pinia": "^2.0.33",
     "pinia-plugin-persistedstate": "^3.1.0",
     "qs": "^6.11.1",

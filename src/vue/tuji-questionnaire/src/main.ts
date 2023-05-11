@@ -10,6 +10,7 @@ import './assets/main.css'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import echarts from "./utils/echarts";
 
+
 const app = createApp(App)
 
 const pinia = createPinia();

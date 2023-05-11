@@ -67,4 +67,10 @@ public interface ISurveyService extends IService<Survey> {
      */
     Result reviseQuestionnaire(SurveyCreateDto surveyCreateDto);
 
+    /**
+     * 问卷修改的时候查询问卷状态
+     * @param id 问卷id
+     * @return 返回问卷状态
+     */
+    Result reviseBySelectStatus(String id);
 }

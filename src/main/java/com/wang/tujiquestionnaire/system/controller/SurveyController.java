@@ -64,6 +64,13 @@ public class SurveyController {
     public Result reviseQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto){
         return surveyService.reviseQuestionnaire(surveyCreateDto);
     }
+
+    @ApiOperation("问卷修改前查询是否发布")
+    @GetMapping("/reviseBySelectStatus")
+    public Result reviseBySelectStatus(@RequestParam("id") String id){
+        return surveyService.reviseBySelectStatus(id);
+    }
+
 }
 
 

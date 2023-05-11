@@ -1,14 +1,11 @@
 package com.wang.tujiquestionnaire.background.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.background.entity.BackgroundUser;
 import com.wang.tujiquestionnaire.background.service.impl.BackgroundUserServiceImpl;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.service.impl.UserDetailServiceImpl;
-import com.wang.tujiquestionnaire.system.service.impl.UserServiceImpl;
 import com.wang.tujiquestionnaire.until.HutoolUntil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 

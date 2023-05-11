@@ -31,8 +31,11 @@
         </div>
         <div class="bottom-div" v-bind:class="{ 'bottom-div-add':isActive===index}">
           <el-row>
-            <el-tooltip content="发布" effect="light">
+            <el-tooltip content="发布" effect="light" v-if="surveys.status==='1'">
               <el-button type="warning" :icon="Promotion" circle @click="surveyGold(surveys.id)"/>
+            </el-tooltip>
+            <el-tooltip content="回收" effect="light" v-if="surveys.status==='0'">
+              <el-button type="danger" :icon="Promotion" circle @click="surveyDelGold(surveys.id)"/>
             </el-tooltip>
             <el-tooltip content="预览" effect="light">
               <el-button type="success" :icon="Search" circle @click="preview(surveys.id)"/>
@@ -41,7 +44,7 @@
               <el-button type="primary" :icon="Edit" circle @click="revise(surveys.id)"/>
             </el-tooltip>
             <el-tooltip content="数据分析" effect="light">
-              <el-button type="info" :icon="Histogram" circle @click=""/>
+              <el-button type="info" :icon="Histogram" circle @click="answerData(surveys.id)"/>
             </el-tooltip>
             <el-popconfirm
                 confirm-button-text="是的"
@@ -102,14 +105,14 @@ import {
   deleteSurveyApi,
   surveyPublish,
   createAnswerData,
-  userGoldApi
+  userGoldApi, answerDataApi, reviseBySelectStatus, surveyStop
 } from "@/axios/api/myquestionnaire.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
-import {useSurveyPreviewStore} from '@/stores/userSurvey'
+import {useAnswerDataStore, usePersonalAnswerStore, useSurveyPreviewStore} from '@/stores/userSurvey'
 import {ElMessage, ElMessageBox} from "element-plus";
-
-
+const PersonalAnswerStore= usePersonalAnswerStore()
+const AnswerDataStore = useAnswerDataStore()
 const router = useRouter();
 const userLogin = useLoginStore();
 const isActive = ref(-1);
@@ -168,6 +171,27 @@ const surveyGold = (id: any) => {
   dialogVisible.value = true
   gold.id = id
   selectUserGold()
+}
+
+const surveyDelGold = (id:any)=>{
+  let surveyId={
+    survey_id:id
+  }
+  ElMessageBox.alert('确认收回问卷吗', 'Title', {
+    confirmButtonText: '确认',
+    callback: (action: any) => {
+      if (action=="confirm"){
+        console.log(surveyId)
+        surveyStop(surveyId).then(map=>{
+        ElMessage.success("操作成功")
+          select()
+        })
+      }
+      else if (action=="cancel"){
+
+      }
+    },
+  })
 }
 
 const handleClose = (done: () => void) => {
@@ -244,6 +268,15 @@ return "state-yellow"
   }
 }
 
+function answerData(id:any){
+  PersonalAnswerStore.surveyId=id
+  AnswerDataStore.cont.id=id
+ let newUrl= router.resolve({
+    path:'/home/myQuestionnaire/analyse'
+  })
+  window.open(newUrl.href, "_blank");
+}
+
 function preview(id: any) {
   surveyStore.$patch((state) => {
     state.cont.id = id
@@ -254,12 +287,23 @@ function preview(id: any) {
 }
 
 function revise(id: any) {
-  surveyStore.$patch((state) => {
-    state.cont.id = id
+  let surveyId ={
+    id:id,
+  }
+  reviseBySelectStatus(surveyId).then(map=>{
+    console.log(map.data.data)
+    if (map.data.data==='1'){
+      surveyStore.$patch((state) => {
+        state.cont.id = id
+      })
+      router.push({
+        name: "revise",
+      })
+    }else {
+      ElMessage.error("该问卷已无法修改！")
+    }
   })
-  router.push({
-    name: "revise",
-  })
+
 }
 
 function push() {

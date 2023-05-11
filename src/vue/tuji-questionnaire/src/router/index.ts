@@ -12,7 +12,7 @@ const router = createRouter({
                 path: '/home',
                 name: 'home',
                 component: HomeView,
-                redirect:'/home/questionnaireCenter',
+                redirect: '/home/questionnaireCenter',
                 children: [{
                     path: '/home/questionnaireCenter',
                     name: 'questionnaireCenter',
@@ -57,13 +57,21 @@ const router = createRouter({
                     path: '/home/myQuestionnaire/revise',
                     name: 'revise',
                     component: () => import('../views/MyQuestion/Revise.vue'),
+                },{
+                    path: '/home/myQuestionnaire/AnswerPreview',
+                    name: 'AnswerPreview',
+                    component: () => import('../views/MyQuestion/AnalyseAnswerPreview.vue'),
                 },
                 ]
             }, {
+                path: '/home/myQuestionnaire/analyse',
+                name: 'analyse',
+                component: () => import('../views/MyQuestion/Analyse.vue'),
+            },  {
                 path: '/personal',
                 name: 'personal',
                 component: () => import('../views/PersonalView.vue'),
-                redirect:'/personal/personalCenter/personalInformation',
+                redirect: '/personal/personalCenter/personalInformation',
                 children: [
                     {
                         path: '/personal/personalCenter/personalInformation',
@@ -119,7 +127,7 @@ const router = createRouter({
                 path: '/background',
                 name: 'background',
                 component: () => import('../views/Background/ManageView.vue'),
-                redirect:'/BackgroundData',
+                redirect: '/BackgroundData',
                 children: [{
                     path: '/background/home',
                     name: 'backgroundUser',
@@ -144,7 +152,7 @@ const router = createRouter({
                     path: '/Template',
                     name: 'Template',
                     component: () => import('../views/Background/Template.vue')
-                },{
+                }, {
                     path: '/BackgroundData',
                     name: 'BackgroundData',
                     component: () => import('../views/Background/BackgroundData.vue')

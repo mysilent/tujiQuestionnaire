@@ -1,10 +1,12 @@
 package com.wang.tujiquestionnaire.system.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.wang.tujiquestionnaire.system.entity.Option;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -22,4 +24,11 @@ public interface OptionMapper extends BaseMapper<Option> {
      * @param optionLists option对象的list表
      */
     void insertOptionList(List<Option> optionLists);
+
+    /**
+     * 根据传入的问卷id查询对应数据返回map数组
+     * @param surveyId 问卷id
+     * @return 返回查询到的map数据
+     */
+    List<Option> selectAllBySurveyId(@Param("surveyId") String surveyId);
 }

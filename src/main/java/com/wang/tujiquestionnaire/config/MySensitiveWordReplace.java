@@ -22,6 +22,8 @@ public class MySensitiveWordReplace implements ISensitiveWordReplace {
         }
         if ("64".equals(sensitiveWord)) {
             return "64";
+        }if ("89".equals(sensitiveWord)) {
+            return "89";
         }
         // 其他默认使用 * 代替
         int wordLength = context.wordLength();

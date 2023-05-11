@@ -284,4 +284,9 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
         return surveyMapper.selectList(queryWrapper);
     }
 
+    @Override
+    public Result reviseBySelectStatus(String id) {
+        return Result.success(surveyMapper.reviseBySelectStatus(id));
+    }
+
 }

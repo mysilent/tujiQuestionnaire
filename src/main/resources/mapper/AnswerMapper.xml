@@ -15,8 +15,24 @@
             #{item.createDate}
             )
         </foreach>
-
     </insert>
 
-
+    <select id="selectDataBySurveyId" resultMap="myMap" parameterType="string">
+        SELECT count(*)               AS count,
+               q.id                   AS question_id,
+               q.question_description as question_name,
+               q.question_sort as question_sort,
+               q.question_type as question_type
+        FROM answer_info a
+                 JOIN question_info q on a.question_id = q.id
+        WHERE q.survey_id = #{surveyId,jdbcType=VARCHAR}
+        GROUP BY q.id
+    </select>
+    <resultMap id="myMap" type="com.wang.tujiquestionnaire.system.entity.dto.AnswerDataDto">
+        <id column="count" property="count"/>
+        <result column="question_id" property="questionId"/>
+        <result column="question_name" property="questionName"/>
+        <result column="question_sort" property="questionSort"/>
+        <result column="question_type" property="questionType"/>
+    </resultMap>
 </mapper>
