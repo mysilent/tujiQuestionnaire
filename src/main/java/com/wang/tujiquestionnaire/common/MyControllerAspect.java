@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 /**
  * ClassName: MyControllerAspect
  * Package: IntelliJ IDEA
- * Description:
+ * Description: Aop切面
  *
  * @Author: wang
  * Create:2023/4/28-14:30
@@ -45,7 +45,6 @@ public class MyControllerAspect {
         objectMapper.registerModule(new JavaTimeModule());
         String jsonStr = objectMapper.writeValueAsString(arg[0]);
         String replace = wordBs.replace(jsonStr,new MySensitiveWordReplace());
-//        arg[0] =objectMapper.readValue(replace, SurveyCreateDto.class);
 
         Class<?> argClazz = arg[0].getClass();
         arg[0] =objectMapper.readValue(replace,argClazz);

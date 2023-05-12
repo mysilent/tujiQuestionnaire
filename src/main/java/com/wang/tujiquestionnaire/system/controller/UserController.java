@@ -1,5 +1,6 @@
 package com.wang.tujiquestionnaire.system.controller;
 
+import com.wang.tujiquestionnaire.common.Constant;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.dto.ChangePasswordDto;
 import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
@@ -36,14 +37,14 @@ public class UserController {
             // 给state赋默认值的例子：
             state = -1;
         }
-        if (userService.login(username, password) == 1 && state==1) {
+        if (userService.login(username, password) == 1 && state==Constant.STATE_ENABLE) {
             UserDto userDto = userService.selectUser(username);
             String token = JwtUtil.generateToken(username,String.valueOf(userDto.getId()));
             userDto.setToken(token);
             if (token != null){
                 return Result.success(userDto);
             }
-        }else if (state==0){
+        }else if (state== Constant.STATE_BAN){
             return Result.error(10000, "账户已被封禁");
         }
         return Result.error(10000, "账户或密码错误");
@@ -64,7 +65,6 @@ public class UserController {
     @ApiOperation("修改密码")
     @PostMapping("/changePassword")
     public Result changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
-        System.out.println(changePasswordDto);
         // 验证旧密码是否正确
         if (!isValidOldPassword(changePasswordDto)) {
             return Result.error("密码不正确");

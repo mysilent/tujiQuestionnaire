@@ -1,6 +1,7 @@
 package com.wang.tujiquestionnaire.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.wang.tujiquestionnaire.common.Constant;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.Survey;
 import com.wang.tujiquestionnaire.system.entity.SurveyGold;
@@ -57,7 +58,7 @@ public class SurveyGoldServiceImpl extends ServiceImpl<SurveyGoldMapper, SurveyG
                 //3.将问卷发布状况写入数据库
                  insert = surveyGoldMapper.insert(surveyGold);
                 //4.更改问卷发布状态
-                 status = surveyMapper.updateStatusById("0", surveyGoldDto.getId());
+                 status = surveyMapper.updateStatusById(Constant.SURVEY_STATUS_PUBLISH, surveyGoldDto.getId());
             }else {
                 return Result.error(1000,"激励值不够呢亲~");
             }
@@ -65,7 +66,7 @@ public class SurveyGoldServiceImpl extends ServiceImpl<SurveyGoldMapper, SurveyG
             //3.将问卷发布状况写入数据库
              insert = surveyGoldMapper.insert(surveyGold);
             //4.更改问卷发布状态
-             status = surveyMapper.updateStatusById("0", surveyGoldDto.getId());
+             status = surveyMapper.updateStatusById(Constant.SURVEY_STATUS_PUBLISH, surveyGoldDto.getId());
         }
         return insert==1&&status==1?Result.success():Result.error();
     }
@@ -78,7 +79,7 @@ public class SurveyGoldServiceImpl extends ServiceImpl<SurveyGoldMapper, SurveyG
         Integer gold = surveyGold.getPrice()*surveyGold.getQuantity();
         userGoldMapper.userGoldAdd(gold,survey.getCreatorId());
         surveyGoldMapper.deleteById(id);
-        surveyMapper.updateStatusById("2",id);
+        surveyMapper.updateStatusById(Constant.SURVEY_STATUS_END,id);
         return Result.success();
     }
 }

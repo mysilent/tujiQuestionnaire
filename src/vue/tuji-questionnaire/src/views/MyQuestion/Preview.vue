@@ -80,6 +80,22 @@ export default defineComponent({
     })
 
     const updateTemplate = () => {
+      //对问卷进行删减缩小
+      console.log(survey.value)
+      survey.value.endTime=''
+      survey.value.createDate=''
+      survey.value.startTime=''
+      survey.value.updateDate=''
+      for (const q in survey.value.questionDtoList) {
+        survey.value.questionDtoList[q].surveyId=''
+        survey.value.questionDtoList[q].id=''
+        for (const o in survey.value.questionDtoList[q].optionList) {
+          survey.value.questionDtoList[q].optionList[o].surveyId=''
+          survey.value.questionDtoList[q].optionList[o].id=''
+          survey.value.questionDtoList[q].optionList[o].questionId=''
+        }
+      }
+
       template.surveyDescription = survey.value.surveyDescription
       template.surveyName = survey.value.surveyName
       // 需要进行序列化，但是为了防止后端认为序列化后的数据为非法数据，带有敏感符号，还需要进行url编码

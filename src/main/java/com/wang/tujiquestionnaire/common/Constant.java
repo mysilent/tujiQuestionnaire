@@ -24,11 +24,11 @@ public class Constant {
 
 
     /**
-     * state  启用1 封禁0 注销2
+     * 用户状态 state  启用1 封禁0 注销2
      */
-    public static final String STATE_ENABLE = "1";
-    public static final String STATE_BAN = "0";
-    public static final String STATE_LOGOUT = "2";
+    public static final int STATE_ENABLE = 1;
+    public static final int STATE_BAN = 0;
+    public static final int STATE_LOGOUT = 2;
 
 
     /**
@@ -38,4 +38,18 @@ public class Constant {
     public static final String NO_URL2 = "/system/user/enroll";
     public static final String NO_URL3 = "/system/survey/selectQuestionnaire";
     public static final String NO_URL4 = "/system/survey/selectOtherUserSurvey";
+
+    /**
+    *模板状态 申请-0 通过-1
+     */
+    public  static  final String TEMPLATE_YES="1";
+    public  static  final String TEMPLATE_NO="0";
+
+    /**
+     * 问卷状态 暂存-1 发布-0 结束-2 失效-3
+     */
+    public static final String SURVEY_STATUS_PUBLISH="0";
+    public static final String SURVEY_STATUS_STAGING="1";
+    public static final String SURVEY_STATUS_END="2";
+    public static final String SURVEY_STATUS_LAPSE="3";
 }

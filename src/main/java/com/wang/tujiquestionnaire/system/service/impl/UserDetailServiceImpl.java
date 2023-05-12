@@ -24,35 +24,8 @@ import java.util.Map;
 public class UserDetailServiceImpl extends ServiceImpl<UserDetailMapper, UserDetail> implements IUserDetailService {
 @Autowired
 UserDetailMapper userDetailMapper;
-//    //数据查询
-//    @Override
-//    public List<UserDetail> find(){
-//        return userDetailMapper.findAll();
-//    }
-//
-//    @Override
-//    //数据更新
-//    public int save(UserDetail user){
-//        if (user.getId()==null){
-//            return userDetailMapper.insert_user(user);
-//        }else {
-//            return userDetailMapper.update(user);
-//        }
-//    }
-//    @Override
-//    //分页查询
-//    public List<UserDetail> findpage(Integer pageNum,Integer pageSize,String username) {
-//        return userDetailMapper.findpage(pageNum, pageSize,username);
-//
-//    }
-//    @Override
-//    //查询数据总数
-//    public Integer selectTotal( String username) {
-//        return userDetailMapper.selectTotal(username);
-//    }
     @Override
     //前端分页查询
-
     public Map<String,Object> page(Integer pageNum, Integer pageSize, String name,String userId,String email,String phone) {
         pageNum = (pageNum - 1) * pageSize;
         Map<String, Object> map = new HashMap<>();
@@ -63,24 +36,4 @@ UserDetailMapper userDetailMapper;
         return map;
     }
 
-//    @Override
-//
-//    public boolean delete(Integer id) {
-//        int i=userDetailMapper.delete(id);
-//        if (i>=1){
-//            return true;
-//        }else {
-//            return false;
-//        }
-//    }
-//    @Override
-//
-//    public boolean dleteAll(List<Integer> ids) {
-//        int i=userDetailMapper.deleteAll(ids);
-//        if (i>=1){
-//            return true;
-//        }else {
-//            return false;
-//        }
-//    }
 }

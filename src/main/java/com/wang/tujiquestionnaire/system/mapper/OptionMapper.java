@@ -26,7 +26,7 @@ public interface OptionMapper extends BaseMapper<Option> {
     void insertOptionList(List<Option> optionLists);
 
     /**
-     * 根据传入的问卷id查询对应数据返回map数组
+     * 根据传入的问卷id查询所有对应该问卷的选项
      * @param surveyId 问卷id
      * @return 返回查询到的map数据
      */

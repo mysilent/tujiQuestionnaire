@@ -38,7 +38,6 @@ private UserHistoryMapper userHistoryMapper;
         List<Map<String, Object>> answerData = userHistoryMapper.createAnswerData(userId);
         Map<Object,Object>maps = new HashMap<>();
         for (Map<String, Object> map : answerData) {
-            System.out.println(map);
             Object surveyId =  map.get("survey_id");
             Object count =  map.get("count");
             maps.put(surveyId, count);

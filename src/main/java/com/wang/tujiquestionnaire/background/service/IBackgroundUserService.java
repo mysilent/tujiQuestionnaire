@@ -42,6 +42,11 @@ public interface IBackgroundUserService extends IService<BackgroundUser> {
      */
     Result updateState(String id, int state);
 
-
+    /**
+     * 根据传来的值取更改管理员的登录密码
+     * @param username 管理员用户名
+     * @param password 管理密码
+     * @return 返回统一封装类
+     */
     Result changePassword(String username, String password);
 }

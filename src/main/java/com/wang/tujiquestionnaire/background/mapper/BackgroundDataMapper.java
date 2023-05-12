@@ -17,6 +17,10 @@ import java.util.Map;
 @Mapper
 public interface BackgroundDataMapper {
 
+    /**
+     * 去数据库里面查询前七天的问卷创建数量各多少
+     * @return 一个列表
+     */
     @Select("SELECT DATE_FORMAT(date_list.date, '%Y-%m-%d') AS date, COUNT(survey_info.create_date) AS count\n" +
             "FROM (\n" +
             "  SELECT CURDATE() - INTERVAL 6 DAY AS date\n" +
@@ -32,6 +36,11 @@ public interface BackgroundDataMapper {
             "WHERE date_list.date BETWEEN CURDATE() - INTERVAL 6 DAY AND CURDATE()\n" +
             "GROUP BY date_list.date;")
     public List<Map<String, Object>> surveyCreateDate();
+
+    /**
+     * 去数据库里面查询前七天的问卷回答数量各多少
+     * @return 一个列表
+     */
     @Select("SELECT DATE_FORMAT(date_list.date, '%Y-%m-%d') AS date, COUNT(user_history.create_date) AS count\n" +
             "FROM (\n" +
             "  SELECT CURDATE() - INTERVAL 6 DAY AS date\n" +

@@ -3,10 +3,12 @@ package com.wang.tujiquestionnaire.background.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.background.entity.SurveyTemplate;
 import com.wang.tujiquestionnaire.background.service.impl.SurveyTemplateServiceImpl;
+import com.wang.tujiquestionnaire.common.Constant;
 import com.wang.tujiquestionnaire.common.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +35,7 @@ public class SurveyTemplateController {
     @ApiOperation("问卷模板查询")
     @GetMapping("/selectTemplate")
     public Map<String,Object>selectTemplate(@RequestParam("pageSize") Integer pageSize, @RequestParam("pageNum") Integer pageNum,@RequestParam("surveyName")String surveyName,@RequestParam("surveyId") String surveyId){
-        return surveyTemplateService.selectTemplate(pageSize,pageNum,"1",surveyName,surveyId);
+        return surveyTemplateService.selectTemplate(pageSize,pageNum, Constant.TEMPLATE_YES,surveyName,surveyId);
     }
 
     @ApiOperation("模板申请")
@@ -43,7 +45,7 @@ public class SurveyTemplateController {
         // 前端进行了url编码，还需要将数据转回序列化数据
         surveyTemplate.setContent(URLDecoder.decode((surveyTemplate.getContent()), "UTF-8"));
         if (surveyTemplateService.getById(surveyTemplate.getId()) == null) {
-            surveyTemplate.setState("0");
+            surveyTemplate.setState(Constant.TEMPLATE_NO);
             save = surveyTemplateService.save(surveyTemplate);
         } else {
             return Result.error(1000, "已申请模板，不能重复申请~");

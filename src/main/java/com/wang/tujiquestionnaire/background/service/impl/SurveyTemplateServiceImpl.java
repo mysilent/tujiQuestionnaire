@@ -4,6 +4,7 @@ import com.wang.tujiquestionnaire.background.entity.SurveyTemplate;
 import com.wang.tujiquestionnaire.background.mapper.SurveyTemplateMapper;
 import com.wang.tujiquestionnaire.background.service.ISurveyTemplateService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.wang.tujiquestionnaire.common.Constant;
 import com.wang.tujiquestionnaire.common.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,7 +61,7 @@ public class SurveyTemplateServiceImpl extends ServiceImpl<SurveyTemplateMapper,
 
     @Override
     public Result templateApplicationYes(String id) {
-        return surveyTemplateMapper.templateYes("1", id) == 1 ? Result.success() : Result.error();
+        return surveyTemplateMapper.templateYes(Constant.TEMPLATE_YES, id) == 1 ? Result.success() : Result.error();
     }
 
     @Override

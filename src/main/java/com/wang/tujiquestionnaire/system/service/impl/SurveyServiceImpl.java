@@ -109,6 +109,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
         //2.1.1创建调查问卷主表id
         String surveyId = hutoolUntil.getID();
         survey.setId(surveyId);
+        survey.setStatus(Constant.SURVEY_STATUS_STAGING);
         //2.2存入调查问卷问题主表
         for (QuestionDto q : questionList) {
             String questionId = hutoolUntil.getID();
@@ -245,28 +246,31 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
     @Override
     public List<Survey> selectUserSurvey(Long id) {
         QueryWrapper<Survey> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("creator_id", id);
+        queryWrapper.eq("creator_id", id).ne("status",Constant.SURVEY_STATUS_LAPSE);
         return surveyMapper.selectList(queryWrapper);
     }
 
 
     @Override
     public Result deleteQuestionnaire(String id) {
-        QueryWrapper<Question> questionQueryWrapper = new QueryWrapper<>();
-        questionQueryWrapper.eq("survey_id", id);
-        QueryWrapper<Option> optionQueryWrapper = new QueryWrapper<>();
-        optionQueryWrapper.eq("survey_id", id);
-        int i = deleteQuestionnaireSql(id, questionQueryWrapper, optionQueryWrapper);
+//        QueryWrapper<Question> questionQueryWrapper = new QueryWrapper<>();
+//        questionQueryWrapper.eq("survey_id", id);
+//        QueryWrapper<Option> optionQueryWrapper = new QueryWrapper<>();
+//        optionQueryWrapper.eq("survey_id", id);
+
+        int i = deleteQuestionnaireSql(id);
         return i == 1 ? Result.success() : Result.error();
     }
 
     @Transactional(rollbackFor  =  Exception.class)
-    protected    int  deleteQuestionnaireSql(String  id,QueryWrapper<Question>  questionQueryWrapper,QueryWrapper<Option>  optionQueryWrapper)  {
-        int  i  =  surveyMapper.deleteById(id);
-        int  j  =  questionMapper.delete(questionQueryWrapper);
-        int  k  =  optionMapper.delete(optionQueryWrapper);
-        int  l  =  surveyGoldMapper.deleteById(id);
-        return  i  ==  1  &&  j  >=  0  &&  k  >=  0 && l==1 ?  1  :  0;
+    protected    int  deleteQuestionnaireSql(String  id)  {
+//        int  i  =  surveyMapper.deleteById(id);
+//        int  j  =  questionMapper.delete(questionQueryWrapper);
+//        int  k  =  optionMapper.delete(optionQueryWrapper);
+
+        int i = surveyMapper.updateStatusById(Constant.SURVEY_STATUS_LAPSE,id);
+          surveyGoldMapper.deleteById(id);
+        return  i  ==  1  ?  1  :  0;
     }
 
     @Override
@@ -280,7 +284,7 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
     @Override
     public List<Survey> selectOtherUserSurvey(String id) {
         QueryWrapper<Survey> queryWrapper = new QueryWrapper<>();
-        queryWrapper.ne("creator_id", id).eq("status","0");
+        queryWrapper.ne("creator_id", id).eq("status",Constant.SURVEY_STATUS_PUBLISH);
         return surveyMapper.selectList(queryWrapper);
     }
 

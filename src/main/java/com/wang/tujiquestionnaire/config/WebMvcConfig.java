@@ -20,7 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JwtInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns(Constant.NO_URL1, Constant.NO_URL2,Constant.NO_URL3,Constant.NO_URL4,"/background/user/**","/swagger-resources/**", "/webjars/**", "/v3/**", "/swagger-ui.html/**");
+                .excludePathPatterns(Constant.NO_URL1, Constant.NO_URL2,Constant.NO_URL3,Constant.NO_URL4,"/background/user/**");
     }
 
         @Override

@@ -27,13 +27,8 @@ UserCreateAnswerMapper userCreateAnswerMapper;
     @Override
     public List<UserCreateAnswer> createAnswerHistory(Long userId) {
         QueryWrapper<UserCreateAnswer> queryWrapper= new QueryWrapper<>();
-        List<UserCreateAnswer> userCreateAnswerLists = new ArrayList<>();
         queryWrapper.eq("user_id",userId);
-        List<UserCreateAnswer> userCreateAnswerList = userCreateAnswerMapper.selectList(queryWrapper);
-        for (UserCreateAnswer userCreateAnswer: userCreateAnswerList) {
-            userCreateAnswerLists.add(userCreateAnswer);
-        }
-        return userCreateAnswerLists;
+        return userCreateAnswerMapper.selectList(queryWrapper);
     }
 
 }

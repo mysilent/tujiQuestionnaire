@@ -40,7 +40,7 @@
             <el-tooltip content="预览" effect="light">
               <el-button type="success" :icon="Search" circle @click="preview(surveys.id)"/>
             </el-tooltip>
-            <el-tooltip content="修改" effect="light">
+            <el-tooltip content="修改" effect="light" v-if="surveys.status==='1'">
               <el-button type="primary" :icon="Edit" circle @click="revise(surveys.id)"/>
             </el-tooltip>
             <el-tooltip content="数据分析" effect="light">
@@ -69,7 +69,7 @@
         width="30%"
         :before-close="handleClose"
     >
-      <span>请输入你要发布的数量~您的激励值:{{userGold}}</span>
+      <span>请输入你要发布的数量~您的激励值:{{ userGold }}</span>
       <el-input v-model="gold.quantity" placeholder="发布份数(不填默认30份)"></el-input>
       <el-input v-model="gold.price" placeholder="每份激励值~(不填默认为0)"></el-input>
       <template #footer>
@@ -105,13 +105,17 @@ import {
   deleteSurveyApi,
   surveyPublish,
   createAnswerData,
-  userGoldApi, answerDataApi, reviseBySelectStatus, surveyStop
+  userGoldApi,
+  reviseBySelectStatus,
+  surveyStop
 } from "@/axios/api/myquestionnaire.api";
 import {useLoginStore} from '@/stores/UserLogin'
 import {useRouter} from 'vue-router'
 import {useAnswerDataStore, usePersonalAnswerStore, useSurveyPreviewStore} from '@/stores/userSurvey'
 import {ElMessage, ElMessageBox} from "element-plus";
-const PersonalAnswerStore= usePersonalAnswerStore()
+
+
+const PersonalAnswerStore = usePersonalAnswerStore()
 const AnswerDataStore = useAnswerDataStore()
 const router = useRouter();
 const userLogin = useLoginStore();
@@ -119,11 +123,11 @@ const isActive = ref(-1);
 const user = ref([])
 const surveyStore = useSurveyPreviewStore()
 const dialogVisible = ref(false)
-const AnswerData =reactive({data:[]})
+const AnswerData = reactive({data: []})
 const id = reactive({
   id: userLogin.id
 })
-const survey = reactive({data:[]})
+const survey = reactive({data: []})
 const isTure = ref(false)
 const gold = reactive({
   id: '',
@@ -134,7 +138,7 @@ const gold = reactive({
 const userGold = ref(0)
 const selectUserGold = () => {
   userGoldApi(id).then(map => {
-    userGold.value=map.data
+    userGold.value = map.data
   })
 }
 
@@ -143,17 +147,17 @@ selectUserSurveyApi(id).then(map => {
   for (let mapKey in map.data.data) {
     isTure.value = true
   }
-    survey.data=(map.data.data);
+  survey.data = (map.data.data);
 })
 
-createAnswerData(id).then(map=>{
-  AnswerData.data=map.data
+createAnswerData(id).then(map => {
+  AnswerData.data = map.data
 })
 const getCreateAnswerData = (state: number) => {
-   let a=AnswerData.data[state]
-  if (a){
+  let a = AnswerData.data[state]
+  if (a) {
     return a
-  }else {
+  } else {
     return 0
   }
 }
@@ -164,7 +168,7 @@ const select = () => {
     for (let mapKey in map.data.data) {
       isTure.value = true
     }
-    survey.data=(map.data.data);
+    survey.data = (map.data.data);
   })
 }
 const surveyGold = (id: any) => {
@@ -173,22 +177,20 @@ const surveyGold = (id: any) => {
   selectUserGold()
 }
 
-const surveyDelGold = (id:any)=>{
-  let surveyId={
-    survey_id:id
+const surveyDelGold = (id: any) => {
+  let surveyId = {
+    survey_id: id
   }
   ElMessageBox.alert('确认收回问卷吗', 'Title', {
     confirmButtonText: '确认',
     callback: (action: any) => {
-      if (action=="confirm"){
+      if (action == "confirm") {
         console.log(surveyId)
-        surveyStop(surveyId).then(map=>{
-        ElMessage.success("操作成功")
+        surveyStop(surveyId).then(map => {
+          ElMessage.success("操作成功")
           select()
         })
-      }
-      else if (action=="cancel"){
-
+      } else if (action == "cancel") {
       }
     },
   })
@@ -209,9 +211,9 @@ const confirmEvent = () => {
   surveyPublish(gold).then(map => {
     if (map.data.code === 200) {
       ElMessage.success("发布成功成功")
-    }else if (map.data.code==1000){
+    } else if (map.data.code == 1000) {
       ElMessage.error(map.data.msg)
-    }else {
+    } else {
       ElMessage.error("好像出错了QAQ")
     }
     select()
@@ -250,9 +252,9 @@ const getStateText = (state: any) => {
     return '收集中'
   } else if (state === '2') {
     return '收集完'
-  } else if (state==='1') {
+  } else if (state === '1') {
     return '未发布'
-  }else {
+  } else {
     return '已失效'
   }
 }
@@ -261,18 +263,18 @@ const getStateClass = (state: any) => {
     return "state-green"
   } else if (state === '2') {
     return "state-red"
-  }else if (state==='1'){
-return "state-yellow"
+  } else if (state === '1') {
+    return "state-yellow"
   } else {
     return "state-info"
   }
 }
 
-function answerData(id:any){
-  PersonalAnswerStore.surveyId=id
-  AnswerDataStore.cont.id=id
- let newUrl= router.resolve({
-    path:'/home/myQuestionnaire/analyse'
+function answerData(id: any) {
+  PersonalAnswerStore.surveyId = id
+  AnswerDataStore.cont.id = id
+  let newUrl = router.resolve({
+    path: '/home/myQuestionnaire/analyse'
   })
   window.open(newUrl.href, "_blank");
 }
@@ -287,23 +289,22 @@ function preview(id: any) {
 }
 
 function revise(id: any) {
-  let surveyId ={
-    id:id,
+  let surveyId = {
+    id: id,
   }
-  reviseBySelectStatus(surveyId).then(map=>{
+  reviseBySelectStatus(surveyId).then(map => {
     console.log(map.data.data)
-    if (map.data.data==='1'){
+    if (map.data.data === '1') {
       surveyStore.$patch((state) => {
         state.cont.id = id
       })
       router.push({
         name: "revise",
       })
-    }else {
+    } else {
       ElMessage.error("该问卷已无法修改！")
     }
   })
-
 }
 
 function push() {
@@ -371,6 +372,7 @@ el-button {
   font-size: 12px;
   padding: 0 6px;
 }
+
 .state-yellow {
   color: #fcd217;
   border: 1px solid #fcd217;

@@ -1,6 +1,7 @@
 package com.wang.tujiquestionnaire.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.wang.tujiquestionnaire.common.Constant;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.*;
 import com.wang.tujiquestionnaire.system.entity.dto.AnswerBySurveyData;
@@ -128,7 +129,7 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         queryWrapper.eq("id",surveyGold.getId());
         SurveyGold surveyGold1 = surveyGoldMapper.selectOne(queryWrapper);
         if (surveyGold1.getQuantity()==0){
-            surveyMapper.updateStatusById("2",surveyGold1.getId());
+            surveyMapper.updateStatusById(Constant.SURVEY_STATUS_END,surveyGold1.getId());
         }
         return deleteOne == 1 && goldAdd == 1;
     }
@@ -147,9 +148,9 @@ public class AnswerServiceImpl extends ServiceImpl<AnswerMapper, Answer> impleme
         Survey survey = surveyMapper.selectById(id);
         List<AnswerDataDto> dataBySurveyId = answerMapper.selectDataBySurveyId(id);
         List<Option> optionList = optionMapper.selectAllBySurveyId(id);
-        List<Map<String, String>> any = answerMapper.selectAnyDataBySurvey(id);
-        List<Map<String, Object>> one = answerMapper.selectOneDataBySurveyId(id);
-        List<Map<String, Object>> input = answerMapper.selectInputDataBySurveyId(id);
+        List<Map<String, String>> any = answerMapper.selectAnyDataBySurvey(id,Constant.QUESTION_TYPE_DUO);
+        List<Map<String, Object>> one = answerMapper.selectOneDataBySurveyId(id,Constant.QUESTION_TYPE_DAN);
+        List<Map<String, Object>> input = answerMapper.selectInputDataBySurveyId(id,Constant.QUESTION_TYPE_TIAN);
         Map<String,Object> surveyAnyData = new HashMap<>(0);
         //2.多选选项数量处理
         for ( Map<String,String> map:any) {

@@ -20,14 +20,14 @@ import java.util.List;
 @Mapper
 public interface UserHistoryMapper extends BaseMapper<UserHistory> {
     /**
-     * 根据前端传来的用户id去查询所属问卷的被作答次数
-     *
-     * @return 返回传到的数据
+     * 根据前端传来的用户id去查询他的所有问卷的被作答次数
+     * @param id 用户id
+     * @return 返回查到的数据，1个列表里的map包含问卷id和该问卷被填写数
      */
-//    @MapKey("survey_id")
+
     @Select("select count(*) as count,si.id as survey_id\n" +
             "     from survey_info si join user_history uh on si.id=uh.survey_id\n" +
             "    where si.creator_id=#{id,jdbcType=VARCHAR}\n" +
             "     group by si.id")
-    public List<Map<String, Object>> createAnswerData(@Param("id") String id);
+     List<Map<String, Object>> createAnswerData(@Param("id") String id);
 }

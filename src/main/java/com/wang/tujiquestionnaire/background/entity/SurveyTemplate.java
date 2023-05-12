@@ -3,6 +3,8 @@ package com.wang.tujiquestionnaire.background.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -41,7 +43,7 @@ public class SurveyTemplate implements Serializable {
     private String creatorId;
 
     @ApiModelProperty("创建时间")
-    private LocalDateTime createDate;
+    private LocalDateTime createDate=LocalDateTime.now();
 
     @ApiModelProperty("修改日期")
     private LocalDateTime updateDate;
