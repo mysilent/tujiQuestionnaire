@@ -1,5 +1,6 @@
 package com.wang.tujiquestionnaire.system.controller;
 
+import com.wang.tujiquestionnaire.common.GetRedisPenetrate;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.common.SensitiveWord;
 import com.wang.tujiquestionnaire.system.entity.Question;
@@ -39,35 +40,40 @@ public class SurveyController {
 
     @ApiOperation("问卷查询")
     @GetMapping("/selectQuestionnaire")
+    @GetRedisPenetrate
     public SurveyCreateDto selectQuestionnaire(@RequestParam("id") String id) {
         return surveyService.selectQuestionnaire(id);
     }
 
     @ApiOperation("根据用户id查询属于他的问卷")
     @GetMapping("/selectUserSurvey")
+
     public Result selectUserSurvey(@RequestParam("id") Long id) {
         return Result.success(surveyService.selectUserSurvey(id));
     }
+
     @ApiOperation("查询除本用户id之外的问卷")
     @GetMapping("/selectOtherUserSurvey")
-    public Result selectOtherUserSurvey (@RequestParam("id")String id){
+    public Result selectOtherUserSurvey(@RequestParam("id") String id) {
         return Result.success(surveyService.selectOtherUserSurvey(id));
     }
+
     @ApiOperation("问卷删除")
     @GetMapping("/deleteQuestionnaire")
     public Result deleteQuestionnaire(@RequestParam("id") String id) {
         return surveyService.deleteQuestionnaire(id);
     }
+
     @ApiOperation("问卷修改")
     @PostMapping("/reviseQuestionnaire")
     @SensitiveWord
-    public Result reviseQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto){
+    public Result reviseQuestionnaire(@RequestBody SurveyCreateDto surveyCreateDto) {
         return surveyService.reviseQuestionnaire(surveyCreateDto);
     }
 
     @ApiOperation("问卷修改前查询是否发布")
     @GetMapping("/reviseBySelectStatus")
-    public Result reviseBySelectStatus(@RequestParam("id") String id){
+    public Result reviseBySelectStatus(@RequestParam("id") String id) {
         return surveyService.reviseBySelectStatus(id);
     }
 

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wang.tujiquestionnaire.background.entity.SurveyTemplate;
 import com.wang.tujiquestionnaire.background.service.impl.SurveyTemplateServiceImpl;
 import com.wang.tujiquestionnaire.common.Constant;
+import com.wang.tujiquestionnaire.common.GetRedisPenetrate;
 import com.wang.tujiquestionnaire.common.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;

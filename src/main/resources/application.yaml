@@ -5,9 +5,8 @@ spring:
     username: root
     url: "jdbc:mysql://127.0.0.1:3306/questionnaire?timezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL"
   redis:  #redis配置
-    host: 192.168.238.129
+    host: 127.0.0.1
     port: 6379
-    password: 123456
     lettuce:
       pool:
         max-active: 10

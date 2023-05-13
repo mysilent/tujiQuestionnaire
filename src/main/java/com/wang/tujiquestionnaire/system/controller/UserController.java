@@ -1,6 +1,10 @@
 package com.wang.tujiquestionnaire.system.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.wang.tujiquestionnaire.common.Constant;
+import com.wang.tujiquestionnaire.common.GetRedisPenetrate;
+import com.wang.tujiquestionnaire.common.RedisConstant;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.dto.ChangePasswordDto;
 import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
@@ -8,7 +12,13 @@ import com.wang.tujiquestionnaire.system.service.impl.UserServiceImpl;
 
 import com.wang.tujiquestionnaire.until.JwtUtil;
 import io.swagger.annotations.*;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -22,6 +32,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/system/user")
 public class UserController {
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
     private final UserServiceImpl userService;
 
     public UserController(UserServiceImpl userService) {
@@ -41,6 +53,12 @@ public class UserController {
             UserDto userDto = userService.selectUser(username);
             String token = JwtUtil.generateToken(username,String.valueOf(userDto.getId()));
             userDto.setToken(token);
+            Map<String, Object> userMap = BeanUtil.beanToMap(userDto,new HashMap<>(),
+                    CopyOptions.create().setIgnoreNullValue(true)
+                            .setFieldValueEditor((fieldName,fieldValue)->fieldValue.toString()));
+            stringRedisTemplate.opsForHash().putAll(RedisConstant.LOGIN_USER_KEY+token, userMap);
+            //7.4 设置过期时间30分钟
+            stringRedisTemplate.expire(RedisConstant.LOGIN_USER_KEY+token,RedisConstant.LOGIN_USER_TTL, TimeUnit.MINUTES);
             if (token != null){
                 return Result.success(userDto);
             }

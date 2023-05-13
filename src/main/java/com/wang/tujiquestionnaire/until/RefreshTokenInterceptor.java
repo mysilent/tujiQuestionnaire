@@ -2,6 +2,7 @@ package com.wang.tujiquestionnaire.until;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.wang.tujiquestionnaire.common.RedisConstant;
 import com.wang.tujiquestionnaire.system.entity.dto.UserDto;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,16 +25,23 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
     public RefreshTokenInterceptor(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
     }
+    // 定义静态变量 HEADER_AUTHORIZATION 和 BEARER_PREFIX
+    private static final String HEADER_AUTHORIZATION = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        String token = request.getHeader("authorization");
+        String token="";
+        String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
+        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_PREFIX)) {
+            // 从 Authorization 字段中获取 JWT Token
+             token = authorizationHeader.substring(BEARER_PREFIX.length());
+        }
         //token是存到redis中的键，没有键，说明之前没有登录，直接放行
         if (StrUtil.isBlank(token)) {
             return true;
         }
         //2:基于token获取redis中的用户,key是一个常量+token组成的。
-        Map<Object, Object> userMap = stringRedisTemplate.opsForHash().entries(RedisConstants.LOGIN_USER_KEY + token);
+        Map<Object, Object> userMap = stringRedisTemplate.opsForHash().entries(RedisConstant.LOGIN_USER_KEY+token);
         //3:判断用户是否存在
         if (userMap.isEmpty()) {
             //4：不存在，直接放行
@@ -46,9 +54,10 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         //6:存在，保存用户信息到ThreadLocal,UserHolder编写了保存UserHolder的方法
         UserHolder.saveUser(userDTO);
         //7:刷新redis键的有效期，也就是每次通过拦截器，都说明用户与系统有交互，那么自动清除时间重新刷新计算,30分钟后过期
-        stringRedisTemplate.expire(RedisConstants.LOGIN_USER_KEY + token, 30, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(RedisConstant.LOGIN_USER_KEY+token, RedisConstant.LOGIN_USER_TTL, TimeUnit.MINUTES);
         //6：放行
         return true;
+
     }
 
     @Override
