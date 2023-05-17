@@ -7,10 +7,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * <p>
@@ -20,9 +17,11 @@ import lombok.ToString;
  * @author wang
  * @since 2023-02-28
  */
-@Getter
-@Setter
+@Data
+@Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("answer_info")
 @ApiModel(value = "Answer对象", description = "用户答案表")
 public class Answer implements Serializable {
@@ -40,7 +39,8 @@ public class Answer implements Serializable {
     @ApiModelProperty("答案内容")
     private String optionContent;
     @ApiModelProperty("创建时间")
-    private LocalDateTime createDate;
+    @Builder.Default
+    private LocalDateTime createDate=LocalDateTime.now();
 
 
 }

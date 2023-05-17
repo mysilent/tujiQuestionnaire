@@ -19,8 +19,7 @@ import lombok.*;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @ToString
 @TableName("survey_info")
 @ApiModel(value = "Survey对象", description = "调查问卷主表")

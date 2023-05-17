@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * <p>
@@ -15,8 +14,9 @@ import lombok.Setter;
  * @author wang
  * @since 2023-04-25
  */
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("background_user")
 @ApiModel(value = "BackgroundUser对象", description = "")
 public class BackgroundUser implements Serializable {

@@ -44,7 +44,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="selectForm.pageNum"
-            :page-sizes="[2, 5, 10, 20]"
+            :page-sizes="[2, 5, 10]"
             :page-size="selectForm.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="state.total">

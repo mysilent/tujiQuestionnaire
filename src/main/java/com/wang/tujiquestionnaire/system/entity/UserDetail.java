@@ -7,9 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * <p>
@@ -19,11 +17,12 @@ import lombok.ToString;
  * @author wang
  * @since 2023-04-18
  */
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @TableName("user_detail")
-@ApiModel(value = "UserDetail对象", description = "")
+@ApiModel(value = "UserDetail对象", description = "用户详情表")
 public class UserDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;

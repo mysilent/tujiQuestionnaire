@@ -19,8 +19,7 @@ import java.util.List;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class SurveyCreateDto implements Serializable {
     private static final long serialVersionUID = 1L;
     private String id;

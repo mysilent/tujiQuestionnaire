@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,8 +21,7 @@ import java.time.LocalDateTime;
  * @Author: wang
  * Create:2023/5/2-21:20
  */
-@Getter
-@Setter
+@Data
 @ToString
 @TableName("user_detail")
 @ApiModel(value = "UserDetail数据传输对象", description = "")

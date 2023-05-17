@@ -24,7 +24,14 @@
       <el-table-column prop="surveyName" label="问卷名称" width="190"></el-table-column>
       <el-table-column prop="nickname" label="创建人" width="150"></el-table-column>
       <el-table-column prop="startTime" label="创建时间" width="170"></el-table-column>
-      <el-table-column prop="status" label="状态" width="150"></el-table-column>
+      <el-table-column prop="status" label="状态" width="150">
+        <template #default="{row}">
+          <span v-if="row.status === '1'" style="background-color:coral">未发布</span>
+          <span v-else-if="row.status === '0'" style="background-color: greenyellow">已发布</span>
+          <span v-else-if="row.status === '2'" style="background-color:red">已结束</span>
+          <span v-else style="background-color:rosybrown">已销毁</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template #default="{row}">
           <el-button type="success" :icon="Search" @click="look(row)">查看</el-button>
@@ -49,7 +56,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="selectForm.pageNum"
-            :page-sizes="[2, 5, 10, 20]"
+            :page-sizes="[2, 5, 10]"
             :page-size="selectForm.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="state.total">
@@ -62,7 +69,7 @@
 <script lang="ts" setup>
 import {ElMessage} from "element-plus";
 import {reactive} from 'vue';
-import {Close, Search, Tickets, User,Lock} from "@element-plus/icons-vue";
+import {Close, Search, Tickets, User, Lock} from "@element-plus/icons-vue";
 import {selectSurvey} from "@/axios/api/Background";
 import {useSurveyPreviewStore} from "@/stores/userSurvey";
 import {useRouter} from "vue-router";

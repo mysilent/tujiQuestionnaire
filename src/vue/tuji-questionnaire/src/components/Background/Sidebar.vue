@@ -46,9 +46,6 @@
         <el-menu-item index="backgroundSurveyTemplate">问卷模板审核</el-menu-item>
         <el-menu-item index="">举报处理</el-menu-item>
       </el-menu-item-group>
-      <el-menu-item-group title="通知处理">
-        <el-menu-item index="backgroundSurveyTemplate">问卷模板审核</el-menu-item>
-      </el-menu-item-group>
     </el-sub-menu>
   </el-menu>
 </template>

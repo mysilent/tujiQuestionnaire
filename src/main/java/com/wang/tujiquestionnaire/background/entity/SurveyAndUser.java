@@ -13,8 +13,7 @@ import java.time.LocalDateTime;
  * @Author: wang
  * Create:2023/4/26-15:59
  */
-@Setter
-@Getter
+@Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor

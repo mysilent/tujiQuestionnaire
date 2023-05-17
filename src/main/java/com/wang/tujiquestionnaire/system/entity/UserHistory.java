@@ -6,9 +6,7 @@ import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * <p>
@@ -18,8 +16,9 @@ import lombok.ToString;
  * @author wang
  * @since 2023-04-14
  */
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @TableName("user_history")
 @ApiModel(value = "UserHistory对象", description = "用户答卷作答历史记录")

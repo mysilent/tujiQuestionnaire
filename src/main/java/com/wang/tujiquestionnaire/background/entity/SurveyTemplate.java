@@ -3,13 +3,10 @@ package com.wang.tujiquestionnaire.background.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * <p>
@@ -19,9 +16,10 @@ import lombok.ToString;
  * @author wang
  * @since 2023-04-26
  */
-@Getter
-@Setter
+@Data
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("survey_template")
 @ApiModel(value = "SurveyTemplate对象", description = "")
 public class SurveyTemplate implements Serializable {
@@ -48,7 +46,7 @@ public class SurveyTemplate implements Serializable {
     @ApiModelProperty("修改日期")
     private LocalDateTime updateDate;
 
-    @ApiModelProperty("状态(1使用，2不使用)")
+    @ApiModelProperty("状态(1使用，0不使用)")
     private String state;
 
 

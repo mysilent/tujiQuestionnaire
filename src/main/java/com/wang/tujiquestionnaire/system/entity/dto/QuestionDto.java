@@ -1,7 +1,5 @@
 package com.wang.tujiquestionnaire.system.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.wang.tujiquestionnaire.system.entity.Option;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -17,8 +15,7 @@ import java.util.List;
  * @Author: wang
  * Create:2023/3/3-14:55
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

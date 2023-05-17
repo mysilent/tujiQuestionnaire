@@ -1,10 +1,7 @@
 package com.wang.tujiquestionnaire.system.entity.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * ClassName: UserDto
@@ -15,8 +12,7 @@ import lombok.Setter;
  * Create:2023/3/14-14:42
  */
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class UserDto {
     @ApiModelProperty("用户id")

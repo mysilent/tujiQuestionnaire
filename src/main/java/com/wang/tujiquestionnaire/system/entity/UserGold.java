@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * <p>
@@ -17,16 +14,16 @@ import lombok.Setter;
  * @author wang
  * @since 2023-05-02
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("user_gold")
-@ApiModel(value = "UserGold对象", description = "")
+@ApiModel(value = "UserGold对象", description = "用户激励值表")
 public class UserGold implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("关联用户id")
     private String id;
 
     @ApiModelProperty("激励值")
