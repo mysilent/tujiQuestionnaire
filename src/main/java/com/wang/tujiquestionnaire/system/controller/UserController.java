@@ -3,7 +3,6 @@ package com.wang.tujiquestionnaire.system.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.wang.tujiquestionnaire.common.Constant;
-import com.wang.tujiquestionnaire.common.GetRedisPenetrate;
 import com.wang.tujiquestionnaire.common.RedisConstant;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.system.entity.dto.ChangePasswordDto;
@@ -95,17 +94,10 @@ public class UserController {
     }
 
     // 验证旧密码是否正确
+
     private boolean isValidOldPassword( ChangePasswordDto changePasswordDto) {
         return userService.isValidOldPassword(changePasswordDto);
     }
-
-    // 对密码进行加密处理
-//    private String encryptPassword(String password) {
-//
-//        return password;
-//    }
-
-
 
     // 更新用户密码信息
 

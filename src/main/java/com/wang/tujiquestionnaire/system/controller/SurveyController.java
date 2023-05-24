@@ -3,15 +3,12 @@ package com.wang.tujiquestionnaire.system.controller;
 import com.wang.tujiquestionnaire.common.GetRedisPenetrate;
 import com.wang.tujiquestionnaire.common.Result;
 import com.wang.tujiquestionnaire.common.SensitiveWord;
-import com.wang.tujiquestionnaire.system.entity.Question;
-import com.wang.tujiquestionnaire.system.entity.Survey;
 import com.wang.tujiquestionnaire.system.entity.dto.SurveyCreateDto;
 import com.wang.tujiquestionnaire.system.service.impl.SurveyServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 /**
  * <p>
