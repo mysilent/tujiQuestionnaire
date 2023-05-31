@@ -253,21 +253,12 @@ public class SurveyServiceImpl extends ServiceImpl<SurveyMapper, Survey> impleme
 
     @Override
     public Result deleteQuestionnaire(String id) {
-//        QueryWrapper<Question> questionQueryWrapper = new QueryWrapper<>();
-//        questionQueryWrapper.eq("survey_id", id);
-//        QueryWrapper<Option> optionQueryWrapper = new QueryWrapper<>();
-//        optionQueryWrapper.eq("survey_id", id);
-
         int i = deleteQuestionnaireSql(id);
         return i == 1 ? Result.success() : Result.error();
     }
 
     @Transactional(rollbackFor  =  Exception.class)
     protected    int  deleteQuestionnaireSql(String  id)  {
-//        int  i  =  surveyMapper.deleteById(id);
-//        int  j  =  questionMapper.delete(questionQueryWrapper);
-//        int  k  =  optionMapper.delete(optionQueryWrapper);
-
         int i = surveyMapper.updateStatusById(Constant.SURVEY_STATUS_LAPSE,id);
           surveyGoldMapper.deleteById(id);
         return  i  ==  1  ?  1  :  0;

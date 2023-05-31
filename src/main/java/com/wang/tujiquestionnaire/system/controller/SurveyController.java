@@ -44,7 +44,6 @@ public class SurveyController {
 
     @ApiOperation("根据用户id查询属于他的问卷")
     @GetMapping("/selectUserSurvey")
-
     public Result selectUserSurvey(@RequestParam("id") Long id) {
         return Result.success(surveyService.selectUserSurvey(id));
     }
