@@ -32,7 +32,6 @@ public class UserHistoryController {
     @GetMapping("/history")
     public Result history(@RequestParam("id") String id){
         return userHistoryService.history(id);
-
     }
     @ApiOperation("查询某一个问卷被填写的数量")
     @GetMapping("createAnswerData")

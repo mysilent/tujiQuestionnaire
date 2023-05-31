@@ -48,18 +48,17 @@ public class UserDetailController {
     @PostMapping("/userDetail")
     @SensitiveWord
     public Result userUpdate(@RequestBody UserDetail userDetail){
-        if (userDetail.getEmail().isEmpty()){
+        if (userDetail.getEmail().isBlank()){
             userDetail.setEmail(null);
         }
-        if (userDetail.getPhone().isEmpty()){
+        if (userDetail.getPhone().isBlank()){
             userDetail.setPhone(null);
         }
-        if (userDetail.getName().isEmpty()){
-            userDetail.setName(null);
+        if (!userDetail.getName().isBlank()){
+            userMapper.updateNickname(userDetail.getUserId(),userDetail.getName());
         }
         QueryWrapper<UserDetail> userDetailQueryWrapper = new QueryWrapper<>();
         userDetailQueryWrapper.eq("user_id",userDetail.getUserId());
-        userMapper.updateNickname(userDetail.getUserId(),userDetail.getName());
         return (userDetailService.update(userDetail,userDetailQueryWrapper))?Result.success():Result.error();
     }
 }

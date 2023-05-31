@@ -44,8 +44,8 @@ public class UserController {
     public Result login(@RequestParam("username") String username, @RequestParam("password")String password) {
         Integer state = userService.selectState(username);
         if(state == null){
-            // 查询结果为空，可以抛出自定义异常或者给state赋一个默认值
-            // 给state赋默认值的例子：
+            // 查询结果为空，抛出自定义异常或者给state赋一个默认值
+            // 给state赋默认值的：
             state = -1;
         }
         if (userService.login(username, password) == 1 && state==Constant.STATE_ENABLE) {
@@ -87,20 +87,16 @@ public class UserController {
             return Result.error("密码不正确");
         }
         // 更新数据库中的密码信息
-
         updateUserPassword(changePasswordDto);
         // 返回修改密码成功的信息
         return Result.success("密码修改成功！");
     }
 
     // 验证旧密码是否正确
-
     private boolean isValidOldPassword( ChangePasswordDto changePasswordDto) {
         return userService.isValidOldPassword(changePasswordDto);
     }
-
     // 更新用户密码信息
-
     private void updateUserPassword(ChangePasswordDto changePasswordDto) {
         userService.updateUserPassword(changePasswordDto);
     }

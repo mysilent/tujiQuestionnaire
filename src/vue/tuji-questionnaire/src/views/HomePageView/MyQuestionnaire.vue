@@ -43,7 +43,7 @@
             <el-tooltip content="修改" effect="light" v-if="surveys.status==='1'">
               <el-button type="primary" :icon="Edit" circle @click="revise(surveys.id)"/>
             </el-tooltip>
-            <el-tooltip content="数据分析" effect="light">
+            <el-tooltip content="数据分析" effect="light" v-if="surveys.status!=='1'">
               <el-button type="info" :icon="Histogram" circle @click="answerData(surveys.id)"/>
             </el-tooltip>
             <el-popconfirm
